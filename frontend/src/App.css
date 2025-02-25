@@ -1,0 +1,102 @@
+.App {
+  text-align: center;
+  font-family: Helvetica !important;
+  margin: 0px 60px;
+}
+
+body {
+  font-family: Helvetica !important;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+input {
+  font-family: Helvetica !important;
+}
+
+
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+.btn {
+  display: inline-block !important;
+  padding: 10px 20px !important;
+  /* Vertical and horizontal padding for button height and width */
+  border: none !important;
+  /* Remove default border */
+  border-radius: 9px !important;
+  /* Rounded corners */
+  cursor: pointer !important;
+  /* Hand cursor on hover */
+  font-size: 16px !important;
+  /* Readable text size */
+  text-align: center !important;
+  /* Center text */
+  text-decoration: none !important;
+  /* Remove underlines */
+  transition: background-color 0.3s, transform 0.1s !important;
+  /* Smooth transitions for hover effects */
+}
+
+/* Specific style for black button */
+.btn-black {
+  background-color: #000000 !important;
+  /* Black background */
+  color: #ffffff !important;
+  /* White text */
+}
+
+/* Hover effect for btn-black */
+.btn-black:hover {
+  background-color: #333333;
+  /* Slightly lighter black on hover */
+  transform: translateY(-2px);
+  /* Slight lift effect */
+}
+
+/* Active (clicked) state */
+.btn-black:active {
+  transform: translateY(0);
+  /* Return to original position when clicked */
+}
+
+/* Focus state for accessibility */
+.btn-black:focus {
+  outline: 2px solid #000000;
+  /* Visible outline for keyboard navigation */
+  outline-offset: 2px;
+}
