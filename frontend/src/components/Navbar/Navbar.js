@@ -1,5 +1,5 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Make sure to include Bootstrap CSS
+// import 'bootstrap/dist/css/bootstrap.min.css'; // Make sure to include Bootstrap CSS
 
 const Navbar = () => {
     return (

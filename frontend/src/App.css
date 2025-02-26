@@ -100,3 +100,11 @@ input {
   /* Visible outline for keyboard navigation */
   outline-offset: 2px;
 }
+
+.text-custom-primary {
+  color: #61dafb !important;
+}
+
+.text-custom-secondary {
+  color: black !important;
+}
