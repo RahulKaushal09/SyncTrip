@@ -101,10 +101,28 @@ input {
   outline-offset: 2px;
 }
 
+.majorHeadings {
+  font-size: 55px !important;
+  margin-bottom: 40px;
+}
+
+
 .text-custom-primary {
   color: #61dafb !important;
 }
 
 .text-custom-secondary {
   color: black !important;
+}
+
+section {
+  margin-bottom: 50px;
+
+}
+
+@media screen and (max-width: 768px) {
+  .App {
+    margin: 0px 0px;
+  }
+
 }

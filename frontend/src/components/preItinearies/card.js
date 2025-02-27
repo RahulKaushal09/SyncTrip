@@ -7,7 +7,7 @@ const ItineraryCard = ({ name, imgSrc, days }) => { // Destructure props
             <img
                 src={imgSrc || 'https://via.placeholder.com/200x300?text=No+Image'} // Fallback image if imgSrc is missing
                 alt={`${name} Itinerary`}
-                className="card-image"
+                className="card-image-itinerary"
             />
             <div className="card-overlay">
                 <h3 className="card-title">{name}</h3>

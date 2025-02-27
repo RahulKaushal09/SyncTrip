@@ -14,12 +14,13 @@
     position: relative;
     border-radius: 20px;
     /* Adjust height as needed */
+    height: 295px !important;
     overflow: hidden;
 }
 
 .card-image img {
     width: 295px;
-    height: 295px;
+    height: 295px !important;
     object-fit: cover;
 }
 
