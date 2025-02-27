@@ -42,7 +42,8 @@ const TrendingSection = () => {
             <h1 className="text-start fw-bold majorHeadings">Stay updated on what's Trending</h1>
 
             <div className="carousel-container position-relative">
-                <div className="d-flex justify-content-center align-items-center">
+                <div className="d-flex justify-content-center align-items-center"
+                    style={{ opacity: "135%" }}>
                     <DestinationCard />
                     {/* <button
                         className="carousel-control custom-control-prev"
