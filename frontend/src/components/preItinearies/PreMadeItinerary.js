@@ -69,8 +69,8 @@ const PreMadeItinerary = () => {
                         </ListGroup.Item> */}
                         </ListGroup>
                     </Col>
-                    <Col md={6} lg={1}></Col>
-                    <Col md={6} lg={7} className="d-flex flex-column flex-md-row gap-3 justify-content-center">
+                    {/* <Col md={6} lg={1}></Col> */}
+                    <Col md={6} lg={8} className="d-flex flex-column flex-md-row gap-3 justify-content-center">
                         <ItineraryCarousel />
                     </Col>
 

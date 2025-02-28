@@ -41,7 +41,7 @@ const TrendingSection = () => {
         <section className="">
             <h1 className="text-start fw-bold majorHeadings">Stay updated on what's Trending</h1>
 
-            <div className="carousel-container position-relative">
+            <div className="carousel-container-trending position-relative">
                 <div className="d-flex justify-content-center align-items-center"
                     style={{ opacity: "135%" }}>
                     <DestinationCard />
@@ -93,11 +93,12 @@ const TrendingSection = () => {
                     </button> */}
                 </div>
 
-                <div className="text-center mt-4">
-                    <button className="btn btn-dark btn-lg px-4">
-                        Explore more
-                    </button>
-                </div>
+
+            </div>
+            <div className="text-center mt-4">
+                <button className="btn btn-dark btn-lg px-4">
+                    Explore more
+                </button>
             </div>
         </section>
     );

@@ -1,12 +1,32 @@
-.carousel-container {
+.carousel-container-itinerary {
     position: relative;
     width: 100%;
-    height: 400px;
-    /* Increased height to accommodate shadow */
+    height: 600px;
+    padding-left: 32%;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* overflow: hidden; */
+    overflow-x: hidden;
+    /* Hides horizontal overflow (including right) */
+    overflow-y: visible;
+    /* Allows vertical overflow if needed */
+}
+
+/* Optional: Use clip-path or a pseudo-element to clip only the right side */
+.carousel-container-itinerary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    /* Adjust width of the clipped area */
+    height: 100%;
+    background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    /* Transparent to white gradient to smooth the edge */
+    pointer-events: none;
+    /* Prevents interaction with the overlay */
+    z-index: 10;
+    /* Ensure it’s above content */
 }
 
 .card-wrapper-itinerary {
@@ -84,9 +104,28 @@
 
 /* Optional: Add media queries for responsive design */
 @media (max-width: 768px) {
-    .carousel-container {
-        height: 350px;
+    .carousel-container-itinerary {
+        height: 415px;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        padding-left: 0px;
         /* Adjust for mobile if needed */
+    }
+
+    .carousel-container-itinerary::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 0px;
+        /* Adjust width of the clipped area */
+        /* height: 100%; */
+        background: none;
+        /* Transparent to white gradient to smooth the edge */
+        pointer-events: none;
+        /* Prevents interaction with the overlay */
+        z-index: 10;
+        /* Ensure it’s above content */
     }
 
     .card-itinearyShow {

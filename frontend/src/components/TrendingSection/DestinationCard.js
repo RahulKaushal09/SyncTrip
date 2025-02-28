@@ -1,48 +1,101 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "../../styles/DestinationCard.css";
 
-const DestinationCard = () => {
+const DestinationCard = ({ imgUrl, Title, Location, peopleVisited }) => {
     return (
-        <div
-            className="card destination-card border-0 "
-            style={{
-                backgroundColor: 'rgba(101, 202, 211, 0.22)', // #65CAD3 with 22% opacity
-                padding: '20px', // Adding padding on all sides to match the image
-                backdropFilter: 'blur(5px)', // Adds blur effect to the background
-                WebkitBackdropFilter: 'blur(5px)', // For Safari support
-            }}
-        >
+        <div className="card destination-card border-0">
             <div
-                className="card destination-card border-0"
-                style={{ background: "transparent" }}
+                className="card-img-container"
+                style={{
+                    background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${imgUrl})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    height: '350px',
+                    borderRadius: '22px',
+                    display: "flex",
+                    alignItems: "flex-end",
+                }}
             >
-                <img
-                    src="https://www.holidify.com/images/bgImages/ALLEPPEY.jpg"
-                    className="card-img-top"
-                    alt="Berlin Brandenburg Gate"
-                    style={{ borderRadius: '10px 10px 0 0' }} // Matches rounded corners of the image
-                />
-                <div className="card-body-destination text-center">
-                    <h5 className="card-title-destination fw-bold">Top Destination of 2024</h5>
-                    <p className="card-text text-muted">
-                        Kurli, Koembatur <br />
-                        Aryan & 24 others visited this month
+                <h5 className="card-title-destination fw-bold text-white text-start" style={{ fontSize: '30px', marginLeft: "10px" }}>
+                    {Title}
+                </h5>
+            </div>
+            <div className="card-body-destination text-center" style={{ padding: '15px 15px 0px 15px' }}>
+                <p className="card-text-destination">
+                    {Location}
+                </p>
+                <div className="avatars d-flex justify-content-center gap-2">
+                    {[...Array(5)].map((_, i) => (
+                        <img
+                            key={i}
+                            src={`${imgUrl}?text=User${i + 1}`}
+                            alt={`User ${i + 1}`}
+                            className="rounded-circle"
+                            style={{ width: '25px', height: '25px', border: '1px solid white', marginRight: "-15px" }}
+                        />
+                    ))}
+                    <p style={{ marginLeft: "10px", fontSize: "14px", fontWeight: "700" }}>
+                        {peopleVisited}
                     </p>
-                    <div className="avatars d-flex justify-content-center gap-2 mb-3">
-                        {[...Array(5)].map((_, i) => (
-                            <img
-                                key={i}
-                                src="https://www.holidify.com/images/bgImages/ALLEPPEY.jpg"
-                                alt={`User ${i + 1}`}
-                                className="rounded-circle"
-                                style={{ width: '30px', height: '30px' }} // Matches avatar size
-                            />
-                        ))}
-                    </div>
                 </div>
             </div>
         </div>
     );
 };
 
-export default DestinationCard;
+const DestinationCardLayout = () => {
+    const [positions, setPositions] = useState([0, 1, 2]);
+
+    const cardData = [
+        {
+            imgUrl: 'https://www.holidify.com/images/bgImages/ALLEPPEY.jpg',
+            Title: 'Top Destination of 2024',
+            Location: 'Kurli, Koembatur',
+            peopleVisited: 'Aryan & 24 others visited this month'
+        },
+        {
+            imgUrl: 'https://www.holidify.com/images/bgImages/GOA.jpg',
+            Title: 'Beaches of Goa',
+            Location: 'Goa, India',
+            peopleVisited: 'Priya & 15 others visited this month'
+        },
+        {
+            imgUrl: 'https://www.holidify.com/images/bgImages/MANALI.jpg',
+            Title: 'Snowy Peaks of Manali',
+            Location: 'Manali, Himachal Pradesh',
+            peopleVisited: 'Rohan & 30 others visited this month'
+        }
+    ];
+
+    const rotateLeft = () => {
+        setPositions(prev => [prev[1], prev[2], prev[0]]);
+    };
+
+    const rotateRight = () => {
+        setPositions(prev => [prev[2], prev[0], prev[1]]);
+    };
+
+    return (
+        <div className="destination-card-container">
+            <button className="arrow-button left-arrow" onClick={rotateLeft}>
+                ‹
+            </button>
+
+            <div className={`card-item position-${positions[0]}`}>
+                <DestinationCard {...cardData[0]} />
+            </div>
+            <div className={`card-item position-${positions[1]}`}>
+                <DestinationCard {...cardData[1]} />
+            </div>
+            <div className={`card-item position-${positions[2]}`}>
+                <DestinationCard {...cardData[2]} />
+            </div>
+
+            <button className="arrow-button right-arrow" onClick={rotateRight}>
+                ›
+            </button>
+        </div>
+    );
+};
+
+export default DestinationCardLayout;

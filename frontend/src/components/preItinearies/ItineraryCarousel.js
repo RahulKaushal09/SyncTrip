@@ -126,7 +126,7 @@ const ItineraryCarousel = () => {
 
     return (
         <div
-            className="carousel-container"
+            className="carousel-container-itinerary"
             onMouseEnter={() => clearInterval(intervalRef.current)}
             onMouseLeave={startRotation}
         >
