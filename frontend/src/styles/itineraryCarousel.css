@@ -106,7 +106,8 @@
 @media (max-width: 768px) {
     .carousel-container-itinerary {
         height: 415px;
-        overflow-y: hidden;
+        overflow-y: visible;
+        overflow-x: visible !important;
         scrollbar-width: none;
         padding-left: 0px;
         /* Adjust for mobile if needed */

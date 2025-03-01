@@ -5,7 +5,7 @@ import locations from "../../data/locations.json"
 
 
 const TopDestitnations = () => {
-    const [visibleCount, setVisibleCount] = useState(10); // St
+    const [visibleCount, setVisibleCount] = useState(12); // St
     const handleShowMore = () => {
         setVisibleCount(locations.length); // Show all locations
     };

@@ -124,6 +124,7 @@ section {
 @media screen and (max-width: 768px) {
   .App {
     margin: 0px 0px;
+    overflow-x: hidden;
   }
 
 }

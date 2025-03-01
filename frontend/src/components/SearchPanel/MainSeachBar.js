@@ -36,8 +36,8 @@ const MainSearchBar = () => {
     return (
         <div className="search-container main-search-container" >
             <SearchBar></SearchBar>
-            <DateSelector label="CheckIn"></DateSelector>
-            <DateSelector label="CheckOut"></DateSelector>
+            {/* <DateSelector label="CheckIn"></DateSelector>
+            <DateSelector label="CheckOut"></DateSelector> */}
             <SearchCircle></SearchCircle>
         </div>
     );
