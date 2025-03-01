@@ -36,7 +36,7 @@
 
 .position-0 {
     left: 27%;
-    transform: scale(0.8) translateZ(-100px);
+    transform: scale(0.8) translateZ(-100px) rotateY(20deg);
     /* Left position */
     z-index: 1;
 }
@@ -50,7 +50,7 @@
 
 .position-2 {
     left: 52%;
-    transform: scale(0.8) translateZ(-100px);
+    transform: scale(0.8) translateZ(-100px) rotateY(-20deg);
     /* Right position */
     z-index: 1;
 }
@@ -71,12 +71,16 @@
 }
 
 .left-arrow {
-    left: 23%;
+    left: 24%;
+    /* left: calc(50% - 360px); */
+
 }
 
 .right-arrow {
-    right: 26%;
+    /* right: 20%; */
+    right: calc(50% - 380px);
 }
+
 
 .arrow-button:hover {
     background: rgba(0, 0, 0, 0.8);

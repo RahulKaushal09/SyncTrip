@@ -11,6 +11,8 @@ import { BrowserRouter } from 'react-router-dom';
 import FestivalsEvents from './components/FestivalEventSection/festivalsEvents';
 import ExploreSection from './components/Explore/ExploreSection';
 import TrendingSection from './components/TrendingSection/TrendingSection';
+import TopDestitnations from './components/TopDestitnations/TopDestitnations';
+import SyncTripAppPushingSection from './components/AppPushingSection/AppPushingSection';
 const App = () => {
 
   return (
@@ -24,6 +26,8 @@ const App = () => {
           <PreMadeItinerary />
           <FestivalsEvents />
           <TrendingSection />
+          <TopDestitnations />
+          <SyncTripAppPushingSection />
         </div>
       </div>
     </BrowserRouter>
