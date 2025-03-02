@@ -1,6 +1,5 @@
 .container-appPushing {
     margin: 0 auto;
-    padding: 2rem;
     background-color: white;
 }
 
@@ -31,6 +30,26 @@ h1 {
         align-items: center;
         gap: 2rem;
     }
+
+
+}
+
+@media screen and (max-width: 768px) {
+    .appPushingSection2 {
+        height: auto !important;
+        overflow: hidden;
+    }
+
+    .marginR50InWebOnly {
+        margin-right: 0px !important;
+    }
+
+    .appPushingImagePeopleTravelling {
+        width: 100% !important;
+        position: relative;
+        margin: 0 auto;
+    }
+
 }
 
 .feature-item {
@@ -80,4 +99,18 @@ h1 {
 
 .call-to-action button:hover {
     background-color: #333;
+}
+
+.appPushingSection2 {
+    height: 50vh;
+    overflow: hidden;
+
+}
+
+.marginR50InWebOnly {
+    margin-right: 50px;
+}
+
+.appPushingImagePeopleTravelling {
+    width: 50%;
 }

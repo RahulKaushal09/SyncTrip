@@ -41,7 +41,7 @@
 .card-itinearyShow {
     border: none !important;
     position: absolute;
-    width: 200px;
+    width: 160px;
     height: 300px;
     /* background: white; */
     border-radius: 15px;
@@ -61,7 +61,7 @@
     position: absolute;
     top: 30px;
     /* Offset by translateY in JS */
-    width: 200px;
+    width: 160px;
     /* Base width before scaling */
     height: 120px;
     /* Base height for elliptical shape */

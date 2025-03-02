@@ -36,7 +36,7 @@ const PreMadeItinerary = () => {
             <Container fluid className=" py-5 pre-made-itinerary mb-5 mt-5" style={{ textAlign: "left" }}>
                 <Row className="justify-content-center align-items-center">
                     {/* Left Column: Text Content */}
-                    <Col md={6} lg={4} className="text-left text-md-start mb-4 mb-md-0">
+                    <Col md={6} lg={5} className="text-left text-md-start mb-4 mb-md-0">
                         <h6 className="text-muted" style={{ fontWeight: "700" }}>Easy and Fast</h6>
                         <h1 className="fw-bold text-custom-secondary majorHeadings" >Save The Hassle With Pre-Made Itinerary</h1>
 
@@ -70,7 +70,7 @@ const PreMadeItinerary = () => {
                         </ListGroup>
                     </Col>
                     {/* <Col md={6} lg={1}></Col> */}
-                    <Col md={6} lg={8} className="d-flex flex-column flex-md-row gap-3 justify-content-center">
+                    <Col md={6} lg={7} className="d-flex flex-column flex-md-row gap-3 justify-content-center">
                         <ItineraryCarousel />
                     </Col>
 

@@ -13,22 +13,36 @@ import ExploreSection from './components/Explore/ExploreSection';
 import TrendingSection from './components/TrendingSection/TrendingSection';
 import TopDestitnations from './components/TopDestitnations/TopDestitnations';
 import SyncTripAppPushingSection from './components/AppPushingSection/AppPushingSection';
+import Footer from './components/Footer/Footer';
 const App = () => {
 
   return (
     <BrowserRouter>
-      <div className="App">
-        <Navbar />
-        <div style={{ margin: "0px 40px" }}>
-          <MainSearchBar />
-          <ExploreSection />
+      <div>
+        <div className="App">
+          <Navbar />
+          <div style={{ margin: "0px 40px" }}>
+            <MainSearchBar />
+            <ExploreSection />
 
-          <PreMadeItinerary />
-          <FestivalsEvents />
-          <TrendingSection />
-          <TopDestitnations />
-          <SyncTripAppPushingSection />
+            <PreMadeItinerary />
+            <FestivalsEvents />
+            <TrendingSection />
+            <TopDestitnations />
+            <SyncTripAppPushingSection />
+
+          </div>
         </div>
+        <Footer
+          links={{
+            company: [
+              { name: 'About', url: '/about' },
+              { name: 'How It Works', url: '/how-it-works' },
+              { name: 'Blog', url: '/blog' },
+            ],
+            // Add other sections as needed
+          }}
+        />
       </div>
     </BrowserRouter>
   );

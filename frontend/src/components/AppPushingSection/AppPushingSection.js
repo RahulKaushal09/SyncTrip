@@ -3,7 +3,7 @@ import { BsBoundingBoxCircles, BsTaxiFrontFill } from 'react-icons/bs';
 import { GrSwim } from 'react-icons/gr';
 import { Container, Row, Col, ListGroup } from 'react-bootstrap';
 
-import womanWithPhone from "../../assets/images/women.png"; // Replace with your image path
+import peopleTravelling from "../../assets/images/peopleTravelling.svg"; // Replace with your image path
 import syncTripApp from '../../assets/images/syncTripMobile.png'; // Replace with your image path
 import "../../styles/appPushing.css";
 const SyncTripAppPushingSection = () => {
@@ -38,7 +38,7 @@ const SyncTripAppPushingSection = () => {
 
             <h1 className="fw-bold text-custom-secondary majorHeadings" >How SyncTrip works?</h1>
 
-            <Container fluid className=" pre-made-itinerary mb-5" style={{ textAlign: "left", padding: "0px 0px 40px 20px" }}>
+            <Container fluid className=" pre-made-itinerary" style={{ textAlign: "left", padding: "0px 0px 0px 20px" }}>
                 <Row className="justify-content-center align-items-center mb-5">
                     {/* Left Column: Text Content */}
                     <Col md={6} lg={4} className="text-left text-md-start mb-4 mb-md-0">
@@ -62,34 +62,35 @@ const SyncTripAppPushingSection = () => {
                     {/* <Col md={6} lg={1}></Col> */}
                     <Col md={6} lg={8} className="d-flex flex-column flex-md-row gap-3 justify-content-center">
                         <img
-                            src={womanWithPhone}
+                            src={peopleTravelling}
                             alt="Woman using SyncTrip app"
-                            className="w-full max-w-md rounded-lg shadow-md mb-6"
+                            className="w-full max-w-md rounded-lg shadow-md mb-6 appPushingImagePeopleTravelling"
                         />
                     </Col>
 
 
                 </Row>
-                <Row className="justify-content-center align-items-center">
-                    <Col md={6} lg={3} className="">
+                <Row className="justify-content-center appPushingSection2">
+                    <Col md={6} lg={3} className="marginR50InWebOnly" >
                         <img
                             src={syncTripApp}
                             alt="SyncTrip app screenshot "
                             className="w-full max-w-sm  mb-6 img-appPushing"
                         />
                     </Col>
-                    <Col md={6} lg={6} className="">
+                    <Col md={6} lg={8} className="">
 
                         <div className="">
-                            <h2 className="text-2xl font-bold text-blue-800 mb-4 majorHeadings">
+                            <h2 className="mb-4" style={{ fontWeight: "600", fontSize: "48px" }}>
                                 Sync, plan, and explore – the way YOU want.
                             </h2>
                             <p className="text-gray-600 mb-4">
-                                Your perfect trip planner is coming soon! Stay ahead by joining the travel revolution.
+                                Your perfect trip planner is <strong>coming soon!</strong> Stay ahead by joining the travel revolution.
                             </p>
-                            <button className="bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition">
-                                Click here & register for early access.
+                            <button className="btn btn-black">
+                                Click here
                             </button>
+                            <p className='text-gray-600 mt-4'> & register for early access.</p>
                         </div>
                     </Col>
                 </Row>
