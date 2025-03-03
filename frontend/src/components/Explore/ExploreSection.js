@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import LocationCard from '../LocationCard/LocationCard';
 import locations from "../../data/locations.json"
-const ExploreSection = () => {
+const ExploreSection = ({ locations }) => {
     const [visibleCount, setVisibleCount] = useState(16); // Start with 12 cards visible
     // Function to handle "Show More" click
-    console.log(locations);
+    // console.log(locations);
 
     const handleShowMore = () => {
         setVisibleCount(locations.length); // Show all locations

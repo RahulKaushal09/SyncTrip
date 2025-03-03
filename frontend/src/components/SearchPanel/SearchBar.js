@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import "../../styles/SearchBar.css";
 
-const SearchBar = ({ label }) => {
+const SearchBar = ({ searchTerm, setSearchTerm }) => {
     const [placeholder, setPlaceholder] = useState("Search destinations, hotels");
 
     useEffect(() => {
@@ -28,7 +28,7 @@ const SearchBar = ({ label }) => {
         window.addEventListener("resize", updatePlaceholder);
         return () => window.removeEventListener("resize", updatePlaceholder);
     }, []);
-    const [destination, setDestination] = useState("");
+    // const [destination, setDestination] = useState("");
     return (
         <div className="">
             <div className="input-group-searchBar dateBlock" >
@@ -36,8 +36,8 @@ const SearchBar = ({ label }) => {
                 <input
                     type="text"
                     placeholder={placeholder}//"Search destinations, hotels"
-                    value={destination}
-                    onChange={(e) => setDestination(e.target.value)}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm in parent
                     className="searchBarInput"
                 />
             </div>

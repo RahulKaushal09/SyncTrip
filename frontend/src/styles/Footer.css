@@ -77,6 +77,10 @@
     justify-content: center;
 }
 
+.footerTextColorNormal {
+    color: #B3B3B3 !important;
+}
+
 .app-buttons {
     display: flex;
     flex-direction: column;
@@ -105,7 +109,28 @@
     font-size: 0.8rem;
     margin-top: 20px;
     color: #888;
+    text-align: center;
     /* Light gray for copyright */
+}
+
+/* display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", backgroundColor: "#65CAD3", padding: "10px", borderRadius: "5px"  */
+.buttonGetApp {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #65CAD3;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
+@media (max-width: 768px) {
+    .buttonGetApp {
+        width: 80%;
+        margin: auto;
+    }
 }
 
 /* Media Queries for Responsiveness */

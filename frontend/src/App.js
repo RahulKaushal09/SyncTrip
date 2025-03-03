@@ -8,11 +8,12 @@ import Navbar from './components/Navbar/Navbar';
 import PreMadeItinerary from './components/preItinearies/PreMadeItinerary';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { BrowserRouter } from 'react-router-dom';
-import FestivalsEvents from './components/FestivalEventSection/festivalsEvents';
-import ExploreSection from './components/Explore/ExploreSection';
-import TrendingSection from './components/TrendingSection/TrendingSection';
-import TopDestitnations from './components/TopDestitnations/TopDestitnations';
-import SyncTripAppPushingSection from './components/AppPushingSection/AppPushingSection';
+// import FestivalsEvents from './components/FestivalEventSection/festivalsEvents';
+// import ExploreSection from './components/Explore/ExploreSection';
+// import TrendingSection from './components/TrendingSection/TrendingSection';
+// import TopDestitnations from './components/TopDestitnations/TopDestitnations';
+// import SyncTripAppPushingSection from './components/AppPushingSection/AppPushingSection';
+import Home from './pages/Home/home';
 import Footer from './components/Footer/Footer';
 const App = () => {
 
@@ -22,15 +23,15 @@ const App = () => {
         <div className="App">
           <Navbar />
           <div style={{ margin: "0px 40px" }}>
-            <MainSearchBar />
+            {/* <MainSearchBar />
             <ExploreSection />
 
             <PreMadeItinerary />
             <FestivalsEvents />
             <TrendingSection />
             <TopDestitnations />
-            <SyncTripAppPushingSection />
-
+            <SyncTripAppPushingSection /> */}
+            <Home />
           </div>
         </div>
         <Footer

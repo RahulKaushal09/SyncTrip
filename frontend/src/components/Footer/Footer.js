@@ -3,7 +3,7 @@ import React from 'react';
 import "../../styles/Footer.css"; // Optional: Custom CSS for additional styling
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
-
+import { faGooglePlay, faApple } from '@fortawesome/free-brands-svg-icons';
 const Footer = ({ links }) => {
     // Default links if none are provided via props
     const defaultLinks = {
@@ -33,8 +33,8 @@ const Footer = ({ links }) => {
         <footer className="footer">
             <div className="footer-content">
                 <div className="footer-section">
-                    <h3 className="footer-title">Synctrip</h3>
-                    <p>Plan together, travel smarter—sync your perfect trip in minutes.</p>
+                    <h3 className="footer-title" style={{ fontSize: "40px", fontWeight: "700" }}>Synctrip</h3>
+                    <p className='footerTextColorNormal'>Plan together, travel smarter—sync your perfect trip in minutes.</p>
                 </div>
 
                 <div className="footer-section">
@@ -42,7 +42,7 @@ const Footer = ({ links }) => {
                     <ul className="footer-nav-list">
                         {companyLinks.map((link, index) => (
                             <li key={index} className="footer-nav-item">
-                                <a href={link.url}>{link.name}</a>
+                                <a className='footerTextColorNormal' href={link.url}>{link.name}</a>
                             </li>
                         ))}
                     </ul>
@@ -53,7 +53,7 @@ const Footer = ({ links }) => {
                     <ul className="footer-nav-list">
                         {contactLinks.map((link, index) => (
                             <li key={index} className="footer-nav-item">
-                                <a href={link.url}>{link.name}</a>
+                                <a className='footerTextColorNormal' href={link.url}>{link.name}</a>
                             </li>
                         ))}
                     </ul>
@@ -64,7 +64,7 @@ const Footer = ({ links }) => {
                     <ul className="footer-nav-list">
                         {moreLinks.map((link, index) => (
                             <li key={index} className="footer-nav-item">
-                                <a href={link.url}>{link.name}</a>
+                                <a className='footerTextColorNormal' href={link.url}>{link.name}</a>
                             </li>
                         ))}
                     </ul>
@@ -82,19 +82,25 @@ const Footer = ({ links }) => {
                             <FontAwesomeIcon icon={faTwitter} />
                         </a>
                     </div>
-                    <h3 className="">Discover our app</h3>
+                    <h3 className="footerTextColorNormal" style={{ fontSize: "1.55rem" }}>Discover our app</h3>
                     <div className="app-buttons">
-                        <a href="https://play.google.com" className="app-button">
-                            Get it on Google Play
-                        </a>
-                        <a href="https://apple.com" className="app-button">
-                            Available on the App Store
-                        </a>
+                        <div className='buttonGetApp'  >
+                            <FontAwesomeIcon icon={faGooglePlay} style={{ scale: "1.3", marginRight: "10px" }} />
+                            {/* <a href="https://play.google.com" className="app-button"> */}
+                            <p style={{ marginBottom: "0px" }}>Get it on Google Play</p>
+                        </div>
+                        {/* </a> */}
+                        <div className='buttonGetApp'  >
+                            <FontAwesomeIcon icon={faApple} style={{ scale: "1.9", marginRight: "10px" }} />
+                            {/* <a href="https://apple.com" className="app-button"> */}
+                            <p style={{ marginBottom: "0px" }}>Available on the App Store</p>
+                        </div>
+                        {/* </a> */}
                     </div>
                 </div>
             </div>
             <p className="copyright">© 2025 Synctrip. All rights reserved.</p>
-        </footer>
+        </footer >
     );
 };
 
