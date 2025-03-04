@@ -15,6 +15,8 @@ import { BrowserRouter } from 'react-router-dom';
 // import SyncTripAppPushingSection from './components/AppPushingSection/AppPushingSection';
 import Home from './pages/Home/home';
 import Footer from './components/Footer/Footer';
+import LocationEventsDetails from './components/Details/locationEventsDetials';
+import LocationImageGallery from './components/Details/locationImages';
 const App = () => {
 
   return (
@@ -31,7 +33,9 @@ const App = () => {
             <TrendingSection />
             <TopDestitnations />
             <SyncTripAppPushingSection /> */}
-            <Home />
+            {/* <Home /> */}
+            <LocationEventsDetails type={"Explore"} location={"Manali"} title={"Manali snowfall"} rating="4.6" country={"India"} />
+            <LocationImageGallery />
           </div>
         </div>
         <Footer

@@ -72,6 +72,26 @@ input {
   /* Smooth transitions for hover effects */
 }
 
+.circlularButton {
+  border-radius: 25px !important;
+  /* Circular button */
+  padding: 10px !important;
+  width: 100px !important;
+  width: 100px;
+  height: 40px;
+  /* Padding for button height and width */
+}
+
+.btn-light-blue {
+  background-color: #E9F2FF !important;
+  /* Light blue background */
+  color: #000000 !important;
+
+  margin-right: 20px;
+  /* Black text */
+}
+
+
 /* Specific style for black button */
 .btn-black {
   background-color: #000000 !important;
@@ -107,6 +127,13 @@ input {
   text-align: left !important;
 }
 
+.locationEventHeadings {
+  font-size: 40px !important;
+  margin-bottom: 20px;
+  text-align: left !important;
+  font-weight: 700;
+}
+
 
 .text-custom-primary {
   color: #61dafb !important;
@@ -129,6 +156,13 @@ section {
 
   .majorHeadings {
     font-size: 45px !important;
+  }
+
+  .locationEventHeadings {
+    font-size: 30px !important;
+    margin-bottom: 20px;
+    text-align: left !important;
+    font-weight: 700;
   }
 
 }
