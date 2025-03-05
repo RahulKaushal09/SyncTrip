@@ -1,0 +1,135 @@
+.travel-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-title h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.rating {
+    font-size: 1rem;
+    color: #666;
+    margin: 5px 0;
+}
+
+.trip-info {
+    font-size: 0.9rem;
+    color: #999;
+    margin: 0;
+}
+
+.card-image img {
+    width: 250px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.card-icons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.card-icons svg {
+    font-size: 1.5rem;
+    color: #ccc;
+}
+
+.card-accommodation p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.card-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.explore-btn {
+    background-color: #f0f0f0;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.create-trip-btn {
+    background-color: #008080;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card-image {
+        margin-top: 20px;
+    }
+
+    .card-image img {
+        width: 100%;
+        height: auto;
+    }
+
+    .card-icons {
+        justify-content: space-around;
+    }
+
+    .card-buttons {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 480px) {
+    .travel-card {
+        padding: 10px;
+    }
+
+    .card-title h2 {
+        font-size: 1.2rem;
+    }
+
+    .rating,
+    .trip-info,
+    .card-accommodation p {
+        font-size: 0.8rem;
+    }
+
+    .card-icons svg {
+        font-size: 1.2rem;
+    }
+
+    .explore-btn,
+    .create-trip-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+}

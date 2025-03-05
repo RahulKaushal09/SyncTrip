@@ -41,9 +41,9 @@ const LocationImageGallery = () => {
                             alt="Location View 5"
                             className="right-image right-image-4"
                         />
-                        <button className="more-images-button" onClick={handleMoreImagesClick}>
-                            +5
-                        </button>
+                        <div className="more-images-button" onClick={handleMoreImagesClick}>
+                            <p>+5</p>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -17,6 +17,7 @@ import Home from './pages/Home/home';
 import Footer from './components/Footer/Footer';
 import LocationEventsDetails from './components/Details/locationEventsDetials';
 import LocationImageGallery from './components/Details/locationImages';
+import AddLocationCard from './components/Details/AddLocationCard';
 const App = () => {
 
   return (
@@ -36,6 +37,13 @@ const App = () => {
             {/* <Home /> */}
             <LocationEventsDetails type={"Explore"} location={"Manali"} title={"Manali snowfall"} rating="4.6" country={"India"} />
             <LocationImageGallery />
+            <div className='row'>
+              <div className='col-lg-8'></div>
+              <div className='col-lg-4'>
+
+                <AddLocationCard />
+              </div>
+            </div>
           </div>
         </div>
         <Footer
