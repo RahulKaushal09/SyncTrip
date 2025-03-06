@@ -8,18 +8,41 @@
     padding: 20px;
 }
 
-.card-header {
+.locationIcons {
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    /* background-color: #D9D9D9; */
+    color: #84829A;
+    padding: 5px;
+    /* margin-right: 10px; */
+    /* display: inline-block; */
+
+}
+
+.location-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.card-title h2 {
+.location-card-title h2 {
     font-size: 1.5rem;
     font-weight: bold;
     color: #333;
     margin: 0;
+}
+
+.info-box {
+    height: 20px;
+    border-radius: 5px;
+    font-size: 10px !important;
+    background-color: black;
+    color: white;
+    padding: 2px 10px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .rating {
@@ -29,36 +52,37 @@
 }
 
 .trip-info {
-    font-size: 0.9rem;
+    font-size: 12px;
     color: #999;
     margin: 0;
+    margin: 10px 0px;
 }
 
-.card-image img {
-    width: 250px;
-    height: 150px;
+.location-card-image img {
+    height: 200px;
+    width: 150px;
     object-fit: cover;
     border-radius: 10px;
 }
 
-.card-icons {
+.location-card-icons {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
 }
 
-.card-icons svg {
+.location-card-icons svg {
     font-size: 1.5rem;
     color: #ccc;
 }
 
-.card-accommodation p {
+.location-card-accommodation p {
     font-size: 1rem;
     color: #666;
     margin-bottom: 20px;
 }
 
-.card-buttons {
+.location-card-buttons {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -84,28 +108,33 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .card-header {
-        flex-direction: column;
+    .location-card-header {
+        display: flex;
+        flex-direction: row;
         align-items: flex-start;
     }
 
-    .card-image {
-        margin-top: 20px;
+    .location-card-image {
+        /* margin-top: 20px; */
+        /* display: none; */
+        /* width: 60%; */
     }
 
-    .card-image img {
-        width: 100%;
-        height: auto;
+    .location-card-image img {
+        /* width: 100%;
+        height: auto; */
+        width: 260px;
     }
 
-    .card-icons {
+    .location-card-icons {
         justify-content: space-around;
     }
 
-    .card-buttons {
+    .location-card-buttons {
         flex-direction: row;
         justify-content: space-between;
     }
+
 }
 
 @media (max-width: 480px) {
@@ -113,17 +142,17 @@
         padding: 10px;
     }
 
-    .card-title h2 {
+    .location-card-title h2 {
         font-size: 1.2rem;
     }
 
     .rating,
     .trip-info,
-    .card-accommodation p {
+    .location-card-accommodation p {
         font-size: 0.8rem;
     }
 
-    .card-icons svg {
+    .location-card-icons svg {
         font-size: 1.2rem;
     }
 
@@ -132,4 +161,11 @@
         padding: 8px 15px;
         font-size: 0.9rem;
     }
+}
+
+@media (max-width: 500px) {
+    .location-card-image img {
+        width: 160px;
+    }
+
 }

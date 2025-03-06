@@ -100,6 +100,30 @@ input {
   /* White text */
 }
 
+.btn-black:hover {
+  background-color: #fff !important;
+  /* Black background */
+  color: #000 !important;
+  border: 1px solid #000 !important;
+  /* White text */
+}
+
+.btn-white {
+  background-color: #fff !important;
+  /* Black background */
+  color: #000 !important;
+  border: 1px solid #000 !important;
+  /* White text */
+}
+
+.btn-white:hover {
+  background-color: #000 !important;
+  /* Black background */
+  color: #fff !important;
+  border: 1px solid #000 !important;
+  /* White text */
+}
+
 /* Hover effect for btn-black */
 .btn-black:hover {
   background-color: #333333;

@@ -18,6 +18,8 @@ import Footer from './components/Footer/Footer';
 import LocationEventsDetails from './components/Details/locationEventsDetials';
 import LocationImageGallery from './components/Details/locationImages';
 import AddLocationCard from './components/Details/AddLocationCard';
+import Discription from './components/Details/description';
+import HotelsAndStaysSection from './components/Details/HotelSection';
 const App = () => {
 
   return (
@@ -25,7 +27,7 @@ const App = () => {
       <div>
         <div className="App">
           <Navbar />
-          <div style={{ margin: "0px 40px" }}>
+          <div style={{ margin: "0px 100px" }}>
             {/* <MainSearchBar />
             <ExploreSection />
 
@@ -37,10 +39,19 @@ const App = () => {
             {/* <Home /> */}
             <LocationEventsDetails type={"Explore"} location={"Manali"} title={"Manali snowfall"} rating="4.6" country={"India"} />
             <LocationImageGallery />
-            <div className='row'>
-              <div className='col-lg-8'></div>
-              <div className='col-lg-4'>
-
+            <div className='row' style={{ position: 'relative' }}>
+              <div className='col-lg-8'>
+                <Discription />
+                <HotelsAndStaysSection />
+              </div>
+              <div
+                className='col-lg-4'
+                style={{
+                  position: 'sticky',
+                  top: '0px',
+                  right: '0px'
+                }}
+              >
                 <AddLocationCard />
               </div>
             </div>
