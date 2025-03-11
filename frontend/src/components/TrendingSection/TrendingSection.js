@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "../../styles/Trending.css";
 import DestinationCard from './DestinationCard';
-const TrendingSection = () => {
+const TrendingSection = ({ ctaAction }) => {
     const itineraries = [
         {
             src: "https://www.holidify.com/images/bgImages/ALLEPPEY.jpg",
@@ -96,7 +96,7 @@ const TrendingSection = () => {
 
             </div>
             <div className="text-center mt-4">
-                <button className="btn btn-dark btn-lg px-4">
+                <button className="btn btn-dark btn-lg px-4" onClick={ctaAction}>
                     Explore more
                 </button>
             </div>

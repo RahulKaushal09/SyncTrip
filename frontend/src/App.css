@@ -167,6 +167,19 @@ input {
   color: black !important;
 }
 
+.DescriptionHeading {
+  margin-bottom: 20px !important;
+}
+
+.HomePage {
+  margin: 0px 40px;
+}
+
+.DestinationPage {
+  margin: 0px 100px;
+}
+
+
 section {
   margin-bottom: 50px;
 
@@ -189,4 +202,24 @@ section {
     font-weight: 700;
   }
 
+  .DestinationPage {
+    margin: 0px 40px;
+  }
+
+  .HomePage {
+    margin: 0px 40px;
+  }
+
+}
+
+@media (max-width: 768px) {
+  .d-flex {
+    flex-direction: row !important;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .zeroPaddingInMobile-btn-1000 {
+    padding: 0px !important;
+  }
 }

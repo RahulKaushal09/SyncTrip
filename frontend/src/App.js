@@ -15,18 +15,20 @@ import { BrowserRouter } from 'react-router-dom';
 // import SyncTripAppPushingSection from './components/AppPushingSection/AppPushingSection';
 import Home from './pages/Home/home';
 import Footer from './components/Footer/Footer';
-import LocationEventsDetails from './components/Details/locationEventsDetials';
-import LocationImageGallery from './components/Details/locationImages';
-import AddLocationCard from './components/Details/AddLocationCard';
-import Discription from './components/Details/description';
-import HotelsAndStaysSection from './components/Details/HotelSection';
+import DestinationPage from './pages/Destination/Destination';
+import PreRegisterPopup from './components/Popups/preRegisterPopup';
 const App = () => {
-
+  const [AnyCtaPopup, setAnyCtaPopup] = useState(false);
+  // const [preRegisterPopup, setPreRegisterPopup] = useState(false);
   return (
     <BrowserRouter>
       <div>
         <div className="App">
-          <Navbar />
+          <Navbar ctaAction={() => setAnyCtaPopup(true)} />
+          {AnyCtaPopup && <PreRegisterPopup onClose={() => setAnyCtaPopup(false)} />}
+          {/* <preRegisterPopup /> */}
+          <Home ctaAction={() => setAnyCtaPopup(true)} />
+          <DestinationPage ctaAction={() => setAnyCtaPopup(true)} />
           <div style={{ margin: "0px 100px" }}>
             {/* <MainSearchBar />
             <ExploreSection />
@@ -37,12 +39,15 @@ const App = () => {
             <TopDestitnations />
             <SyncTripAppPushingSection /> */}
             {/* <Home /> */}
-            <LocationEventsDetails type={"Explore"} location={"Manali"} title={"Manali snowfall"} rating="4.6" country={"India"} />
+            {/* <LocationEventsDetails type={"Explore"} location={"Manali"} title={"Manali snowfall"} rating="4.6" country={"India"} />
             <LocationImageGallery />
             <div className='row' style={{ position: 'relative' }}>
               <div className='col-lg-8'>
                 <Discription />
                 <HotelsAndStaysSection />
+                <PlanTripDates />
+                <LocationMapSection />
+
               </div>
               <div
                 className='col-lg-4'
@@ -54,7 +59,7 @@ const App = () => {
               >
                 <AddLocationCard />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <Footer

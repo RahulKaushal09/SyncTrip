@@ -5,7 +5,7 @@ import '../../styles/AddLocationCard.css';
 import locations from "../../data/locations.json"
 import { FaLeaf, FaBars, FaPlane } from "react-icons/fa";
 
-const AddLocationCard = () => {
+const AddLocationCard = ({ ctaAction }) => {
     return (
         <div className="travel-card">
             <div className="location-card-header">
@@ -39,8 +39,8 @@ const AddLocationCard = () => {
                 <p>30+ Places to stay</p>
             </div> */}
             <div className="location-card-buttons">
-                <button className="btn btn-white">Explore itinerary</button>
-                <button className="btn btn-black">Create a Trip →</button>
+                <button className="btn btn-white" onClick={ctaAction}>Explore itinerary</button>
+                <button className="btn btn-black" onClick={ctaAction}>Create a Trip →</button>
             </div>
         </div>
     );

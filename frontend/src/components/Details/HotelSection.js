@@ -99,8 +99,8 @@ const HotelCard = ({ hotel }) => {
             <CiHeart className="heart-icon" />
             <HotelImageCarousel images={hotel.hotel_images} />
             {/* <img src={hotel.hotel_images[0]} alt="Hotel" className="hotel-image" /> */}
-            <div className="card-content">
-                <div className="rating">
+            <div className="card-content-hotel">
+                <div className="rating-hotel">
                     <span className="stars">★</span> <strong>{hotel.hotel_location.rating.score}</strong> (672 reviews)
                 </div>
                 <h3>{hotel.hotel_name}</h3>
@@ -133,13 +133,14 @@ const HotelsAndStaysSection = () => {
                 )}
 
             </div>
-            <div
+            <button
                 className='view-more-btn mt-5'
                 onClick={() => setActiveHotelShow(10)}
             >
                 Load More
 
-            </div>
+            </button>
+            <hr></hr>
         </div>
     );
 };

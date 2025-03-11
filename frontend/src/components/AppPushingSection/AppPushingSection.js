@@ -6,7 +6,7 @@ import { Container, Row, Col, ListGroup } from 'react-bootstrap';
 import peopleTravelling from "../../assets/images/peopleTravelling.svg"; // Replace with your image path
 import syncTripApp from '../../assets/images/syncTripMobile.png'; // Replace with your image path
 import "../../styles/appPushing.css";
-const SyncTripAppPushingSection = () => {
+const SyncTripAppPushingSection = ({ showWork, ctaAction }) => {
     const iconStyle = {
         width: "100px",
         height: "40px",
@@ -35,41 +35,43 @@ const SyncTripAppPushingSection = () => {
     ];
     return (
         <div className="container-appPushing mx-auto px-4 py-8 bg-white">
-
-            <h1 className="fw-bold text-custom-secondary majorHeadings" >How SyncTrip works?</h1>
-
+            {showWork &&
+                <h1 className="fw-bold text-custom-secondary majorHeadings" >How SyncTrip works?</h1>
+            }
             <Container fluid className=" pre-made-itinerary" style={{ textAlign: "left", padding: "0px 0px 0px 20px" }}>
-                <Row className="justify-content-center align-items-center mb-5">
-                    {/* Left Column: Text Content */}
-                    <Col md={6} lg={4} className="text-left text-md-start mb-4 mb-md-0">
+                {showWork &&
+                    <Row className="justify-content-center align-items-center mb-5">
+                        {/* Left Column: Text Content */}
+                        <Col md={6} lg={4} className="text-left text-md-start mb-4 mb-md-0">
 
-                        <ListGroup variant="flush" className="mt-4">
-                            {features.map(({ Icon, title, description }, index) => (
-                                <ListGroup.Item
-                                    key={index}
-                                    className="d-flex  border-0 p-2"
-                                >
-                                    <Icon style={iconStyle} />
-                                    <p className="mb-0">
-                                        <strong>{title}</strong><br></br> {description}
-                                    </p>
-                                </ListGroup.Item>
-                            ))}
-
-
-                        </ListGroup>
-                    </Col>
-                    {/* <Col md={6} lg={1}></Col> */}
-                    <Col md={6} lg={8} className="d-flex flex-column flex-md-row gap-3 justify-content-center">
-                        <img
-                            src={peopleTravelling}
-                            alt="Woman using SyncTrip app"
-                            className="w-full max-w-md rounded-lg shadow-md mb-6 appPushingImagePeopleTravelling"
-                        />
-                    </Col>
+                            <ListGroup variant="flush" className="mt-4">
+                                {features.map(({ Icon, title, description }, index) => (
+                                    <ListGroup.Item
+                                        key={index}
+                                        className="d-flex  border-0 p-2"
+                                    >
+                                        <Icon style={iconStyle} />
+                                        <p className="mb-0">
+                                            <strong>{title}</strong><br></br> {description}
+                                        </p>
+                                    </ListGroup.Item>
+                                ))}
 
 
-                </Row>
+                            </ListGroup>
+                        </Col>
+                        {/* <Col md={6} lg={1}></Col> */}
+                        <Col md={6} lg={8} className="d-flex flex-column flex-md-row gap-3 justify-content-center">
+                            <img
+                                src={peopleTravelling}
+                                alt="Woman using SyncTrip app"
+                                className="w-full max-w-md rounded-lg shadow-md mb-6 appPushingImagePeopleTravelling"
+                            />
+                        </Col>
+
+
+                    </Row>
+                }
                 <Row className="justify-content-center appPushingSection2">
                     <Col md={6} lg={3} className="marginR50InWebOnly" >
                         <img
@@ -87,7 +89,7 @@ const SyncTripAppPushingSection = () => {
                             <p className="text-gray-600 mb-4">
                                 Your perfect trip planner is <strong>coming soon!</strong> Stay ahead by joining the travel revolution.
                             </p>
-                            <button className="btn btn-black">
+                            <button className="btn btn-black" onClick={ctaAction}>
                                 Click here
                             </button>
                             <p className='text-gray-600 mt-4'> & register for early access.</p>

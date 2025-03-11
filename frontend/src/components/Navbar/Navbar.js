@@ -1,7 +1,7 @@
 import React from 'react';
 // import 'bootstrap/dist/css/bootstrap.min.css'; // Make sure to include Bootstrap CSS
 
-const Navbar = () => {
+const Navbar = ({ ctaAction }) => {
     return (
         <nav className="navbar navbar-expand-lg navbar-light ">
             <div className="container-fluid">
@@ -26,13 +26,13 @@ const Navbar = () => {
                 {/* Navbar links */}
                 <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul className="navbar-nav">
-                        <li className="nav-item">
-                            <a className="nav-link" href="/create-trip">
+                        <li className="nav-item" style={{ cursor: "pointer" }} onClick={ctaAction}>
+                            <a className="nav-link" >
                                 Create Trip
                             </a>
                         </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="/sign-up">
+                        <li className="nav-item" style={{ cursor: "pointer" }} onClick={ctaAction}>
+                            <a className="nav-link" >
                                 Sign Up
                             </a>
                         </li>

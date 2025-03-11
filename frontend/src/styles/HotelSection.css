@@ -1,8 +1,9 @@
 .hotels-container {
     /* max-width: 1200px; */
-    margin: 0 auto;
+    /* margin: 0 auto; */
     /* padding: 20px; */
     font-family: Arial, sans-serif;
+    text-align: left;
 }
 
 h2 {
@@ -26,7 +27,7 @@ h2 {
 
 .hotel-card {
     background: white;
-    border-radius: 12px;
+    border-radius: 30px;
     /* overflow: hidden; */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: relative;
@@ -73,12 +74,12 @@ h2 {
     border-radius: 32px 32px 0 0;
 }
 
-.card-content {
+.card-content-hotel {
     position: relative;
     padding: 15px;
 }
 
-.rating {
+.rating-hotel {
     position: absolute;
     right: 20px;
     top: -20px;
@@ -102,7 +103,7 @@ h3 {
     color: #333;
 }
 
-.card-content p {
+.card-content-hotel p {
     color: #666;
     font-size: 0.9em;
     margin: 5px 0;
@@ -151,7 +152,7 @@ h3 {
         font-size: 1.2em;
     }
 
-    .card-content {
+    .card-content-hotel {
         padding: 10px;
     }
 }
@@ -161,11 +162,11 @@ h3 {
         height: 120px;
     }
 
-    .card-content h3 {
+    .card-content-hotel h3 {
         font-size: 1em;
     }
 
-    .card-content p {
+    .card-content-hotel p {
         font-size: 0.8em;
     }
 

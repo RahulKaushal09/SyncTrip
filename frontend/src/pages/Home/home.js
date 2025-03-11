@@ -10,7 +10,7 @@ import locations from '../../data/locations.json';
 import { debounce } from 'lodash'; // Install lodash if needed
 
 
-const Home = () => {
+const Home = ({ ctaAction }) => {
     const [searchTerm, setSearchTerm] = useState(""); // State to hold search input
 
     const debouncedSetSearchTerm = useCallback(
@@ -25,7 +25,7 @@ const Home = () => {
         location.title?.toLowerCase().includes(searchTerm.toLowerCase())
     );
     return (
-        <div>
+        <div className='HomePage'>
             <MainSearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             <ExploreSection locations={filteredLocations} />
             {/* <MainSearchBar />
@@ -33,9 +33,9 @@ const Home = () => {
 
             <PreMadeItinerary />
             <FestivalsEvents />
-            <TrendingSection />
+            <TrendingSection ctaAction={ctaAction} />
             <TopDestitnations />
-            <SyncTripAppPushingSection />
+            <SyncTripAppPushingSection ctaAction={ctaAction} />
         </div>
     );
 }
