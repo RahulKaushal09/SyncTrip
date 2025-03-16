@@ -3,15 +3,16 @@ import '../../styles/LocationCard.css'; // Optional: You can create a CSS file f
 import { CiHeart } from "react-icons/ci";
 import { Carousel } from 'react-bootstrap';
 
-const LocationCard = ({ name, rating, places, bestTime, images }) => {
+const LocationCard = ({ name, rating, places, bestTime, images, onClickFunction }) => {
     return (
-        <div className="location-card">
+        <div className="location-card" >
             <div className="card-image">
                 <Carousel
                     interval={null} // Disable auto-play (no automatic scrolling)
                     controls={true} // Show navigation arrows (manual scrolling via arrows)
                     indicators={true} // Show indicators (dots by default)
                     wrap={true} // Allow wrapping around to the first slide after the last
+
                 >
                     {images && images.length > 0 ? (
                         images.map((image, index) => (
@@ -37,7 +38,7 @@ const LocationCard = ({ name, rating, places, bestTime, images }) => {
                 </Carousel>
                 <CiHeart className="heart-icon" />
             </div>
-            <div className="card-content">
+            <div className="card-content" onClick={onClickFunction} style={{ cursor: "pointer" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <h3>{name}</h3>
                     <div className="rating">

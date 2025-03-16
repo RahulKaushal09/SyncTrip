@@ -1,46 +1,29 @@
 const mongoose = require('mongoose');
 
-// Define the location schema
-const locationSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+const LocationSchema = new mongoose.Schema({
     best_time: String,
     description: String,
-    rating: Number,
-    photos: [String],
-    placesNumberToVisit: Number,
-    full_details: {
+    href: String,
+    objective: String,
+    rating: String,
+    title: String,
+    PlaceImageLink: String,
+    PlacesToVisitLink: String,
+    HotelsLink: String,
+    placesNumberToVisit: String,
+    fullDetails: {
         full_description: String,
-        additional_info: [String]
+        additional_info: [String],
+        top_places_to_visit: [{
+            name: String,
+            link: String,
+            image: String
+        }]
     },
-    top_places_to_visit: [{
-        place_id: mongoose.Schema.Types.ObjectId,
-        name: String,
-        link: String,
-        image: String
-    }],
-    hotels: [{
-        hotel_id: mongoose.Schema.Types.ObjectId,
-        name: String,
-        link: String,
-        location: {
-            neighbourhood: String,
-            distance_from_city_centre: String,
-            rating: Number
-        },
-        price: {
-            amount: Number,
-            currency: String,
-            description: String
-        }
-    }],
-    places_to_visit: [{
-        place_id: mongoose.Schema.Types.ObjectId,
-        title: String,
-        rating: Number,
-        description: String,
-        image: String
-    }]
-});
+    photos: [String],
+    images: [String],
+    hotels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' }],   // Linking Hotels
+    placesToVisit: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PlacesToVisit' }]  // Linking Places to Visit
+}, { timestamps: true });
 
-// Create and export the model
-module.exports = mongoose.model('Location', locationSchema);
+module.exports = mongoose.model('Location', LocationSchema);

@@ -1,25 +1,24 @@
 const mongoose = require('mongoose');
 
-// Define hotel schema
-const hotelSchema = new mongoose.Schema({
+const HotelSchema = new mongoose.Schema({
   hotel_name: String,
   hotel_link: String,
+  hotel_description: String,
+  hotel_images: [String],
   hotel_location: {
     neighbourhood: String,
     distance_from_city_centre: String,
-    rating: Number
+    rating: {
+      score: String,
+      review_count: Number
+    },
+    top_location: String
   },
   price: {
-    amount: Number,
-    currency: String,
+    amount: String,
     description: String
   },
-  hotel_images: [String],
-  hotel_description: String,
-  rating: {
-    score: Number
-  }
-});
+  location: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' }  // Mapping to Location
+}, { timestamps: true });
 
-// Create and export the model
-module.exports = mongoose.model('Hotel', hotelSchema);
+module.exports = mongoose.model('Hotel', HotelSchema);

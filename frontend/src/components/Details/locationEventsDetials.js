@@ -8,12 +8,13 @@ import { GrUploadOption } from "react-icons/gr";
 
 const LocationEventsDetails = ({ type, location, name, rating, country, title, address }) => {
     const url = "";
+
     return (
         <div className="locationEventsDetails">
             <div >
                 <p className="text-muted">Home /{type} /<strong>{location}</strong></p>
                 <h2 className="locationEventHeadings">{title}</h2>
-                <p>{address} Address Here</p>
+                {address && <p>{address} Address Here</p>}
                 <div className="d-flex m-gap-2 justify-content-between">
                     <div >
                         <div className="btn btn-light-blue circlularButton">

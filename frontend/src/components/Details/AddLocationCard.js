@@ -5,29 +5,29 @@ import '../../styles/AddLocationCard.css';
 import locations from "../../data/locations.json"
 import { FaLeaf, FaBars, FaPlane } from "react-icons/fa";
 
-const AddLocationCard = ({ ctaAction }) => {
+const AddLocationCard = ({ ctaAction, title, address, rating, reviews, bestTime, placesToVisit, MainImage }) => {
     return (
         <div className="travel-card">
             <div className="location-card-header">
                 <div className="location-card-title text-start">
-                    <h4>Vrindavan </h4>
-                    <p className='text-muted' style={{ fontSize: "14px" }}>- add address here</p>
+                    <h4>{title}</h4>
+                    {address && <p className='text-muted' style={{ fontSize: "14px" }}>{address}</p>}
                     <div className='d-flex '>
-                        <div className=" info-box">★ 4.2</div>
-                        <div className=" info-box">2 reviews</div>
+                        <div className=" info-box">★ {rating}</div>
+                        <div className=" info-box">{reviews} reviews</div>
                     </div>
-                    <p className="trip-info ">14-29 June / 3 People</p>
+                    <p className="trip-info ">{bestTime}</p>
                     <div className="location-card-icons">
                         <FaLeaf className='locationIcons' />
                         <FaBars className='locationIcons' />
                         <FaPlane className='locationIcons' />
                     </div>
                     <div className="location-card-accommodation">
-                        <p>30+ Places to stay</p>
+                        <p>{placesToVisit}+ Places to stay</p>
                     </div>
                 </div>
                 <div className="location-card-image">
-                    <img src={locations[0].images[0]} alt="Prem Mandir, Vrindavan" />
+                    <img src={MainImage} alt="MainImage" />
                 </div>
             </div>
             {/* <div className="location-card-icons">

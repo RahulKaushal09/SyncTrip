@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import '../../styles/LocationImageGallery.css'; // Updated CSS for responsiveness
 import location from '../../data/locations.json'; // Import the JSON file
 
-const LocationImageGallery = () => {
-    const locationImages = location[0].photos;
+const LocationImageGallery = ({ locationImages }) => {
+    // const locationImages = location[0].photos;
 
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 

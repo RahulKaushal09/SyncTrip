@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import MainSearchBar from '../../components/SearchPanel/MainSeachBar';
 import ExploreSection from '../../components/Explore/ExploreSection';
 import PreMadeItinerary from '../../components/preItinearies/PreMadeItinerary';
@@ -6,31 +6,63 @@ import FestivalsEvents from '../../components/FestivalEventSection/festivalsEven
 import TrendingSection from '../../components/TrendingSection/TrendingSection';
 import TopDestitnations from '../../components/TopDestitnations/TopDestitnations';
 import SyncTripAppPushingSection from '../../components/AppPushingSection/AppPushingSection';
-import locations from '../../data/locations.json';
-import { debounce } from 'lodash'; // Install lodash if needed
 
+const Home = ({ ctaAction, handleIsLoading, hasFetchedLocations }) => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [locations, setLocations] = useState([]);
+    const [error, setError] = useState(null);
 
-const Home = ({ ctaAction }) => {
-    const [searchTerm, setSearchTerm] = useState(""); // State to hold search input
-
-    const debouncedSetSearchTerm = useCallback(
-        debounce((value) => setSearchTerm(value), 300), []
-    );
-
+    // Handle Search Input
     const handleSearchChange = (value) => {
-        debouncedSetSearchTerm(value);
+        setSearchTerm(value);
     };
-    // Filter locations based on search term
-    const filteredLocations = locations.filter((location) =>
-        location.title?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    return (
-        <div className='HomePage'>
-            <MainSearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-            <ExploreSection locations={filteredLocations} />
-            {/* <MainSearchBar />
-            <ExploreSection /> */}
 
+    // Fetch Locations Only Once
+    useEffect(() => {
+        const fetchInitialLocations = async () => {
+            if (hasFetchedLocations.current) {
+                console.log('Locations already fetched, skipping API call');
+                return;
+            }
+            hasFetchedLocations.current = true;
+            console.log('Fetching locations...');
+
+            handleIsLoading(true); // Show loader
+
+            try {
+                const response = await fetch('http://localhost:5000/api/locations/getalllocations', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ limit: 100 }),
+                });
+
+                if (!response.ok) throw new Error('Failed to fetch locations');
+
+                const data = await response.json();
+                setLocations(data.locations || data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                handleIsLoading(false); // Hide loader
+                console.log('Fetch complete');
+            }
+        };
+
+        fetchInitialLocations();
+    }, [handleIsLoading, hasFetchedLocations]); // Dependencies added for clarity
+
+    // Memoized Filtered Locations
+    const filteredLocations = useMemo(() => {
+        return locations.filter((location) =>
+            location.title?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [locations, searchTerm]);
+
+    return (
+        <div className="HomePage">
+            <MainSearchBar searchTerm={searchTerm} setSearchTerm={handleSearchChange} />
+            <ExploreSection locations={filteredLocations} />
+            {error && <div>Error: {error}</div>}
             <PreMadeItinerary />
             <FestivalsEvents />
             <TrendingSection ctaAction={ctaAction} />
@@ -38,5 +70,6 @@ const Home = ({ ctaAction }) => {
             <SyncTripAppPushingSection ctaAction={ctaAction} />
         </div>
     );
-}
+};
+
 export default Home;

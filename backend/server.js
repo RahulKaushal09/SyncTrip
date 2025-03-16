@@ -47,15 +47,16 @@ app.use(function (req, res, next) {
 
 // -----------------> Routes <-----------------------------------//
 // Import routes
-const locationRoutes = require('./routes/locationRoutes');
-const hotelRoutes = require('./routes/hotelRoutes');
-const placeRoutes = require('./routes/placeRoutes');
-
+const locationRoutes = require('./routes/location.routes');
+const hotelRoutes = require('./routes/hotel.routes');
+const placeRoutes = require('./routes/place.routes');
+const fetchingRoutes = require('./routes/fetching.routes');
 
 // -----------------> Routes Setup <---------------------------------//
 app.use('/api/locations', locationRoutes);
 app.use('/api/hotels', hotelRoutes);
 app.use('/api/places', placeRoutes);
+app.use('/api/fetching/', fetchingRoutes);
 
 
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
