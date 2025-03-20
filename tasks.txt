@@ -1,0 +1,65 @@
+USER
+(add user with gmail auth
+get user data by username || gmailid ||phone
+PUT request for all three
+POST for all Three (profile building)
+
+
+Locations:
+Get locations 
+//post location(admin)
+//put location (admin)
+
+Get trip:-
+
+
+places to Visit :
+get places by location id (shimla ke ander chadwar falls, chruch(yasu di balee), mall road)
+//post Places(admin)
+//put Places(admin)
+
+Hotels:
+get Hotels by location id (shimla ke ander oyo, jw marriot,taj)
+//post Hotels(admin)
+//put Hotels(admin)
+
+fetching:
+rapid api : weather details for next 3 days and today
+
+
+
+Trip :
+Get trip by trip Id || lcoation ID
+get all people going in trip
+show my profile to others consent
+	apis :
+		request send
+		accept Request( reject also )
+		get all matched(chat with others(block))
+ 
+Put Post For Both (admin)
+	apply :
+		user-> add trip to user model 
+		trip-> add user id and number of user applie ++ in trip model
+		view -> people all going in that trip 
+	
+
+Chat :
+need to discuss
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
