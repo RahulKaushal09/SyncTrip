@@ -3,23 +3,28 @@ import React, { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import "../../styles/SearchBar.css";
 
-const SearchBar = ({ searchTerm, setSearchTerm }) => {
-    const [placeholder, setPlaceholder] = useState("Search destinations, hotels");
+const SearchBar = ({ searchTerm, setSearchTerm, searchBarPlaceHolder }) => {
+    const [placeholder, setPlaceholder] = useState(searchBarPlaceHolder);
+
 
     useEffect(() => {
         const updatePlaceholder = () => {
             if (window.innerWidth <= 768) {
                 // Mobile view: Alternate placeholder
-                setPlaceholder("Search destinations...");
-                const interval = setInterval(() => {
-                    setPlaceholder((prev) =>
-                        prev === "Search destinations..." ? "Search hotels..." : "Search destinations..."
-                    );
-                }, 4000); // Switch every 2 seconds
-                return () => clearInterval(interval); // Cleanup interval
+                if (searchBarPlaceHolder === "Search Trips") {
+                    setPlaceholder("Search trips...");
+                } else {
+                    setPlaceholder("Search destinations...");
+                    const interval = setInterval(() => {
+                        setPlaceholder((prev) =>
+                            prev === "Search destinations..." ? "Search hotels..." : "Search destinations..."
+                        );
+                    }, 4000); // Switch every 2 seconds
+                    return () => clearInterval(interval); // Cleanup interval
+                }
             } else {
                 // Desktop view: Full placeholder
-                setPlaceholder("Search destinations, hotels");
+                setPlaceholder(searchBarPlaceHolder);
             }
         };
 

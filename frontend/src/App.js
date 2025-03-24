@@ -4,6 +4,7 @@ import Navbar from './components/Navbar/Navbar';
 import Home from './pages/Home/home';
 import DestinationPage from './pages/Destination/Destination';
 import Footer from './components/Footer/Footer';
+import Trips from './pages/Trips/trips';
 import PreRegisterPopup from './components/Popups/preRegisterPopup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -26,7 +27,7 @@ const App = () => {
     <BrowserRouter>
       <div>
         <div className="App">
-          <WeatherComponent locationQuery="manali" />
+          {/* <WeatherComponent locationQuery="manali" /> */}
           {/* Always render Navbar */}
           <Navbar ctaAction={() => setAnyCtaPopup(true)} />
 
@@ -76,6 +77,10 @@ const App = () => {
             <Route
               path="/location/:locationId"
               element={<DestinationPage ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
+            />
+            <Route
+              path="/trips"
+              element={<Trips ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
             />
 
             {/* Optional: Catch-all route for 404 */}

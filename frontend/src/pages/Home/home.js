@@ -60,7 +60,7 @@ const Home = ({ ctaAction, handleIsLoading, hasFetchedLocations }) => {
 
     return (
         <div className="HomePage">
-            <MainSearchBar searchTerm={searchTerm} setSearchTerm={handleSearchChange} />
+            <MainSearchBar searchTerm={searchTerm} setSearchTerm={handleSearchChange} searchBarPlaceHolder={"Search destinations, hotels"} />
             <ExploreSection locations={filteredLocations} />
             {error && <div>Error: {error}</div>}
             <PreMadeItinerary />

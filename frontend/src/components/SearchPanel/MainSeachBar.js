@@ -3,7 +3,7 @@ import DateSelector from './DateSelector';
 import SearchBar from './SearchBar';
 import SearchCircle from './SearchCircle';
 import "../../styles/SearchBar.css";
-const MainSearchBar = ({ searchTerm, setSearchTerm }) => {
+const MainSearchBar = ({ searchTerm, setSearchTerm, searchBarPlaceHolder }) => {
     // const [destination, setDestination] = useState("");
     // const [checkin, setCheckin] = useState("");
     // const [checkout, setCheckout] = useState("");
@@ -35,7 +35,7 @@ const MainSearchBar = ({ searchTerm, setSearchTerm }) => {
     // };
     return (
         <div className="search-container main-search-container" >
-            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} searchBarPlaceHolder={searchBarPlaceHolder} />
             {/* <DateSelector label="CheckIn"></DateSelector>
             <DateSelector label="CheckOut"></DateSelector> */}
             <SearchCircle></SearchCircle>
