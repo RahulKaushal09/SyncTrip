@@ -45,7 +45,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
             setLoading(true);
 
             try {
-                const url = `http://localhost:5000/api/locations/${locationId}`;
+                const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/${locationId}`;
                 console.log('Fetching from:', url);
 
                 const locationResponse = await fetch(url, {

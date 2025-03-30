@@ -30,7 +30,7 @@ const Home = ({ ctaAction, handleIsLoading, hasFetchedLocations }) => {
             handleIsLoading(true); // Show loader
 
             try {
-                const response = await fetch('http://localhost:5000/api/locations/getalllocations', {
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/getalllocations`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ limit: 100 }),

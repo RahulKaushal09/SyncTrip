@@ -10,7 +10,8 @@ import PreRegisterPopup from './components/Popups/preRegisterPopup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import loader from './assets/images/loader.gif';
-import WeatherComponent from './data/getWeather';
+// import WeatherComponent from './data/getWeather';
+// import TripForm from './components/upload/TripFormUpload';
 // import { config } from "./config.js";
 
 
@@ -31,7 +32,7 @@ const App = () => {
           {/* <WeatherComponent locationQuery="manali" /> */}
           {/* Always render Navbar */}
           <Navbar ctaAction={() => setAnyCtaPopup(true)} />
-
+          {/* <TripForm /> */}
           {/* Conditionally render Popup */}
           {anyCtaPopup && <PreRegisterPopup onClose={() => setAnyCtaPopup(false)} />}
 

@@ -1,0 +1,21 @@
+.trip-form {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.trip-form div {
+    margin-bottom: 15px;
+}
+
+.trip-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.trip-form input,
+.trip-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 5px;
+}

@@ -45,7 +45,7 @@ const TripsDetialsPage = ({ ctaAction, handleIsLoading, type }) => {
             setLoading(true);
 
             try {
-                const url = `http://localhost:5000/api/trips/${tripId}`;
+                const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/${tripId}`;
                 console.log('Fetching from:', url);
 
                 const TripResponse = await fetch(url, {
