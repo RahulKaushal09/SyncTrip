@@ -5,6 +5,7 @@ import Home from './pages/Home/home';
 import DestinationPage from './pages/Destination/Destination';
 import Footer from './components/Footer/Footer';
 import Trips from './pages/Trips/trips';
+import TripsDetialsPage from './pages/Trips/TripsDetails';
 import PreRegisterPopup from './components/Popups/preRegisterPopup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -81,6 +82,10 @@ const App = () => {
             <Route
               path="/trips"
               element={<Trips ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
+            />
+            <Route
+              path="/trips/:locationId"
+              element={<TripsDetialsPage ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
             />
 
             {/* Optional: Catch-all route for 404 */}

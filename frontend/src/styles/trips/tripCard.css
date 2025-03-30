@@ -7,6 +7,7 @@
     margin: 20px auto;
     background-color: #fff;
     font-family: Arial, sans-serif;
+    cursor: pointer;
 }
 
 /* Image Section */
@@ -40,6 +41,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+    text-align: left;
 }
 
 .tripCard-header h2 {
@@ -63,6 +65,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     margin-bottom: 15px;
+    text-align: left;
 }
 
 .inclusion-item {
@@ -79,6 +82,7 @@
 /* Highlights Section */
 .tripCard-highlights {
     margin-bottom: 15px;
+    text-align: left;
 }
 
 .highlight-item {

@@ -30,7 +30,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
     // Effect to detect screen size
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
+            setIsMobile(window.innerWidth <= 1024);
         };
         handleResize();
         window.addEventListener('resize', handleResize);
@@ -111,10 +111,10 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
             />
             <LocationImageGallery locationImages={locationData?.photos} />
 
-            {isMobile && <AddLocationCard ctaAction={ctaAction} title={locationData?.title} rating={locationData?.rating} reviews={getRandomNumberReviews} bestTime={locationData?.best_time} placesToVisit={locationData?.placesNumberToVisit || "10"} MainImage={locationData?.images[0]} />}
+            {isMobile && <AddLocationCard style={{ marginBottom: "50px", marginLeft: "0px" }} ctaAction={ctaAction} title={locationData?.title} rating={locationData?.rating} reviews={getRandomNumberReviews} bestTime={locationData?.best_time} placesToVisit={locationData?.placesNumberToVisit || "10"} MainImage={locationData?.images[0]} />}
 
             <div className="row" style={{ position: 'relative' }}>
-                <div className="col-lg-8">
+                <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
                     {!isMobile && <Discription shortDescription={locationData?.description || ""} fullDescription={locationData?.fullDetails?.full_description || ""} bestTime={locationData?.best_time} />}
                     <HotelsAndStaysSection hotels={hotels} />
                     <PlanTripDates ctaAction={ctaAction} />
@@ -123,15 +123,25 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                 </div>
 
                 {!isMobile && (
-                    <div
-                        className="col-lg-4"
-                        style={{
-                            position: 'sticky',
-                            top: '0px',
-                            right: '0px',
-                        }}
-                    >
-                        <AddLocationCard ctaAction={ctaAction} title={locationData?.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={locationData?.best_time} placesToVisit={locationData?.placesNumberToVisit || "10"} MainImage={locationData?.images[0]} />
+                    <div className="col-lg-4">
+                        <div
+                            style={{
+                                position: 'sticky',
+                                top: '10px',
+                                zIndex: 1000, // ensure it's above other content if needed
+                            }}
+                        >
+                            <AddLocationCard
+                                ctaAction={ctaAction}
+                                title={locationData?.title}
+                                rating={locationData?.rating}
+                                reviews={getRandomNumberReviews()}
+                                bestTime={locationData?.best_time}
+                                placesToVisit={locationData?.placesNumberToVisit || "10"}
+                                HotelsToStay={locationData?.hotels?.length || "10"}
+                                MainImage={locationData?.images[0]}
+                            />
+                        </div>
                     </div>
                 )}
             </div>

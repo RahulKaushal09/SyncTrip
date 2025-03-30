@@ -176,12 +176,68 @@ input {
 }
 
 .DestinationPage {
-  margin: 0px 100px;
+  margin: 0px 60px;
 }
 
 
 section {
   margin-bottom: 50px;
+
+}
+
+.reviewingBox {
+  /* align-items: flex-start; */
+  justify-content: flex-start;
+}
+
+@media screen and (max-width:1050px) and (min-width:990px) {
+  .App {
+    margin: 0px 30px;
+    overflow-x: hidden;
+  }
+}
+
+@media screen and (max-width:990px) {
+  .App {
+    margin: 0px 0px;
+    overflow-x: hidden;
+  }
+
+
+}
+
+@media screen and (max-width: 1200px) {
+  .reviewingBox {
+    flex-direction: column !important;
+    align-items: flex-start;
+    gap: 10px !important;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  /* .App {
+    margin: 0px 20px;
+    overflow-x: hidden;
+  } */
+
+  /* .majorHeadings {
+    font-size: 45px !important;
+  }
+
+  .locationEventHeadings {
+    font-size: 30px !important;
+    margin-bottom: 20px;
+    text-align: left !important;
+    font-weight: 700;
+  } */
+
+  .DestinationPage {
+    margin: 0px 40px;
+  }
+
+  .HomePage {
+    margin: 0px 40px;
+  }
 
 }
 

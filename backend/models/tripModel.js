@@ -1,6 +1,16 @@
 const mongoose = require('mongoose');
 
 const tripSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    locationId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Location',
+        required: true
+    },
+
     essentials: {
         region: String,
         duration: String,

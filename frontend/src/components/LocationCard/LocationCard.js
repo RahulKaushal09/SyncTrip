@@ -42,7 +42,7 @@ const LocationCard = ({ name, rating, places, bestTime, images, onClickFunction 
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <h3>{name}</h3>
                     <div className="rating">
-                        <span>★ {rating}/5</span>
+                        <span>★ {rating.split("/")[0].trim()}/5</span>
                     </div>
                 </div>
                 <p>{places} places to visit</p>

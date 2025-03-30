@@ -1,7 +1,7 @@
 import React from 'react';
 import "../../styles/trips/tripCard.css";
 import tripsHeaderImg from "../../assets/images/TripsHeader.png";
-const TripCard = ({ trip }) => {
+const TripCard = ({ trip, onClickFunction }) => {
   const {
     essentials: {
       region,
@@ -19,7 +19,7 @@ const TripCard = ({ trip }) => {
   const itineraryHighlights = itinerary ? itinerary.split(',').slice(0, 3) : [];
 
   return (
-    <div className="tripCard">
+    <div className="tripCard" onClick={onClickFunction}>
       {/* Background Image (you can replace with a dynamic image if available) */}
       <div className="tripCard-image" style={{ backgroundImage: `url(${tripsHeaderImg})` }}>
         <div className="tripCard-bookNow">Book Now @₹1</div>
