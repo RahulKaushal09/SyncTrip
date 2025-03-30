@@ -8,6 +8,7 @@ const morgan = require('morgan');
 
 // Initialize express app
 const app = express();
+const allowedOrigins = ['https://www.synctrip.in'];
 
 dotenv.config();
 
@@ -24,9 +25,16 @@ const whitelist = [
 ];
 
 app.use(cors({
-    origin: '*',  // Replace '*' with your frontend URL for security
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true, // Allows cookies and authentication headers
 }));
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
@@ -38,7 +46,7 @@ app.use(function (req, res, next) {
     const origin = req.get('referer');
     const isWhitelisted = whitelist.find((w) => origin && origin.includes(w));
     if (isWhitelisted) {
-        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Origin", "https://www.synctrip.in");
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-auth-token");
         res.header("Access-Control-Expose-Headers", "x-auth-token");
