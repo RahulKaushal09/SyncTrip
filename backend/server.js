@@ -23,7 +23,11 @@ const whitelist = [
     '*'
 ];
 
-app.use(cors())
+app.use(cors({
+    origin: '*',  // Replace '*' with your frontend URL for security
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
