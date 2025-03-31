@@ -8,7 +8,10 @@ const morgan = require('morgan');
 
 // Initialize express app
 const app = express();
-const allowedOrigins = ['https://www.synctrip.in'];
+const allowedOrigins = ['http://localhost:3000',
+    'https://www.synctrip.in',
+    'https://synctrip.in',
+    'https://synctrip.in/',];
 
 dotenv.config();
 
@@ -21,7 +24,7 @@ const dbUrl = process.env.MONGO_URI;
 
 // Whitelisdty
 const whitelist = [
-    '*'
+    '*',
 ];
 
 app.use(cors({
@@ -42,20 +45,20 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 const bodyParser = require('body-parser');
 
 // some basic header for auth
-app.use(function (req, res, next) {
-    const origin = req.get('referer');
-    const isWhitelisted = whitelist.find((w) => origin && origin.includes(w));
-    if (isWhitelisted) {
-        res.header("Access-Control-Allow-Origin", "https://www.synctrip.in");
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-auth-token");
-        res.header("Access-Control-Expose-Headers", "x-auth-token");
-        res.setHeader('Access-Control-Allow-Credentials', true);
-        next();
-    }
-    if (req.method === 'OPTIONS') res.sendStatus(200);
-    else next();
-});
+// app.use(function (req, res, next) {
+//     const origin = req.get('referer');
+//     const isWhitelisted = whitelist.find((w) => origin && origin.includes(w));
+//     if (isWhitelisted) {
+//         // res.header("Access-Control-Allow-Origin", "*");
+//         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-auth-token");
+//         res.header("Access-Control-Expose-Headers", "x-auth-token");
+//         res.setHeader('Access-Control-Allow-Credentials', true);
+//         next();
+//     }
+//     if (req.method === 'OPTIONS') res.sendStatus(200);
+//     else next();
+// });
 
 // -----------------> Routes <-----------------------------------//
 // Import routes
@@ -63,12 +66,17 @@ const locationRoutes = require('./routes/location.routes');
 const hotelRoutes = require('./routes/hotel.routes');
 const placeRoutes = require('./routes/place.routes');
 const fetchingRoutes = require('./routes/fetching.routes');
+// const userRoutes = require('./routes/user.routes');
+const tripRoutes = require('./routes/trips.routes');
 
 // -----------------> Routes Setup <---------------------------------//
 app.use('/api/locations', locationRoutes);
 app.use('/api/hotels', hotelRoutes);
 app.use('/api/places', placeRoutes);
 app.use('/api/fetching/', fetchingRoutes);
+// app.use('/api/users', userRoutes);
+app.use('/api/trips', tripRoutes);
+
 
 
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));

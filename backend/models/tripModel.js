@@ -5,6 +5,10 @@ const tripSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    MainImageUrl: {
+        type: String,
+        required: true
+    },
     locationId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Location',

@@ -5,6 +5,7 @@ import Home from './pages/Home/home';
 import DestinationPage from './pages/Destination/Destination';
 import Footer from './components/Footer/Footer';
 import Trips from './pages/Trips/trips';
+import AddNewTripPage from './pages/Trips/AddNewTrip';
 import TripsDetialsPage from './pages/Trips/TripsDetails';
 import PreRegisterPopup from './components/Popups/preRegisterPopup';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -83,6 +84,10 @@ const App = () => {
             <Route
               path="/trips"
               element={<Trips ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
+            />
+            <Route
+              path="/AddNewtrips"
+              element={<AddNewTripPage />}
             />
             <Route
               path="/trips/:locationId"

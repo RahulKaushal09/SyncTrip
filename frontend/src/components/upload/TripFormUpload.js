@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLoadScript, Autocomplete, GoogleMap, Marker } from '@react-google-maps/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from "axios";
 
 const libraries = ['places'];
 
@@ -86,6 +87,7 @@ const TripForm = () => {
     const [formData, setFormData] = useState({
         title: '',
         locationId: '',
+        MainImageUrl: '',
         itinerary: '',
         tripRating: 5,
         requirements: {
@@ -135,6 +137,8 @@ const TripForm = () => {
         if (fromDate && tillDate) {
             const from = new Date(fromDate);
             const till = new Date(tillDate);
+            console.log("From Date:", from, "Till Date:", till);
+
 
             // Calculate the difference in days
             const diffTime = Math.abs(till - from);
@@ -146,6 +150,7 @@ const TripForm = () => {
 
             // Format the duration as "X days Y nights"
             const duration = `${days}D ${nights}N`;
+            console.log("Calculated Duration:", duration);
 
             // Update the formData with the calculated duration
             setFormData(prev => ({
@@ -155,6 +160,8 @@ const TripForm = () => {
                     duration: duration
                 }
             }));
+            console.log(formData.essentials);
+
         }
     };
     const handlePlaceSelect = (place, type) => {
@@ -197,9 +204,51 @@ const TripForm = () => {
 
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        console.log("Submitting form data:", formData);
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/addNewTrip`, {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.status === 201) {
+                alert("Trip added successfully!");
+                setFormData({
+                    title: '',
+                    locationId: '',
+                    MainImageUrl: '',
+                    itinerary: '',
+                    tripRating: 5,
+                    requirements: {
+                        age: 0,
+                        fitnessCriteria: '',
+                        status: '',
+                        previousExp: ''
+                    },
+                    essentials: {
+                        region: '',
+                        duration: '',
+                        bestTime: '',
+                        timeline: { fromDate: '', tillDate: '' },
+                        altitude: '',
+                        typeOfTrip: '',
+                        price: '',
+                        season: '',
+                        pickup: { name: '', mapLocation: { lat: 0, long: 0 } },
+                        dropPoint: { name: '', mapLocation: { lat: 0, long: 0 } },
+                    },
+                });
+            }
+        } catch (error) {
+            console.error("Error submitting trip:", error);
+            alert("Failed to add trip. Please try again.");
+        }
     };
 
     return (
@@ -211,6 +260,11 @@ const TripForm = () => {
                         <label className="form-label">Title:</label>
                         <input type="text" name="title" value={formData.title} onChange={handleChange} required className="form-control" />
                     </div>
+                    <div className="mb-3">
+                        <label className="form-label">Main Image URL:</label>
+                        <input type="text" name="MainImageUrl" value={formData.MainImageUrl} onChange={handleChange} className="form-control" />
+                    </div>
+
 
                     {/* Searchable Location Dropdown */}
                     <SearchDropdown locations={locations} setSelectedLocation={(id) => setFormData({ ...formData, locationId: id })} />
@@ -359,7 +413,7 @@ const TripForm = () => {
                     </GoogleMap>
 
 
-                    <button type="submit" className="btn btn-primary w-100">Create Trip</button>
+                    <button type="submit" className="btn btn-primary w-100" onclic>Create Trip</button>
                 </form>
             </div>
         </div>
