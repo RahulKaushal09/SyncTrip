@@ -172,147 +172,6 @@ function LocationBlock() {
         </div>
     );
 }
-// function LocationBlock({ onLocationChange }) {
-//     const [location, setLocation] = useState("Fetching location...");
-//     const [customLocation, setCustomLocation] = useState("");
-//     const [suggestions, setSuggestions] = useState([]);
-
-//     useEffect(() => {
-//         if (navigator.geolocation) {
-//             navigator.geolocation.getCurrentPosition(
-//                 (position) => {
-//                     fetch(
-//                         `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`
-//                     )
-//                         .then((res) => res.json())
-//                         .then((data) => {
-//                             const city = truncateLocation(data.address.city || "Unknown City");
-//                             setLocation(city);
-//                             onLocationChange(city); // Pass location to parent
-//                         })
-//                         .catch(() => setLocation("Location unavailable"));
-//                 },
-//                 () => setLocation("Location permission denied")
-//             );
-//         } else {
-//             setLocation("Geolocation not supported");
-//         }
-//     }, [onLocationChange]);
-
-//     const fetchLocations = (query) => {
-//         if (query.length > 2) {
-//             const filteredCities = indianCities.filter(city => city.toLowerCase().includes(query.toLowerCase()));
-//             setSuggestions(filteredCities);
-//         } else {
-//             setSuggestions([]);
-//         }
-//     };
-
-//     const truncateLocation = (loc) => {
-//         const words = loc.split(" ");
-//         return words.length > 3 ? words.slice(0, 3).join(" ") + "..." : loc;
-//     };
-
-//     return (
-//         <div className="d-flex flex-column align-items-end gap-2">
-//             <div className="d-flex align-items-center gap-2">
-//                 <FontAwesomeIcon icon={faMapMarkerAlt} className="text-primary" />
-//                 <span className="text-muted">{location}</span>
-//             </div>
-//             <div className="position-relative">
-//                 <input
-//                     type="text"
-//                     className="form-control"
-//                     placeholder="Enter location"
-//                     value={customLocation}
-//                     onChange={(e) => {
-//                         setCustomLocation(e.target.value);
-//                         fetchLocations(e.target.value);
-//                     }}
-//                 />
-//                 {suggestions.length > 0 && (
-//                     <ul className="list-group position-absolute w-100 mt-1" style={{ zIndex: 10 }}>
-//                         {suggestions.map((city, index) => (
-//                             <li
-//                                 key={index}
-//                                 className="list-group-item list-group-item-action"
-//                                 onClick={() => {
-//                                     setLocation(city);
-//                                     onLocationChange(city); // Pass selected city to parent
-//                                     setCustomLocation("");
-//                                     setSuggestions([]);
-//                                 }}
-//                             >
-//                                 {city}
-//                             </li>
-//                         ))}
-//                     </ul>
-//                 )}
-//             </div>
-//         </div>
-//     );
-// }
-
-
-// Festivals & Events Component
-// const FestivalsEvents = () => {
-//     // Data for a single card (repeated four times as per description)
-//     const [visibleCount, setVisibleCount] = useState(12); // St
-//     const destination = {
-//         image: 'https://via.placeholder.com/300x200', // Placeholder image; replace with actual image URL
-//         title: 'Manali',
-//         places: '46 places to visit',
-//         rating: '5.0',
-//         bestTime: 'sept to nov',
-//     };
-//     const handleShowMore = () => {
-//         setVisibleCount(locations.length); // Show all locations
-//     };
-
-//     return (
-//         <section className="">
-//             {/* Section title */}
-//             <div className='row'>
-//                 <div className='col-lg-8 col-sm-12 col-md-8'>
-//                     <h2 className="fw-bold majorHeadings" style={{ textAlign: "left" }}>Festivals & Events</h2>
-//                 </div>
-//                 <div className='col-lg-4 col-sm-12 col-md-4'>
-//                     <LocationBlock />
-//                 </div>
-//             </div>
-//             {/* Row of cards */}
-//             <div
-//                 style={{
-//                     display: "flex",
-//                     justifyContent: "space-around",
-//                     // margin: "0px 40px",
-//                     flexWrap: "wrap"
-//                 }}
-//             >
-//                 {locations.slice(0, visibleCount).map((location, index) => (
-//                     <LocationCard
-//                         key={index}
-//                         name={location.title?.replace(/[0-9. ]/g, '') || 'Unknown'} // Safely handle null/undefined title
-//                         rating={location.rating || 'N/A'} // Safely handle null/undefined rating
-//                         places={location.placesNumberToVisit || "0"} // Safely extract places
-//                         bestTime={location.best_time || 'N/A'} // Safely handle null/undefined best_time
-//                         images={location.images || ['https://via.placeholder.com/300x200?text=No+Image']} // Pass the images array or fallback
-//                     />
-//                 ))}
-
-//             </div>
-//             {
-//                 visibleCount < locations.length && (
-//                     <div style={{ textAlign: 'center', margin: '20px 0' }}>
-//                         <button className="btn btn-black" onClick={handleShowMore}>
-//                             Show More
-//                         </button>
-//                     </div>
-//                 )
-//             }
-//         </section>
-//     );
-// };
 const FestivalsEvents = () => {
     const [visibleCount, setVisibleCount] = useState(12);
     const [selectedFilter, setSelectedFilter] = useState(null);
@@ -375,7 +234,7 @@ const FestivalsEvents = () => {
                 <div className='col-lg-8 col-sm-12 col-md-8'>
                     <h2 className="fw-bold majorHeadings" style={{ textAlign: "left" }}>Festivals & Events</h2>
                     {/* Filters */}
-                    <div className="mt-3">
+                    {/* <div className="mt-3">
                         {Object.keys(eventCategories).map((category) => (
                             <button
                                 key={category}
@@ -385,7 +244,7 @@ const FestivalsEvents = () => {
                                 {category}
                             </button>
                         ))}
-                    </div>
+                    </div> */}
                 </div>
                 <div className='col-lg-4 col-sm-12 col-md-4'>
                     <LocationBlock onLocationChange={handleLocationChange} />
