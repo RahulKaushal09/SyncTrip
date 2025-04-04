@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../styles/HotelSection.css'; // We'll create this CSS file separately
-import location from "../../data/locations.json";
 import { CiHeart } from "react-icons/ci";
 
 const HotelImageCarousel = ({ images }) => {
@@ -116,17 +115,36 @@ const HotelCard = ({ hotel }) => {
     );
 };
 
-const HotelsAndStaysSection = () => {
+const HotelsAndStaysSection = ({ hotelIds }) => {
     // Sample image URLs (replace with actual hotel images)
-
+    const [hotels, setHotels] = useState([]); // State to store fetched hotels
     const [activeHotelShow, setActiveHotelShow] = useState(4);
+    useEffect(() => {
+        const fetchHotels = async () => {
+            if (!hotelIds || hotelIds.length === 0) return; // Avoid making a request if no hotelIds are available
 
+            try {
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/hotels/getHotelsByIds`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ hotelIds }), // Send array of hotel ObjectIds
+                });
+                if (!response.ok) throw new Error('Failed to fetch hotels');
+                const data = await response.json();
+                setHotels(data); // Store the fetched hotels in state
+            } catch (err) {
+                console.error(err.message);
+            }
+        };
+
+        fetchHotels();
+    }, [hotelIds]); // Re-run when hotelIds change
 
     return (
         <div className="hotels-container">
             <h2 className='DescriptionHeading'>Hotels & Stays</h2>
             <div className="hotels-grid">
-                {location[0].hotels.slice(0, activeHotelShow).map((hotel, index) => (
+                {hotels.slice(0, activeHotelShow).map((hotel, index) => (
                     <HotelCard key={index} hotel={hotel} />
                 )
                     // <HotelCard key={index} imageUrl={image} />

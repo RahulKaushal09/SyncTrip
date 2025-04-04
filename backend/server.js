@@ -5,7 +5,6 @@ var mongo = require('mongodb').MongoClient;
 const dotenv = require('dotenv');
 var cors = require('cors')
 const morgan = require('morgan');
-
 // Initialize express app
 const app = express();
 const allowedOrigins = ['http://localhost:3000',
@@ -28,13 +27,7 @@ const whitelist = [
 ];
 
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: "*",
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Allows cookies and authentication headers
@@ -70,6 +63,11 @@ const fetchingRoutes = require('./routes/fetching.routes');
 const tripRoutes = require('./routes/trips.routes');
 
 // -----------------> Routes Setup <---------------------------------//
+app.use('/api/locations', (req, res, next) => {
+    req.requestStartTime = Date.now(); // save the timestamp on request object
+    console.log(`➡️ Request started at: ${new Date(req.requestStartTime).toISOString()}`);
+    next(); // proceed to next middleware/route
+});
 app.use('/api/locations', locationRoutes);
 app.use('/api/hotels', hotelRoutes);
 app.use('/api/places', placeRoutes);
@@ -89,6 +87,7 @@ app.get('/', (req, res) => {
 });
 
 
+
 if (environment === 'development') {
     app.use(morgan('combined'));
     // ------------------------> Logger (Morgan) <---------------------------- //
@@ -97,16 +96,29 @@ if (environment === 'development') {
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => {
-    console.log(`Application running in ${environment} environment, listening to port ${port}....`);
-    try {
-        mongoose.connect(dbUrl, {
+// app.listen(port, () => {
+//     console.log(`Application running in ${environment} environment, listening to port ${port}....`);
+//     try {
+//         mongoose.connect(dbUrl, {
 
-        })
-            .then(() => console.log('Connected to MongoDB Atlas'))
-            .catch(err => console.error('MongoDB connection error:', err));
-    } catch (error) {
-        console.error('unable to connect, please check your connection....' + error)
-    }
+//         })
+//             .then(() => console.log('Connected to MongoDB Atlas'))
+//             .catch(err => console.error('MongoDB connection error:', err));
+//     } catch (error) {
+//         console.error('unable to connect, please check your connection....' + error)
+//     }
+// });
+mongoose.connect(dbUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log('✅ Connected to MongoDB Atlas');
+
+    // Start Express app only after DB connection is successful
+    app.listen(port, () => {
+        console.log(`🚀 Server running in ${environment} mode on port ${port}`);
+    });
+}).catch(err => {
+    console.error('❌ MongoDB connection error:', err);
+    process.exit(1); // Exit the app if unable to connect
 });
-

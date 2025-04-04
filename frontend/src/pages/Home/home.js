@@ -11,6 +11,7 @@ const Home = ({ ctaAction, handleIsLoading, hasFetchedLocations }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [locations, setLocations] = useState([]);
     const [error, setError] = useState(null);
+    const [locationsForPreMadeItinerary, setLocationsForPreMadeItinerary] = useState([]);
 
     // Handle Search Input
     const handleSearchChange = (value) => {
@@ -40,6 +41,7 @@ const Home = ({ ctaAction, handleIsLoading, hasFetchedLocations }) => {
 
                 const data = await response.json();
                 setLocations(data.locations || data);
+                setLocationsForPreMadeItinerary(data.locations || data); // Set locations for Pre-Made Itinerary
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -63,7 +65,7 @@ const Home = ({ ctaAction, handleIsLoading, hasFetchedLocations }) => {
             <MainSearchBar searchTerm={searchTerm} setSearchTerm={handleSearchChange} searchBarPlaceHolder={"Search destinations, hotels"} />
             <ExploreSection locations={filteredLocations} />
             {error && <div>Error: {error}</div>}
-            <PreMadeItinerary />
+            <PreMadeItinerary locations={locationsForPreMadeItinerary} />
             <FestivalsEvents />
             <TrendingSection ctaAction={ctaAction} />
             <TopDestitnations />

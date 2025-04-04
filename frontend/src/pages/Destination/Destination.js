@@ -13,7 +13,7 @@ import SyncTripAppPushingSection from '../../components/AppPushingSection/AppPus
 const DestinationPage = ({ ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
     const [locationData, setLocationData] = useState(null);
-    const [hotels, setHotels] = useState([]);
+    const [hotelIds, setHotelids] = useState([]);
     const [placesToVisit, setPlacesToVisit] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -63,6 +63,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                 console.log('Raw API response:', location);
                 location.title = location?.title?.replace(/[0-9. ]/g, '');
                 location.title = extractTextFromHTML(location.title);
+                setHotelids(location?.hotels);
                 if (!location) {
                     throw new Error('Location data is empty or null');
                 }
@@ -116,10 +117,10 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
             <div className="row" style={{ position: 'relative' }}>
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
                     {!isMobile && <Discription shortDescription={locationData?.description || ""} fullDescription={locationData?.fullDetails?.full_description || ""} bestTime={locationData?.best_time} />}
-                    <HotelsAndStaysSection hotels={hotels} />
+                    <PlacesToVisitSection title={locationData?.title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
                     <PlanTripDates ctaAction={ctaAction} />
                     <LocationMapSection coordinates={locationData?.coordinates} />
-                    <PlacesToVisitSection places={placesToVisit} ctaAction={ctaAction} />
+                    <HotelsAndStaysSection hotelIds={hotelIds} />
                 </div>
 
                 {!isMobile && (

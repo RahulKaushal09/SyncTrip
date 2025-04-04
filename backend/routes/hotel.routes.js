@@ -16,6 +16,8 @@ const Hotel = require('../models/hotelModel');
 router.post('/getHotelsByIds', async (req, res) => {
     try {
         // const limit = parseInt(req.body.limit) || 4;
+        console.log('Hotel IDs:', req.body.hotelIds); // Log the hotel IDs received in the request body
+
         const hotelIds = req.body.hotelIds;
         const hotels = await Hotel.find({ _id: { $in: hotelIds } });
 

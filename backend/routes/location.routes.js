@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Location = require('../models/locationModel');
-
+// import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 // Create Location
+
 router.post('/', async (req, res) => {
     try {
         const location = new Location(req.body);
@@ -19,26 +21,24 @@ router.post('/getAllLocations', async (req, res) => {
     try {
         const limit = parseInt(req.body.limit) || 12;
         const locations = await Location.find().limit(limit);
-        // const locations = await Location.find();
-        // .populate('hotels')
-        // .populate('placesToVisit');
         res.json(locations);
     } catch (error) {
         res.status(500).json({ error });
     }
 });
-router.get('/', async (req, res) => {
-    try {
-        const limit = parseInt(req.body.limit) || 12;
-        const locations = await Location.find().limit(limit);
-        // const locations = await Location.find();
-        // .populate('hotels')
-        // .populate('placesToVisit');
-        res.json(locations);
-    } catch (error) {
-        res.status(500).json({ error });
-    }
-});
+
+// router.get('/', async (req, res) => {
+//     try {
+//         const limit = parseInt(req.body.limit) || 12;
+//         const locations = await Location.find().limit(limit);
+//         // const locations = await Location.find();
+//         // .populate('hotels')
+//         // .populate('placesToVisit');
+//         res.json(locations);
+//     } catch (error) {
+//         res.status(500).json({ error });
+//     }
+// });
 
 // Get Location by ID
 router.get('/:id', async (req, res) => {

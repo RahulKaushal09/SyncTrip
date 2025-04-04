@@ -55,7 +55,7 @@ const TripCard = ({ trip, onClickFunction }) => {
   const formatDate = (date) => date ? new Date(date).toLocaleDateString() : 'N/A';
 
   return (
-    <div className="tripCard" onClick={onClickFunction}>
+    <div className="tripCard" onClick={onClickFunction(locationId)}>
       {/* Background Image */}
       <div className="tripCard-image" style={{ backgroundImage: `url(${MainImageUrl || tripsHeaderImg})` }}>
         <div className="tripCard-bookNow">Book Now @₹1</div>

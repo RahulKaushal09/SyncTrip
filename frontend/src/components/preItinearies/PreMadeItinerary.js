@@ -4,7 +4,11 @@ import '../../styles/PreMadeItinerary.css'; // Optional: Custom CSS for addition
 import { BsBoundingBoxCircles, BsTaxiFrontFill } from "react-icons/bs";
 import { GrSwim } from "react-icons/gr";
 import ItineraryCarousel from './ItineraryCarousel';
-const PreMadeItinerary = () => {
+import { useNavigate } from 'react-router-dom';
+
+const PreMadeItinerary = ({ locations }) => {
+    const navigate = useNavigate();
+
     const iconStyle = {
         width: "100px",
         height: "40px",
@@ -71,7 +75,7 @@ const PreMadeItinerary = () => {
                     </Col>
                     {/* <Col md={6} lg={1}></Col> */}
                     <Col md={6} lg={7} className="d-flex flex-column flex-md-row gap-3 justify-content-center">
-                        <ItineraryCarousel />
+                        <ItineraryCarousel locations={locations} />
                     </Col>
 
 

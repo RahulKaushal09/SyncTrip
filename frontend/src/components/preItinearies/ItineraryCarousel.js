@@ -3,44 +3,53 @@ import { Link } from "react-router-dom";
 import "../../styles/itineraryCarousel.css";
 import ItineraryCard from "./card";
 
-const ItineraryCarousel = () => {
-    const itineraries = [
-        {
-            src: "https://www.holidify.com/images/bgImages/ALLEPPEY.jpg",
-            title: "Delhi",
-            days: "3 Days",
-            url: "/delhi",
-        },
-        {
-            src: "https://www.holidify.com/images/bgImages/ALLEPPEY.jpg",
-            title: "Mumbai",
-            days: "3 Days",
-            url: "/mumbai",
-        },
-        {
-            src: "https://www.holidify.com/images/bgImages/ALLEPPEY.jpg",
-            title: "Kasol",
-            days: "3 Days",
-            url: "/kasol",
-        },
-        {
-            src: "https://www.holidify.com/images/bgImages/ALLEPPEY.jpg",
-            title: "Kasol",
-            days: "3 Days",
-            url: "/kasol",
-        },
-    ];
+const ItineraryCarousel = ({ locations }) => {
+
+    const itineraries = locations.slice(0, 4); // Select up to 4 random locations
+    // const itineraries = [
+    //     {
+    //         src: "https://www.holidify.com/images/bgImages/ALLEPPEY.jpg",
+    //         title: "Delhi",
+    //         days: "3 Days",
+    //         url: "/delhi",
+    //     },
+    //     {
+    //         src: "https://www.holidify.com/images/bgImages/ALLEPPEY.jpg",
+    //         title: "Mumbai",
+    //         days: "3 Days",
+    //         url: "/mumbai",
+    //     },
+    //     {
+    //         src: "https://www.holidify.com/images/bgImages/ALLEPPEY.jpg",
+    //         title: "Kasol",
+    //         days: "3 Days",
+    //         url: "/kasol",
+    //     },
+    //     {
+    //         src: "https://www.holidify.com/images/bgImages/ALLEPPEY.jpg",
+    //         title: "Kasol",
+    //         days: "3 Days",
+    //         url: "/kasol",
+    //     },
+    // ];
 
     const [cycleOffset, setCycleOffset] = useState(0);
     const intervalRef = useRef(null);
     const cardCount = itineraries.length;
+    console.log(cardCount, "cardCount");
+
 
     useEffect(() => {
-        startRotation();
+        if (cardCount > 1) {
+            startRotation();
+        } else {
+            clearInterval(intervalRef.current); // Stop rotation if data is not yet available
+        }
         return () => clearInterval(intervalRef.current);
-    }, []);
+    }, [cardCount]);
 
     const startRotation = () => {
+        console.log("cardCountinterval", cardCount);
         intervalRef.current = setInterval(() => {
             setCycleOffset((prev) => (prev + 1) % cardCount);
         }, 5000);
@@ -131,17 +140,20 @@ const ItineraryCarousel = () => {
             onMouseLeave={startRotation}
         >
             {itineraries.map((itinerary, index) => {
+                console.log("index", index);
+                console.log("cycleOffset", cycleOffset);
                 const cardStyles = getCardStyles(index);
                 const shadowStyles = getShadowStyles(index);
                 return (
                     <div key={index} className="card-wrapper-itinerary ">
                         <div className="card-shadow-itinerary" style={shadowStyles}></div>
                         <div className="card-itinearyShow" style={cardStyles}>
-                            <Link to={itinerary.url} className="card-link">
+                            <Link to={`/location/${itinerary._id}`} className="card-link">
                                 <ItineraryCard
-                                    name={itinerary.title}
-                                    imgSrc={itinerary.src}
-                                    days={itinerary.days}
+                                    name={itinerary.title.replace(/[0-9. ]/g, "")}
+                                    imgSrc={itinerary.images?.length > 0
+                                        ? itinerary.images[0] : ""}
+                                    days={itinerary.days ? itinerary.days : "3 Days"}
                                 />
                             </Link>
                         </div>

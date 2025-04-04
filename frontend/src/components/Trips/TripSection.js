@@ -25,8 +25,8 @@ const TripSection = ({ trips }) => {
             {/* Trip Cards Grid */}
             <div className="tripSection-cards">
                 {trips.map((trip, index) => (
-                    <TripCard key={index} trip={trip} onClickFunction={() => {
-                        window.location.href = `/trips/{trip._id}`;
+                    <TripCard key={index} trip={trip} onClickFunction={(locationId) => {
+                        window.location.href = `/trips/${trip._id}`;
                     }} />
                 ))}
             </div>
