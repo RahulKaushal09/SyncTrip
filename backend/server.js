@@ -5,6 +5,7 @@ var mongo = require('mongodb').MongoClient;
 const dotenv = require('dotenv');
 var cors = require('cors')
 const morgan = require('morgan');
+const axios = require('axios');
 // Initialize express app
 const app = express();
 const allowedOrigins = ['http://localhost:3000',
@@ -61,7 +62,7 @@ const placeRoutes = require('./routes/place.routes');
 const fetchingRoutes = require('./routes/fetching.routes');
 // const userRoutes = require('./routes/user.routes');
 const tripRoutes = require('./routes/trips.routes');
-
+const eventsLocationRoutes = require('./routes/eventsFestivals.routes');
 // -----------------> Routes Setup <---------------------------------//
 app.use('/api/locations', (req, res, next) => {
     req.requestStartTime = Date.now(); // save the timestamp on request object
@@ -74,6 +75,7 @@ app.use('/api/places', placeRoutes);
 app.use('/api/fetching/', fetchingRoutes);
 // app.use('/api/users', userRoutes);
 app.use('/api/trips', tripRoutes);
+app.use('/api/events', eventsLocationRoutes);
 
 
 
@@ -85,7 +87,26 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.get('/', (req, res) => {
     res.send('App is running');
 });
+app.get('/api/events', async (req, res) => {
+    const url = 'https://api.allevents.in/events/search/?query=comedy%20show%20in%20Chandigarh';
 
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Ocp-Apim-Subscription-Key': '9tdsvscW9qrA4W5',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        });
+
+        const data = await response.json();
+        res.json(data);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch data' });
+    }
+});
 
 
 if (environment === 'development') {

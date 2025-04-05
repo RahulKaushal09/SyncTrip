@@ -2,7 +2,7 @@ import React from 'react';
 import "../../styles/trips/tripCard.css";
 import tripsHeaderImg from "../../assets/images/TripsHeader.png";
 
-const TripCard = ({ trip, onClickFunction }) => {
+const TripCard = ({ trip }) => {
   const {
     _id,
     title,
@@ -55,7 +55,7 @@ const TripCard = ({ trip, onClickFunction }) => {
   const formatDate = (date) => date ? new Date(date).toLocaleDateString() : 'N/A';
 
   return (
-    <div className="tripCard" onClick={onClickFunction(locationId)}>
+    <div className="tripCard" >
       {/* Background Image */}
       <div className="tripCard-image" style={{ backgroundImage: `url(${MainImageUrl || tripsHeaderImg})` }}>
         <div className="tripCard-bookNow">Book Now @₹1</div>

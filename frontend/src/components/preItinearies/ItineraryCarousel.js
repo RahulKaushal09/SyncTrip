@@ -36,7 +36,7 @@ const ItineraryCarousel = ({ locations }) => {
     const [cycleOffset, setCycleOffset] = useState(0);
     const intervalRef = useRef(null);
     const cardCount = itineraries.length;
-    console.log(cardCount, "cardCount");
+    // console.log(cardCount, "cardCount");
 
 
     useEffect(() => {
@@ -49,7 +49,7 @@ const ItineraryCarousel = ({ locations }) => {
     }, [cardCount]);
 
     const startRotation = () => {
-        console.log("cardCountinterval", cardCount);
+        // console.log("cardCountinterval", cardCount);
         intervalRef.current = setInterval(() => {
             setCycleOffset((prev) => (prev + 1) % cardCount);
         }, 5000);
@@ -140,8 +140,8 @@ const ItineraryCarousel = ({ locations }) => {
             onMouseLeave={startRotation}
         >
             {itineraries.map((itinerary, index) => {
-                console.log("index", index);
-                console.log("cycleOffset", cycleOffset);
+                // console.log("index", index);
+                // console.log("cycleOffset", cycleOffset);
                 const cardStyles = getCardStyles(index);
                 const shadowStyles = getShadowStyles(index);
                 return (

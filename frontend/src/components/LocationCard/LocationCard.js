@@ -6,7 +6,7 @@ import { Carousel } from 'react-bootstrap';
 const LocationCard = ({ name, rating, places, bestTime, images, onClickFunction }) => {
     return (
         <div className="location-card" >
-            <div className="card-image">
+            <div className="card-image" >
                 <Carousel
                     interval={null} // Disable auto-play (no automatic scrolling)
                     controls={true} // Show navigation arrows (manual scrolling via arrows)
@@ -16,7 +16,7 @@ const LocationCard = ({ name, rating, places, bestTime, images, onClickFunction 
                 >
                     {images && images.length > 0 ? (
                         images.map((image, index) => (
-                            <Carousel.Item key={index}>
+                            <Carousel.Item key={index} onClick={onClickFunction} style={{ cursor: "pointer" }}>
                                 <img
                                     className="d-block" // Ensure the image takes full width
                                     src={image}
