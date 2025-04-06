@@ -48,7 +48,8 @@ router.post('/getEventsForLocation', async (req, res) => {
                 // Check if the last updated date is older than a week
                 if (isDataOlderThanOneWeek(locationDetails.lastUpdatedDate)) {
                     // Make a POST request to fetch new data from the external API
-                    const LocationNameSearch = locationDetails.locationName.replace(" ", "-").toLowerCase(); // Convert to lowercase and replace spaces with hyphens
+                    const LocationNameSearch = locationDetails.locationName.trim().replace(" ", "-").replace("(", "").replace(")", "").toLowerCase();
+                    // const LocationNameSearch = locationDetails.locationName.replace(" ", "-").toLowerCase(); // Convert to lowercase and replace spaces with hyphens
                     const response = await axios.post(`${PYTHON_SERVER_IP}/getEventsFromLocationName`, {
                         location: LocationNameSearch  // Sending location name in the payload
                     });
@@ -83,7 +84,7 @@ router.post('/getEventsForLocation', async (req, res) => {
                 return res.status(200).json({ message: 'Location events Still Valid', events: locationDetails.events });
             }
             // If location details are not found in DB, fetch new location and events
-            locationName = locationName.trim().replace(" ", "-").toLowerCase(); // Convert to lowercase and replace spaces with hyphens
+            locationName = locationName.trim().replace(" ", "-").replace("(", "").replace(")", "").toLowerCase(); // Convert to lowercase and replace spaces with hyphens
             // Make a POST request to fetch location details from the external API
             console.log("Fetching new location data for:", locationName);  // Log the location name for debugging
 
