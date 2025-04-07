@@ -3,7 +3,7 @@ const axios = require('axios');
 // import location from '../models/locationModel.js';
 const Location = require('../models/locationModel.js'); // Adjust the path as necessary
 
-const GOOGLE_API_KEY = 'AIzaSyBcYLw5aFg6Uq81_TsEurc3LIDXGlArQho'; // replace with your key
+const GOOGLE_API_KEY = 'AIzaS'; // replace with your key
 const MONGODB_URI = "mongodb+srv://synctripofficial:adminSyncTrip@synctripdb.4qm1d.mongodb.net/?retryWrites=true&w=majority&appName=syncTripDB"; // change this too
 console.log({ MONGODB_URI });
 
