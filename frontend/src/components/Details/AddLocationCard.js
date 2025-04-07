@@ -8,7 +8,7 @@ import { FaLeaf, FaBars, FaPlane } from "react-icons/fa";
 import { PageTypeEnum } from '../../utils/pageType';  // adjust path as needed
 const AddLocationCard = ({ pageType, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage }) => {
     const [activeIcon, setActiveIcon] = useState(0);
-    const [showItinearyBtn, setShowItinearyBtn] = useState(true);
+    // const [showItinearyBtn, setShowItinearyBtn] = useState(true);
     // create enum for page type location or trips
 
     // get random numebr 10 to 100 
@@ -29,6 +29,10 @@ const AddLocationCard = ({ pageType, btnsStyle, style, ctaAction, title, address
 
         return () => clearInterval(interval);
     }, []);
+    console.log("pageType", pageType);
+    console.log(pageType == PageTypeEnum.LOCATION);
+
+
 
     return (
         <div className="travel-card" style={style}>
@@ -114,9 +118,9 @@ const AddLocationCard = ({ pageType, btnsStyle, style, ctaAction, title, address
                     onClick={ctaAction}
                     style={btnsStyle}
                 >
-                    {pageType === PageTypeEnum.LOCATION
+                    {pageType == PageTypeEnum.LOCATION
                         ? "Create a Trip →"
-                        : pageType === PageTypeEnum.TRIP
+                        : pageType == PageTypeEnum.TRIP
                             ? "Join Trip"
                             : ""}
                 </button>

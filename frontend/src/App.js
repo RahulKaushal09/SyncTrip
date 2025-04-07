@@ -90,7 +90,7 @@ const App = () => {
               element={<AddNewTripPage />}
             />
             <Route
-              path="/trips/:locationId"
+              path="/trips/:tripId"
               element={<TripsDetialsPage ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
             />
 

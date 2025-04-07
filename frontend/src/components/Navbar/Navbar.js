@@ -1,13 +1,14 @@
 import React from 'react';
 // import 'bootstrap/dist/css/bootstrap.min.css'; // Make sure to include Bootstrap CSS
-
+import SyncTripLogo from "../../assets/images/logoWeb.png"
 const Navbar = ({ ctaAction }) => {
     return (
         <nav className="navbar navbar-expand-lg navbar-light ">
             <div className="container-fluid">
                 {/* Logo/Brand */}
-                <a className="navbar-brand" href="/" style={{ color: '#65CAD3', fontSize: "30px", fontWeight: "700" }}>
-                    SyncTrip
+                <a className="navbar-brand" href="/" style={{ color: '#65CAD3', fontSize: "30px", fontWeight: "700", width: "100px" }}>
+                    {/*  */}
+                    <img src={SyncTripLogo} alt="SyncTrip" style={{ width: "100%", marginLeft: "10px" }} />
                 </a>
 
                 {/* Toggle button for mobile view */}

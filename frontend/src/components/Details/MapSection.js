@@ -13,19 +13,24 @@ const customIcon = new L.Icon({
     popupAnchor: [1, -34],
 });
 
-const LocationMapSection = () => {
+const LocationMapSection = ({ latitide, longitude }) => {
     // Coordinates for 329 Kent Ave, Brooklyn (approximate)
     const position = [33.2778322, 75.3000181];
+    if (latitide && longitude) {
+        position[0] = latitide;
+        position[1] = longitude;
+    }
+    console.log("Location Map", position);
 
     return (
         <div className="location-map">
             <div className='d-flex' style={{ justifyContent: 'space-between', alignItems: 'start' }}>
-                <h2 className='DescriptionHeading'>Location</h2>
+                <h2 className='DescriptionHeading'><strong>Location</strong></h2>
                 <a href={`https://www.google.com/maps/dir/?api=1&destination=${position[0]},${position[1]}`} target="_blank" rel="noopener noreferrer" className="get-direction DescriptionHighlightText">
                     Get Direction <span><GoArrowUpRight /></span>
                 </a>
             </div>
-            <p>329 Kent Ave, Brooklyn</p>
+            <p></p>
 
             <div className="map-container">
                 <MapContainer center={position} zoom={13} style={{ height: '300px', width: '100%' }}>
@@ -35,9 +40,9 @@ const LocationMapSection = () => {
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
                     <Marker position={position} icon={customIcon}>
-                        <Popup>
+                        {/* <Popup>
                             329 Kent Ave, Brooklyn
-                        </Popup>
+                        </Popup> */}
                     </Marker>
                 </MapContainer>
             </div>

@@ -93,7 +93,7 @@ const HotelCard = ({ hotel }) => {
     // console.log(hotel);
 
     return (
-        <div className="hotel-card">
+        <div className="hotel-card" onClick={() => window.location.href = hotel?.hotel_link} style={{ cursor: 'pointer' }} onclick={hotel?.hotel_link}>
             <div className='top-rated'>Top Rated</div>
             <CiHeart className="heart-icon" />
             <HotelImageCarousel images={hotel.hotel_images} />
@@ -142,7 +142,7 @@ const HotelsAndStaysSection = ({ hotelIds }) => {
 
     return (
         <div className="hotels-container">
-            <h2 className='DescriptionHeading'>Hotels & Stays</h2>
+            <h2 className='DescriptionHeading'><strong>Hotels & Stays</strong></h2>
             <div className="hotels-grid">
                 {hotels.slice(0, activeHotelShow).map((hotel, index) => (
                     <HotelCard key={index} hotel={hotel} />

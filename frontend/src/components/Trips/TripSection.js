@@ -24,10 +24,13 @@ const TripSection = ({ trips }) => {
 
             {/* Trip Cards Grid */}
             <div className="tripSection-cards">
-                {trips.map((trip, index) => (
-                    <TripCard key={index} trip={trip} />
-                ))}
+                {trips
+                    .filter((trip) => new Date(trip.essentials.timeline.tillDate) < new Date())
+                    .map((trip, index) => (
+                        <TripCard key={index} trip={trip} />
+                    ))}
             </div>
+
         </div>
     );
 };

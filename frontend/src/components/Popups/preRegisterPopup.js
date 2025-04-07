@@ -17,7 +17,7 @@ const PreRegisterPopup = ({ onClose }) => {
     return (
         <div className="preRegister-popup-overlay">
             <div className="preRegister-popup-content">
-                <button className="close-button" onClick={onClose}>
+                <button className="close-button-popUpEmail" onClick={onClose}>
                     ×
                 </button>
                 <div className="preRegister-popup-body">

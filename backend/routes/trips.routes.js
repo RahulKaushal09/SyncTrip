@@ -45,7 +45,10 @@ router.post('/addNewTrip', async (req, res) => {
 // Get User Profile
 router.get('/:id', async (req, res) => {
     try {
-        const trip = await Trip.findById(req.params.id).populate('locationId').populate('peopleApplied').populate('locationId.locationId');
+        console.log("Fetching trip with ID:", req.params.id);  // Log the trip ID for debugging
+        const trip = await Trip.findById(req.params.id);
+
+
         res.json(trip);
     } catch (error) {
         res.status(404).json({ error: 'User not found' });

@@ -68,7 +68,7 @@
 }
 
 .location-card-icons {
-    display: flex;
+    /* display: flex; */
     /* justify-content: space-between; */
     margin-bottom: 20px;
 }
@@ -135,7 +135,7 @@
     }
 
     .location-card-icons {
-        justify-content: space-around;
+        /* justify-content: space-around; */
         margin-bottom: 10px;
     }
 
@@ -174,7 +174,7 @@
 
 @media (max-width: 500px) {
     .location-card-image img {
-        width: 160px;
+        width: 140px;
     }
 
 }

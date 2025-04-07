@@ -5,12 +5,14 @@ import { CiTimer } from "react-icons/ci";
 import { MdSentimentVerySatisfied } from "react-icons/md";
 import { TbTemperatureSun } from "react-icons/tb";
 import location from "../../data/locations.json";
-const Discription = ({ shortDescription, fullDescription, bestTime }) => {
+import { PageTypeEnum } from '../../utils/pageType';
+const Discription = ({ pageType, shortDescription, fullDescription, bestTime }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     // Shortened description for initial view
     const toggleDescription = () => {
         setIsExpanded(!isExpanded);
     };
+    console.log(pageType, "description");
 
     return (
         <div className="travel-info-container">
@@ -43,10 +45,10 @@ const Discription = ({ shortDescription, fullDescription, bestTime }) => {
             </div>
 
             <div className="description-section">
-                <h2 className='DescriptionHeading'>Description</h2>
+                <h2 className='DescriptionHeading'><strong>{pageType && pageType == PageTypeEnum.TRIP ? "Itinerary" : "Description"}</strong></h2>
                 <p
                     className="description-text"
-                    dangerouslySetInnerHTML={{ __html: isExpanded ? fullDescription : shortDescription }}
+                    dangerouslySetInnerHTML={{ __html: isExpanded ? fullDescription : shortDescription.slice(0, 300) + '...' }}
                 ></p>
                 <button
                     className="view-more-btn"

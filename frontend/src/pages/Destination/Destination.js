@@ -30,8 +30,6 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
     };
     useEffect(() => {
         const url = window.location.href;
-        console.log("Current URL:", url);
-
         if (url.includes("/trips/")) {
             setPageType(PageTypeEnum.TRIP);
         } else if (url.includes("/location/")) {
@@ -123,14 +121,14 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
             />
             <LocationImageGallery locationImages={locationData?.photos} />
 
-            {isMobile && <AddLocationCard pageType={pageType} btnsStyle={{ width: "45%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} ctaAction={ctaAction} title={locationData?.title} rating={locationData?.rating} reviews={getRandomNumberReviews} bestTime={locationData?.best_time} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} />}
+            {isMobile && <AddLocationCard pageType={pageType} btnsStyle={{ width: "45%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} ctaAction={ctaAction} title={locationData?.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={locationData?.best_time} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} />}
 
             <div className="row" style={{ position: 'relative' }}>
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
-                    {!isMobile && <Discription shortDescription={locationData?.description || ""} fullDescription={locationData?.fullDetails?.full_description || ""} bestTime={locationData?.best_time} />}
+                    {!isMobile && <Discription pageType={pageType} shortDescription={locationData?.description || ""} fullDescription={locationData?.fullDetails?.full_description || ""} bestTime={locationData?.best_time} />}
                     <PlacesToVisitSection title={locationData?.title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
-                    <PlanTripDates ctaAction={ctaAction} />
-                    <LocationMapSection coordinates={locationData?.coordinates} />
+                    <PlanTripDates pageType={pageType} ctaAction={ctaAction} />
+                    <LocationMapSection latitude={locationData?.fullDetails?.coordinates?.lat} longitude={locationData?.fullDetails?.coordinates?.long} />
                     <HotelsAndStaysSection hotelIds={hotelIds} />
                 </div>
 
@@ -144,6 +142,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                             }}
                         >
                             <AddLocationCard
+                                pageType={pageType}
                                 ctaAction={ctaAction}
                                 title={locationData?.title}
                                 rating={locationData?.rating}

@@ -34,7 +34,7 @@ const PlacesToVisitSection = ({ title, placesIds }) => {
 
     return (
         <div className="hotels-container" style={{ marginBottom: "50px" }}>
-            <h2 className='DescriptionHeading'>Other Places To Visit  in {title?.replace(/[0-9. ]/g, '')}</h2>
+            <h2 className='DescriptionHeading'><strong>Other Places To Visit  in {title?.replace(/[0-9. ]/g, '')}</strong></h2>
             <div className="hotels-grid">
                 {places.slice(0, activeHotelShow).map((placesToVisit, index) => (
                     <LocationCard name={placesToVisit.title} rating={placesToVisit.rating} images={placesToVisit.image} />

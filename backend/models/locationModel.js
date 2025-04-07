@@ -18,7 +18,19 @@ const LocationSchema = new mongoose.Schema({
             name: String,
             link: String,
             image: String
-        }]
+        }],
+        coordinates: {
+            lat: {
+                type: Number,
+                default: 0
+
+            },
+
+            long: {
+                type: Number,
+                default: 0
+            }
+        },
     },
     photos: [String],
     images: [String],
