@@ -6,8 +6,11 @@ import locations from "../../data/locations.json"
 import { FaLeaf, FaBars, FaPlane } from "react-icons/fa";
 // improt enum class 
 import { PageTypeEnum } from '../../utils/pageType';  // adjust path as needed
-const AddLocationCard = ({ pageType, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage }) => {
+const AddLocationCard = ({ pageType, onLoginClick, EnrollInTrip, PeopleGoingInTrip, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage }) => {
     const [activeIcon, setActiveIcon] = useState(0);
+    const [btn2Text, setBtn2Text] = useState("");
+    const [btn2CTA, setBtn2CTA] = useState(() => ctaAction);
+
     // const [showItinearyBtn, setShowItinearyBtn] = useState(true);
     // create enum for page type location or trips
 
@@ -20,7 +23,21 @@ const AddLocationCard = ({ pageType, btnsStyle, style, ctaAction, title, address
     ];
     const [currentText, setCurrentText] = useState(0);
 
-
+    useEffect(() => {
+        if (pageType == PageTypeEnum.LOCATION) {
+            setBtn2CTA(() => ctaAction);
+        } else if (pageType == PageTypeEnum.TRIP) {
+            var user = JSON.parse(localStorage.getItem("user"));
+            if (user && user?.profileCompleted != undefined && user?.profileCompleted == true) {
+                setBtn2CTA(() => EnrollInTrip);
+            }
+            else {
+                setBtn2CTA(() => onLoginClick);
+            }
+        } else {
+            setBtn2CTA(() => ctaAction);
+        }
+    }, [pageType, ctaAction]);
     useEffect(() => {
         const interval = setInterval(() => {
             setActiveIcon((prev) => (prev + 1) % 3);
@@ -29,6 +46,17 @@ const AddLocationCard = ({ pageType, btnsStyle, style, ctaAction, title, address
 
         return () => clearInterval(interval);
     }, []);
+    useEffect(() => {
+        if (pageType == PageTypeEnum.LOCATION) {
+            setBtn2Text("Create a Trip →");
+        } else if (pageType == PageTypeEnum.TRIP) {
+            setBtn2Text("Join Trip");
+        } else {
+            setBtn2Text("Create a Trip →");
+        }
+    }, [pageType]);
+
+
     console.log("pageType", pageType);
     console.log(pageType == PageTypeEnum.LOCATION);
 
@@ -112,17 +140,14 @@ const AddLocationCard = ({ pageType, btnsStyle, style, ctaAction, title, address
             </div> */}
             <div className="location-card-buttons">
                 {pageType == PageTypeEnum.LOCATION && <button className="btn btn-white" onClick={ctaAction} style={btnsStyle}>Explore itinerary</button>}
+                {pageType == PageTypeEnum.TRIP && PeopleGoingInTrip && PeopleGoingInTrip.length > 0 && <button className="btn btn-white" onClick={EnrollInTrip(2)} style={btnsStyle}>See Others</button>}
                 {/* <button className="btn btn-white" onClick={ctaAction} style={btnsStyle}>Explore itinerary</button> */}
                 <button
                     className="btn btn-black"
-                    onClick={ctaAction}
+                    onClick={btn2CTA}
                     style={btnsStyle}
                 >
-                    {pageType == PageTypeEnum.LOCATION
-                        ? "Create a Trip →"
-                        : pageType == PageTypeEnum.TRIP
-                            ? "Join Trip"
-                            : ""}
+                    {btn2Text}
                 </button>
             </div>
         </div>

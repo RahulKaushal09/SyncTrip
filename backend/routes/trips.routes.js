@@ -3,7 +3,9 @@ const express = require('express');
 // const jwt = require('jsonwebtoken');
 const router = express.Router();
 const Trip = require('../models/tripModel');
-
+const User = require('../models/userModel'); // Adjust path
+const jwt = require('jsonwebtoken');
+const authenticateToken = require('../middleware/middleware.js').authenticateToken; // Adjust path
 // User Registration
 router.post('/getAllTrips', async (req, res) => {
     try {
@@ -83,5 +85,70 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ error });
     }
 });
+router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
+    const { tripId } = req.params;
+    const userId = req.user.id; // From token
 
+    try {
+        // Find the trip and populate enrolled users
+        const trip = await Trip.findById(tripId).populate({
+            path: 'peopleApplied',
+            select: 'name profile_picture socialMedias.instagram', // Select fields to return
+        });
+        if (!trip) {
+            return res.status(404).json({ message: 'Trip not found' });
+        }
+
+        // Check if trip is enrollable
+        if (trip.requirements.status === 'completed') {
+            return res.status(400).json({ message: 'Cannot enroll in a completed trip' });
+        }
+
+        // Check if user is already enrolled
+        if (trip.peopleApplied.some(user => user._id.toString() === userId)) {
+            return res.status(400).json({ message: 'You are already enrolled in this trip' });
+        }
+
+        // Find the user
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Update Trip
+        trip.peopleApplied.push(userId);
+        trip.numberOfPeopleApplied = (trip.numberOfPeopleApplied || 0) + 1;
+
+        // Update User
+        user.trips.push({
+            status: 'ongoing', // Or 'scheduled' based on trip status
+            tripId: trip._id,
+            bookingDate: new Date(),
+        });
+
+        // Save both documents
+        await Promise.all([trip.save(), user.save()]);
+
+        // Re-fetch trip with updated peopleApplied (populated)
+        const updatedTrip = await Trip.findById(tripId).populate({
+            path: 'peopleApplied',
+            select: 'name profile_picture socialMedias.instagram age', // Select fields to return
+        });
+        // console.log('Updated trip:', updatedTrip); // Log the updated trip for debugging
+
+        if (!updatedTrip) {
+            return res.status(404).json({ message: 'Trip not found' });
+        }
+        // Send response
+        res.status(200).json({
+            success: true,
+            message: 'Successfully enrolled in the trip',
+            trip: updatedTrip, // Includes populated peopleApplied
+            user,
+        });
+    } catch (err) {
+        console.error('Error enrolling in trip:', err);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 module.exports = router;

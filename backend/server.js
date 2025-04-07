@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 var cors = require('cors')
 const morgan = require('morgan');
 const axios = require('axios');
+const path = require('path');
 // Initialize express app
 const app = express();
 const allowedOrigins = ['http://localhost:3000',
@@ -63,6 +64,8 @@ const fetchingRoutes = require('./routes/fetching.routes');
 // const userRoutes = require('./routes/user.routes');
 const tripRoutes = require('./routes/trips.routes');
 const eventsLocationRoutes = require('./routes/eventsFestivals.routes');
+const authRoutes = require('./routes/auth.routes');
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // -----------------> Routes Setup <---------------------------------//
 app.use('/api/locations', (req, res, next) => {
     req.requestStartTime = Date.now(); // save the timestamp on request object
@@ -76,6 +79,7 @@ app.use('/api/fetching/', fetchingRoutes);
 // app.use('/api/users', userRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api/events', eventsLocationRoutes);
+app.use('/api/auth', authRoutes);
 
 
 

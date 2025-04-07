@@ -5,15 +5,31 @@ import '../../styles/PlanTripDates.css'; // Optional: for custom styling
 import { TbBackground } from 'react-icons/tb';
 import { PageTypeEnum } from '../../utils/pageType';
 
-const TripPlanner = ({ pageType, ctaAction, startDatePreTrip, endDatePreTrip }) => {
+const TripPlanner = ({ pageType, onLoginClick, EnrollInTrip, ctaAction, startDatePreTrip, endDatePreTrip }) => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [selectedMonth, setSelectedMonth] = useState(new Date());
+    const [btn2CTA, setBtn2CTA] = useState(() => ctaAction);
+
     const today = new Date();
     const maxDate = new Date(today);
     maxDate.setFullYear(today.getFullYear() + 1);
 
-
+    useEffect(() => {
+        if (pageType == PageTypeEnum.LOCATION) {
+            setBtn2CTA(() => ctaAction);
+        } else if (pageType == PageTypeEnum.TRIP) {
+            var user = JSON.parse(localStorage.getItem("user"));
+            if (user && user?.profileCompleted != undefined && user?.profileCompleted == true) {
+                setBtn2CTA(() => EnrollInTrip);
+            }
+            else {
+                setBtn2CTA(() => onLoginClick);
+            }
+        } else {
+            setBtn2CTA(() => ctaAction);
+        }
+    }, [pageType, ctaAction]);
     useEffect(() => {
         if (startDatePreTrip && endDatePreTrip) {
             setStartDate(new Date(startDatePreTrip));
