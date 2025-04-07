@@ -4,9 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../../styles/AddLocationCard.css';
 import locations from "../../data/locations.json"
 import { FaLeaf, FaBars, FaPlane } from "react-icons/fa";
-
-const AddLocationCard = ({ style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage }) => {
+// improt enum class 
+import { PageTypeEnum } from '../../utils/pageType';  // adjust path as needed
+const AddLocationCard = ({ pageType, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage }) => {
     const [activeIcon, setActiveIcon] = useState(0);
+    const [showItinearyBtn, setShowItinearyBtn] = useState(true);
+    // create enum for page type location or trips
+
     // get random numebr 10 to 100 
     const getRandomNumberReviews = Math.floor(Math.random() * (100 - 10 + 1)) + 10;
     const accommodationTexts = [
@@ -16,6 +20,7 @@ const AddLocationCard = ({ style, ctaAction, title, address, rating, reviews, be
     ];
     const [currentText, setCurrentText] = useState(0);
 
+
     useEffect(() => {
         const interval = setInterval(() => {
             setActiveIcon((prev) => (prev + 1) % 3);
@@ -24,6 +29,7 @@ const AddLocationCard = ({ style, ctaAction, title, address, rating, reviews, be
 
         return () => clearInterval(interval);
     }, []);
+
     return (
         <div className="travel-card" style={style}>
             <div className="location-card-header ">
@@ -101,8 +107,19 @@ const AddLocationCard = ({ style, ctaAction, title, address, rating, reviews, be
                 <p>30+ Places to stay</p>
             </div> */}
             <div className="location-card-buttons">
-                <button className="btn btn-white" onClick={ctaAction}>Explore itinerary</button>
-                <button className="btn btn-black" onClick={ctaAction}>Create a Trip →</button>
+                {pageType == PageTypeEnum.LOCATION && <button className="btn btn-white" onClick={ctaAction} style={btnsStyle}>Explore itinerary</button>}
+                {/* <button className="btn btn-white" onClick={ctaAction} style={btnsStyle}>Explore itinerary</button> */}
+                <button
+                    className="btn btn-black"
+                    onClick={ctaAction}
+                    style={btnsStyle}
+                >
+                    {pageType === PageTypeEnum.LOCATION
+                        ? "Create a Trip →"
+                        : pageType === PageTypeEnum.TRIP
+                            ? "Join Trip"
+                            : ""}
+                </button>
             </div>
         </div>
     );

@@ -9,7 +9,7 @@ import PlanTripDates from '../../components/Details/PlanTripDates';
 import LocationMapSection from '../../components/Details/MapSection';
 import PlacesToVisitSection from '../../components/Details/PlacesToVisit';
 import SyncTripAppPushingSection from '../../components/AppPushingSection/AppPushingSection';
-
+import { PageTypeEnum } from '../../utils/pageType'; // adjust path as needed
 const DestinationPage = ({ ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
     const [locationData, setLocationData] = useState(null);
@@ -18,6 +18,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const { locationId } = useParams();
+    const [pageType, setPageType] = useState(null);
     const extractTextFromHTML = (htmlString) => {
         if (!htmlString) return "";
         const parser = new DOMParser();
@@ -27,6 +28,16 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
     const getRandomNumberReviews = () => {
         return Math.floor(Math.random() * 100) + 1;
     };
+    useEffect(() => {
+        const url = window.location.href;
+        console.log("Current URL:", url);
+
+        if (url.includes("/trips/")) {
+            setPageType(PageTypeEnum.TRIP);
+        } else if (url.includes("/location/")) {
+            setPageType(PageTypeEnum.LOCATION);
+        }
+    }, []); // only run once when the component mounts
     // Effect to detect screen size
     useEffect(() => {
         const handleResize = () => {
@@ -112,7 +123,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
             />
             <LocationImageGallery locationImages={locationData?.photos} />
 
-            {isMobile && <AddLocationCard style={{ marginBottom: "50px", marginLeft: "0px" }} ctaAction={ctaAction} title={locationData?.title} rating={locationData?.rating} reviews={getRandomNumberReviews} bestTime={locationData?.best_time} placesToVisit={locationData?.placesNumberToVisit || "10"} MainImage={locationData?.images[0]} />}
+            {isMobile && <AddLocationCard pageType={pageType} btnsStyle={{ width: "45%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} ctaAction={ctaAction} title={locationData?.title} rating={locationData?.rating} reviews={getRandomNumberReviews} bestTime={locationData?.best_time} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} />}
 
             <div className="row" style={{ position: 'relative' }}>
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>

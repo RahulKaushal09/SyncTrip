@@ -136,6 +136,7 @@
 
     .location-card-icons {
         justify-content: space-around;
+        margin-bottom: 10px;
     }
 
     .location-card-buttons {

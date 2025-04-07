@@ -9,15 +9,16 @@ import PlanTripDates from '../../components/Details/PlanTripDates';
 import LocationMapSection from '../../components/Details/MapSection';
 import PlacesToVisitSection from '../../components/Details/PlacesToVisit';
 import SyncTripAppPushingSection from '../../components/AppPushingSection/AppPushingSection';
-
-const TripsDetialsPage = ({ ctaAction, handleIsLoading, type }) => {
+import { PageTypeEnum } from '../../utils/pageType'; // adjust path as needed
+const TripsDetialsPage = ({ ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
-    const [tripData, setTripData] = useState(null);
-    const [hotels, setHotels] = useState([]);
+    const [locationData, setLocationData] = useState(null);
+    const [hotelIds, setHotelids] = useState([]);
     const [placesToVisit, setPlacesToVisit] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-    const { tripId } = useParams();
+    const { locationId } = useParams();
+    const [pageType, setPageType] = useState(null);
     const extractTextFromHTML = (htmlString) => {
         if (!htmlString) return "";
         const parser = new DOMParser();
@@ -30,45 +31,56 @@ const TripsDetialsPage = ({ ctaAction, handleIsLoading, type }) => {
     // Effect to detect screen size
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
+            setIsMobile(window.innerWidth <= 1024);
         };
         handleResize();
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    useEffect(() => {
+        const url = window.location.href;
+        console.log("Current URL:", url);
+
+        if (url.includes("/trips/")) {
+            setPageType(PageTypeEnum.TRIP);
+        } else if (url.includes("/location/")) {
+            setPageType(PageTypeEnum.LOCATION);
+        }
+    }, []); // only run once when the component mounts
     // Fetch location details
     useEffect(() => {
         const fetchLocationDetails = async () => {
-            console.log('Starting fetch for locationId:', tripId);
+            console.log('Starting fetch for locationId:', locationId);
             // handleIsLoading(true);
             setLoading(true);
 
             try {
-                const url = `${process.env.REACT_APP_BACKEND_BASE_URL}c/api/trips/${tripId}`;
+                const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/${locationId}`;
                 console.log('Fetching from:', url);
 
-                const TripResponse = await fetch(url, {
+                const locationResponse = await fetch(url, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                 });
 
-                console.log('Response status:', TripResponse.status);
+                console.log('Response status:', locationResponse.status);
 
-                if (!TripResponse.ok) {
-                    throw new Error(`Failed to fetch location: ${TripResponse.statusText}`);
+                if (!locationResponse.ok) {
+                    throw new Error(`Failed to fetch location: ${locationResponse.statusText}`);
                 }
 
-                const trip = await TripResponse.json();
-                console.log('Raw API response:', trip);
-                trip.title = trip?.title?.replace(/[0-9. ]/g, '');
-                trip.title = extractTextFromHTML(trip.title);
-                if (!trip) {
+                const location = await locationResponse.json();
+                console.log('Raw API response:', location);
+                location.title = location?.title?.replace(/[0-9. ]/g, '');
+                location.title = extractTextFromHTML(location.title);
+                setHotelids(location?.hotels);
+                if (!location) {
                     throw new Error('Location data is empty or null');
                 }
 
-                setTripData(trip);
-                console.log('Setting locationData state:', trip);
+                setLocationData(location);
+                console.log('Setting locationData state:', location);
 
             } catch (err) {
                 console.error('Fetch error:', err.message);
@@ -80,23 +92,23 @@ const TripsDetialsPage = ({ ctaAction, handleIsLoading, type }) => {
         };
 
         fetchLocationDetails();
-    }, [tripId]);
-    // Log tripData when it updates
+    }, [locationId]);
+    // Log locationData when it updates
     useEffect(() => {
-        console.log("useEffect triggered with tripData:", tripData);
-        if (tripData) {
-            console.log('tripData updated:', tripData);
+        console.log("useEffect triggered with locationData:", locationData);
+        if (locationData) {
+            console.log('locationData updated:', locationData);
         } else {
-            console.log('tripData is still null');
+            console.log('locationData is still null');
         }
-    }, [tripData]);
+    }, [locationData]);
 
 
-    if (!tripData) {
+    if (!locationData) {
         return <p>Loading...</p>; // Or any placeholder UI
     }
     else {
-        console.log("locationData:", tripData);
+        console.log("locationData:", locationData);
     }
 
     // Render when data is loaded
@@ -104,34 +116,44 @@ const TripsDetialsPage = ({ ctaAction, handleIsLoading, type }) => {
         <div className="DestinationPage">
             <LocationEventsDetails
                 type="Explore"
-                location={tripData?.title || 'Unknown Location'}
-                title={tripData?.title || 'Destination'}
-                rating={tripData?.rating || 'N/A'}
-                country={tripData?.country || 'India'}
+                location={locationData?.title || 'Unknown Location'}
+                title={locationData?.title || 'Destination'}
+                rating={locationData?.rating || 'N/A'}
+                country={locationData?.country || 'India'}
             />
-            <LocationImageGallery locationImages={tripData?.photos} />
+            <LocationImageGallery locationImages={locationData?.photos} />
 
-            {isMobile && <AddLocationCard ctaAction={ctaAction} title={tripData?.title} rating={tripData?.rating} reviews={getRandomNumberReviews} bestTime={tripData?.best_time} placesToVisit={tripData?.placesNumberToVisit || "10"} MainImage={tripData?.images[0]} />}
+            {isMobile && <AddLocationCard pageType={pageType} btnsStyle={{ width: "45%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} ctaAction={ctaAction} title={locationData?.title} rating={locationData?.rating} reviews={getRandomNumberReviews} bestTime={locationData?.best_time} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} />}
 
             <div className="row" style={{ position: 'relative' }}>
-                <div className="col-lg-8">
-                    {!isMobile && <Discription shortDescription={tripData?.description || ""} fullDescription={tripData?.fullDetails?.full_description || ""} bestTime={tripData?.best_time} />}
-                    <HotelsAndStaysSection hotels={hotels} />
+                <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
+                    {!isMobile && <Discription shortDescription={locationData?.description || ""} fullDescription={locationData?.fullDetails?.full_description || ""} bestTime={locationData?.best_time} />}
+                    <PlacesToVisitSection title={locationData?.title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
                     <PlanTripDates ctaAction={ctaAction} />
-                    <LocationMapSection coordinates={tripData?.coordinates} />
-                    <PlacesToVisitSection places={placesToVisit} ctaAction={ctaAction} />
+                    <LocationMapSection coordinates={locationData?.coordinates} />
+                    <HotelsAndStaysSection hotelIds={hotelIds} />
                 </div>
 
                 {!isMobile && (
-                    <div
-                        className="col-lg-4"
-                        style={{
-                            position: 'sticky',
-                            top: '0px',
-                            right: '0px',
-                        }}
-                    >
-                        <AddLocationCard ctaAction={ctaAction} title={tripData?.title} rating={tripData?.rating} reviews={getRandomNumberReviews()} bestTime={tripData?.best_time} placesToVisit={tripData?.placesNumberToVisit || "10"} MainImage={tripData?.images[0]} />
+                    <div className="col-lg-4">
+                        <div
+                            style={{
+                                position: 'sticky',
+                                top: '10px',
+                                zIndex: 1000, // ensure it's above other content if needed
+                            }}
+                        >
+                            <AddLocationCard
+                                ctaAction={ctaAction}
+                                title={locationData?.title}
+                                rating={locationData?.rating}
+                                reviews={getRandomNumberReviews()}
+                                bestTime={locationData?.best_time}
+                                placesToVisit={locationData?.placesNumberToVisit || "10"}
+                                HotelsToStay={locationData?.hotels?.length || "10"}
+                                MainImage={locationData?.images[0]}
+                            />
+                        </div>
                     </div>
                 )}
             </div>

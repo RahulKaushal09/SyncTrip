@@ -79,6 +79,12 @@
 @media screen and (max-width: 768px) {
     .location-card {
         margin-right: 0;
+        width: 100%;
+    }
+
+    .card-image img {
+        width: 100%;
+        height: 295px !important;
     }
 
 

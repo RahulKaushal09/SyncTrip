@@ -16,11 +16,11 @@ const LocationEventsDetails = ({ type, location, name, rating, country, title, a
                 <h2 className="locationEventHeadings">{title}</h2>
                 {address && <p>{address} Address Here</p>}
                 <div className="d-flex m-gap-2 justify-content-between">
-                    <div >
-                        <div className="btn btn-light-blue circlularButton">
+                    <div style={{ display: "flex" }} >
+                        <div className=" btn-light-blue circlularButton" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                             <FontAwesomeIcon icon={faStar} style={{ marginRight: "10px" }} />
                             {rating}</div>
-                        <div className="btn btn-light-blue circlularButton">
+                        <div className=" btn-light-blue circlularButton" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                             <FontAwesomeIcon icon={faLocationDot} style={{ marginRight: "10px" }} />
                             {country}
                         </div>
