@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -14,13 +14,16 @@ const customIcon = new L.Icon({
 });
 
 const LocationMapSection = ({ latitide, longitude }) => {
-    // Coordinates for 329 Kent Ave, Brooklyn (approximate)
     const position = [33.2778322, 75.3000181];
-    if (latitide && longitude) {
-        position[0] = latitide;
-        position[1] = longitude;
-    }
-    console.log("Location Map", position);
+    useEffect(() => {
+        // Set the default position to the provided latitude and longitude
+        if (latitide && longitude) {
+            position[0] = latitide;
+            position[1] = longitude;
+            console.log("Location Map", position);
+        }
+    }, [latitide, longitude]);
+
 
     return (
         <div className="location-map">
