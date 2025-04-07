@@ -13,16 +13,16 @@ const customIcon = new L.Icon({
     popupAnchor: [1, -34],
 });
 
-const LocationMapSection = ({ latitide, longitude }) => {
+const LocationMapSection = ({ latitude, longitude }) => {
     const position = [33.2778322, 75.3000181];
     useEffect(() => {
         // Set the default position to the provided latitude and longitude
-        if (latitide && longitude) {
-            position[0] = latitide;
+        if (latitude && longitude) {
+            position[0] = latitude;
             position[1] = longitude;
             console.log("Location Map", position);
         }
-    }, [latitide, longitude]);
+    }, [latitude, longitude]);
 
 
     return (
