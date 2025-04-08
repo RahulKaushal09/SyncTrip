@@ -264,6 +264,11 @@ const App = () => {
                 path="/trips/:tripId"
                 element={<TripsDetialsPage onLoginClick={() => decideLoginStatePopup()} ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
               />
+              {/* enrolled Trip */}
+              <Route
+                path="/trips/en/:tripId"
+                element={<TripsDetialsPage onLoginClick={() => decideLoginStatePopup()} ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
+              />
 
               {/* Optional: Catch-all route for 404 */}
               <Route path="*" element={<div>404 - Page Not Found</div>} />

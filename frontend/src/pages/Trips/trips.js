@@ -1,90 +1,118 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TripSection from '../../components/Trips/TripSection';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import '../../styles/trips/Trip.css'; // Import the CSS file for tabs
 
 const Trips = () => {
-    // Sample trip data based on the schema
-    const [trips, setTrips] = useState([]);
+    const [trips, setTrips] = useState([]); // All trips
+    const [enrolledTrips, setEnrolledTrips] = useState([]); // User's enrolled trips
     const [error, setError] = useState(null);
-    useEffect(() => {
-        const fetchInitialLocations = async () => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState('upcoming'); // Track active tab
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Check if the device is mobile
+    // Get token from local storage (or your auth system)
+    const token = localStorage.getItem('userToken'); // Replace with your auth method
+    const isLoggedIn = !!token; // Check if user is logged in
 
+    useEffect(() => {
+        const fetchTrips = async () => {
+            setIsLoading(true);
             try {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/getAllTrips`, {
+                // Fetch all trips
+                const allTripsResponse = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/getAllTrips`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ limit: 100 }),
                 });
 
-                if (!response.ok) throw new Error('Failed to fetch locations');
+                if (!allTripsResponse.ok) throw new Error('Failed to fetch all trips');
 
-                const data = await response.json();
-                setTrips(data);
+                const allTripsData = await allTripsResponse.json();
+                setTrips(allTripsData);
+
+                // Fetch enrolled trips only if logged in
+                if (isLoggedIn) {
+                    const enrolledTripsResponse = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/en/enrolled`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+
+                    if (!enrolledTripsResponse.ok) throw new Error('Failed to fetch enrolled trips');
+
+                    const enrolledTripsData = await enrolledTripsResponse.json();
+                    setEnrolledTrips(enrolledTripsData);
+                }
             } catch (err) {
                 setError(err.message);
             } finally {
-                console.log('Fetch complete');
+                setIsLoading(false);
             }
         };
 
-        fetchInitialLocations();
-    }, []); // Dependencies added for clarity
+        fetchTrips();
+    }, [token, isLoggedIn]);
 
-    // const trips = [
-    //     {
-    //         essentials: {
-    //             region: 'Himalchal',
-    //             duration: '2N Shimla • 3N Manali',
-    //             price: 22444,
-    //             pickup: { name: 'Airport' },
-    //             dropPoint: { name: 'Airport' },
-    //             nearbyPoints: { airport: 'Nearby Airport' },
-    //         },
-    //         include: {
-    //             travel: true,
-    //             food: true,
-    //             hotel: true,
-    //         },
-    //         itinerary: 'Visit to Solang Valley, Viceregal Lodge, Mall road, Visit to Scandal Point, Townhall, Shimla Church, Visit to Gaiety Theatre, Kufri Excursion, Hadimba Temple',
-    //     },
-    //     {
-    //         essentials: {
-    //             region: 'Kerala',
-    //             duration: '3N Munnar • 2N Alleppey',
-    //             price: 18999,
-    //             pickup: { name: 'Cochin Airport' },
-    //             dropPoint: { name: 'Cochin Airport' },
-    //             nearbyPoints: { airport: 'Cochin Airport' },
-    //         },
-    //         include: {
-    //             travel: true,
-    //             food: true,
-    //             hotel: true,
-    //         },
-    //         itinerary: 'Visit to Tea Gardens, Mattupetty Dam, Echo Point, Houseboat stay in Alleppey, Backwater cruise, Visit to Kumarakom Bird Sanctuary',
-    //     },
-    //     {
-    //         essentials: {
-    //             region: 'Goa',
-    //             duration: '4N Goa',
-    //             price: 15999,
-    //             pickup: { name: 'Dabolim Airport' },
-    //             dropPoint: { name: 'Dabolim Airport' },
-    //             nearbyPoints: { airport: 'Dabolim Airport' },
-    //         },
-    //         include: {
-    //             travel: true,
-    //             food: true,
-    //             hotel: true,
-    //         },
-    //         itinerary: 'Visit to Baga Beach, Calangute Beach, Dudhsagar Waterfalls, Explore Old Goa Churches, Nightlife at Tito’s Lane',
-    //     },
-    // ];
+    // Filter trips based on the active tab
+    const getFilteredTrips = () => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Normalize to start of day
+
+        switch (activeTab) {
+            case 'upcoming':
+                return trips.filter((trip) => {
+                    const fromDate = new Date(trip.essentials.timeline.fromDate);
+                    return fromDate >= today && ['active', 'scheduled'].includes(trip.requirements.status);
+                });
+            case 'enrolled':
+                return enrolledTrips; // Already fetched as enrolled trips
+            case 'history':
+                return trips.filter((trip) => {
+                    const fromDate = new Date(trip.essentials.timeline.fromDate);
+                    return fromDate < today || trip.requirements.status === 'completed';
+                });
+            default:
+                return trips;
+        }
+    };
+
+    const filteredTrips = getFilteredTrips();
 
     return (
-        <div>
-            <TripSection trips={trips} />
+        <div className="trips-container">
+            {/* Tab Navigation */}
+            <div className="tabs">
+                <button
+                    className={`tab-button ${activeTab === 'upcoming' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('upcoming')}
+                >
+                    Upcoming {!isMobile ? "Trips" : ""}
+                </button>
+                {isLoggedIn && (
+                    <button
+                        className={`tab-button ${activeTab === 'enrolled' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('enrolled')}
+                    >
+                        Enrolled {!isMobile ? "Trips" : ""}
+                    </button>
+                )}
+                <button
+                    className={`tab-button ${activeTab === 'history' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('history')}
+                >
+                    {!isMobile ? "Trips" : ""} History
+                </button>
+            </div>
+
+            {/* Loading, Error, and Empty States */}
+            {isLoading ? (
+                <p className="status-message">Loading trips...</p>
+            ) : error ? (
+                <p className="status-message error">{error}</p>
+            ) : (
+                <TripSection activeTab={activeTab} trips={filteredTrips} />
+            )}
         </div>
     );
 };

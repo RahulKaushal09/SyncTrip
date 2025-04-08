@@ -85,6 +85,28 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ error });
     }
 });
+router.get('/en/enrolled', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId).populate({
+            path: 'trips.tripId',
+            select: 'title essentials itinerary requirements include MainImageUrl',
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const enrolledTrips = user.trips
+            .filter((trip) => trip.tripId)
+            .map((trip) => trip.tripId);
+
+        res.json(enrolledTrips);
+    } catch (error) {
+        console.error('Error fetching enrolled trips:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
 router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
     const { tripId } = req.params;
     const userId = req.user.id; // From token
@@ -108,7 +130,7 @@ router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
         if (trip.peopleApplied.some(user => user._id.toString() === userId)) {
             // get all other users who are willing to showprofile 
             trip.peopleApplied = trip.peopleApplied.filter(user => user._id.toString() !== userId && user.showProfile == true);
-            return res.status(201).json({ message: 'You are already enrolled in this trip', trip });
+            return res.status(201).json({ message: 'You are already enrolled in this trip', trip: trip });
         }
 
         // Find the user

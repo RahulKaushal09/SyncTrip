@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import TripCard from './TripCard.js'; // Import the TripCard component from the previous response
 import "../../styles/trips/tripSection.css";
 import MainSearchBar from '../SearchPanel/MainSeachBar.js';
-const TripSection = ({ trips }) => {
+const TripSection = ({ trips, activeTab }) => {
     const [searchTerm, setSearchTerm] = useState('');
     // Handle Search Input
     const handleSearchChange = (value) => {
@@ -24,12 +24,14 @@ const TripSection = ({ trips }) => {
 
             {/* Trip Cards Grid */}
             <div className="tripSection-cards">
-                {trips
+                {trips.length > 0 && trips
                     .filter((trip) => new Date(trip.essentials.timeline.tillDate) < new Date())
                     .map((trip, index) => (
-                        <TripCard key={index} trip={trip} />
+                        <TripCard key={index} trip={trip} activeTab={activeTab} />
                     ))}
+
             </div>
+            {trips.length == 0 && <p className="status-message">No trips available for this category.</p>}
 
         </div>
     );

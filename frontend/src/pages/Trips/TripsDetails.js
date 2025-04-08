@@ -60,8 +60,8 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
 
                 const data = await response.json();
                 if (response.ok) {
-                    // console.log('Successfully enrolled in trip:', data);
-                    setOtherPeopleGoing(data.updatedTrip); // Assuming the API returns this data
+                    console.log('Successfully enrolled in trip:', data);
+                    setOtherPeopleGoing(data.trip); // Assuming the API returns this data
                     // Optionally update local user state or notify user
                     alert('You have successfully enrolled in the trip!');
                 } else {

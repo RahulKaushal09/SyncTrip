@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import "../../styles/trips/tripCard.css";
 import tripsHeaderImg from "../../assets/images/TripsHeader.png";
 
-const TripCard = ({ trip }) => {
+const TripCard = ({ trip, activeTab }) => {
   const {
     _id,
     title,
@@ -50,12 +50,32 @@ const TripCard = ({ trip }) => {
     }
   } = trip;
   // console.log(trip);
+  const [urlToTrip, setUrlToTrip] = useState("/trips/" + _id);
+  useEffect(() => {
+
+    // console.log(activeTab);
+    switch (activeTab) {
+      case 'upcoming':
+        setUrlToTrip(`/trips/${_id}`);
+        break;
+      case 'enrolled':
+        setUrlToTrip(`/trips/en/${_id}`);
+        break;
+      case 'history':
+        setUrlToTrip(`/trips/${_id}`);
+        break;
+      default:
+        setUrlToTrip(`/trips/${_id}`);
+        break;
+    }
+  }, [activeTab]);
+
 
   // Format dates for display
   const formatDate = (date) => date ? new Date(date).toLocaleDateString() : 'N/A';
 
   return (
-    <div className="tripCard" onClick={() => window.location.href = `/trips/${_id}`} style={{ cursor: 'pointer' }}>
+    <div className="tripCard" onClick={() => window.location.href = `${urlToTrip}`} style={{ cursor: 'pointer' }}>
       {/* Background Image */}
       <div className="tripCard-image" style={{ backgroundImage: `url(${MainImageUrl || tripsHeaderImg})` }}>
         <div className="tripCard-bookNow">Book Now @₹1</div>
