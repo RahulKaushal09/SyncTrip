@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 
 import { Dropdown } from 'react-bootstrap';
 import { PageTypeEnum } from '../../utils/pageType';
+import "../../styles/navbar/navbar.css"; // Import your CSS file for styling
 const Navbar = ({ ctaAction, onLoginClick, user }) => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [pageType, setPageType] = useState(null);
@@ -25,7 +26,8 @@ const Navbar = ({ ctaAction, onLoginClick, user }) => {
     const handleLogout = () => {
         // You should clear user state in App.js
         localStorage.removeItem("user"); // Clear user data from local storage
-        localStorage.removeItem("access_token"); // Clear access token from local storage
+        localStorage.removeItem("userToken"); // Clear access token from local storage
+        localStorage.removeItem("accessToken"); // Clear access token from local storage
         window.location.reload(); // Simple refresh logout for now
     };
 

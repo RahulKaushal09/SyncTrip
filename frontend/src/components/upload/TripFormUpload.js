@@ -57,8 +57,8 @@ const SearchDropdown = ({ locations, setSelectedLocation }) => {
 const TripForm = () => {
     const [locations, setLocations] = useState([]);
     const [selectedLocation, setSelectedLocation] = useState('');
-    const [pickupPosition, setPickupPosition] = useState({ lat: 0, lng: 0 });
-    const [dropPosition, setDropPosition] = useState({ lat: 0, lng: 0 });
+    const [pickupPosition, setPickupPosition] = useState({ lat: 0, long: 0 });
+    const [dropPosition, setDropPosition] = useState({ lat: 0, long: 0 });
 
     useEffect(() => {
         const fetchLocations = async () => {
@@ -167,7 +167,7 @@ const TripForm = () => {
         if (place && place.geometry) {
             const position = {
                 lat: place.geometry.location.lat(),
-                lng: place.geometry.location.lng(),
+                long: place.geometry.location.lng(),
             };
             setFormData(prev => ({
                 ...prev,
@@ -185,8 +185,8 @@ const TripForm = () => {
 
     const handleMarkerDragEnd = (e, type) => {
         const lat = e.latLng.lat();
-        const lng = e.latLng.lng();
-        type === 'pickup' ? setPickupPosition({ lat, lng }) : setDropPosition({ lat, lng });
+        const long = e.latLng.lng();
+        type === 'pickup' ? setPickupPosition({ lat, long }) : setDropPosition({ lat, long });
 
         // Update the corresponding location in the form (pickup or drop)
         setFormData(prev => ({
@@ -195,7 +195,7 @@ const TripForm = () => {
                 ...prev.essentials,
                 [type]: {
                     ...prev.essentials[type],
-                    mapLocation: { lat, long: lng },
+                    mapLocation: { lat, long: long },
                 },
             },
         }));
@@ -382,7 +382,7 @@ const TripForm = () => {
                                 <input type="text" placeholder="Enter pickup location" className="form-control" />
                             </Autocomplete>
                         )}
-                        Lat: {pickupPosition.lat}, Lng: {pickupPosition.lng}
+                        Lat: {pickupPosition.lat}, long: {pickupPosition.long}
                     </div>
                     <GoogleMap center={pickupPosition} zoom={10} mapContainerStyle={{ height: '300px', width: '100%' }}>
                         <Marker
@@ -399,7 +399,7 @@ const TripForm = () => {
                                 <input type="text" placeholder="Enter drop point" className="form-control" />
                             </Autocomplete>
                         )}
-                        Lat: {dropPosition.lat}, Lng: {dropPosition.lng}
+                        Lat: {dropPosition.lat}, long: {dropPosition.long}
 
                     </div>
 

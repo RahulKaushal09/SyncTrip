@@ -1,18 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TripSection from '../../components/Trips/TripSection';
-import '../../styles/trips/Trip.css'; // Import the CSS file for tabs
+import '../../styles/trips/Trip.css';
 
 const Trips = () => {
-    const [trips, setTrips] = useState([]); // All trips
-    const [enrolledTrips, setEnrolledTrips] = useState([]); // User's enrolled trips
+    const [trips, setTrips] = useState([]);
+    const [enrolledTrips, setEnrolledTrips] = useState([]);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState('upcoming'); // Track active tab
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Check if the device is mobile
-    // Get token from local storage (or your auth system)
-    const token = localStorage.getItem('userToken'); // Replace with your auth method
-    const isLoggedIn = !!token; // Check if user is logged in
+    const [activeTab, setActiveTab] = useState('upcoming');
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [token, setToken] = useState(localStorage.getItem('userToken') || ''); // Default to empty string
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('userToken')); // True if token exists
 
+    // Handle window resize for mobile detection
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Listen for storage changes (e.g., login/logout from navbar)
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const newToken = localStorage.getItem('userToken') || '';
+            setToken(newToken);
+            setIsLoggedIn(!!newToken); // Update login status
+        };
+
+        // Initial check
+        handleStorageChange();
+
+        // Listen for storage events (fired by other tabs or manual updates)
+        window.addEventListener('storage', handleStorageChange);
+
+        // Custom event for same-tab updates (if navbar dispatches it)
+        window.addEventListener('authChange', handleStorageChange);
+
+        // return () => {
+        //     window.removeEventListener('storage', handleStorageChange);
+        //     window.removeEventListener('authChange', handleStorageChange);
+        // };
+    }, []);
+
+    // Fetch trips when token or login status changes
     useEffect(() => {
         const fetchTrips = async () => {
             setIsLoading(true);
@@ -25,12 +55,11 @@ const Trips = () => {
                 });
 
                 if (!allTripsResponse.ok) throw new Error('Failed to fetch all trips');
-
                 const allTripsData = await allTripsResponse.json();
                 setTrips(allTripsData);
 
-                // Fetch enrolled trips only if logged in
-                if (isLoggedIn) {
+                // Fetch enrolled trips if logged in
+                if (isLoggedIn && token) {
                     const enrolledTripsResponse = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/en/enrolled`, {
                         method: 'GET',
                         headers: {
@@ -40,9 +69,10 @@ const Trips = () => {
                     });
 
                     if (!enrolledTripsResponse.ok) throw new Error('Failed to fetch enrolled trips');
-
                     const enrolledTripsData = await enrolledTripsResponse.json();
                     setEnrolledTrips(enrolledTripsData);
+                } else {
+                    setEnrolledTrips([]); // Clear enrolled trips if not logged in
                 }
             } catch (err) {
                 setError(err.message);
@@ -52,12 +82,12 @@ const Trips = () => {
         };
 
         fetchTrips();
-    }, [token, isLoggedIn]);
+    }, [token, isLoggedIn]); // Re-run when token or login status changes
 
-    // Filter trips based on the active tab
+    // Filter trips based on active tab
     const getFilteredTrips = () => {
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // Normalize to start of day
+        today.setHours(0, 0, 0, 0);
 
         switch (activeTab) {
             case 'upcoming':
@@ -66,7 +96,7 @@ const Trips = () => {
                     return fromDate >= today && ['active', 'scheduled'].includes(trip.requirements.status);
                 });
             case 'enrolled':
-                return enrolledTrips; // Already fetched as enrolled trips
+                return enrolledTrips;
             case 'history':
                 return trips.filter((trip) => {
                     const fromDate = new Date(trip.essentials.timeline.fromDate);
@@ -76,36 +106,33 @@ const Trips = () => {
                 return trips;
         }
     };
-
     const filteredTrips = getFilteredTrips();
 
     return (
         <div className="trips-container">
-            {/* Tab Navigation */}
             <div className="tabs">
                 <button
                     className={`tab-button ${activeTab === 'upcoming' ? 'active' : ''}`}
                     onClick={() => setActiveTab('upcoming')}
                 >
-                    Upcoming {!isMobile ? "Trips" : ""}
+                    Upcoming {!isMobile ? 'Trips' : ''}
                 </button>
                 {isLoggedIn && (
                     <button
                         className={`tab-button ${activeTab === 'enrolled' ? 'active' : ''}`}
                         onClick={() => setActiveTab('enrolled')}
                     >
-                        Enrolled {!isMobile ? "Trips" : ""}
+                        Enrolled {!isMobile ? 'Trips' : ''}
                     </button>
                 )}
                 <button
                     className={`tab-button ${activeTab === 'history' ? 'active' : ''}`}
                     onClick={() => setActiveTab('history')}
                 >
-                    {!isMobile ? "Trips" : ""} History
+                    {!isMobile ? 'Trips ' : ''}History
                 </button>
             </div>
 
-            {/* Loading, Error, and Empty States */}
             {isLoading ? (
                 <p className="status-message">Loading trips...</p>
             ) : error ? (

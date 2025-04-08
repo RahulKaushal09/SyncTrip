@@ -56,6 +56,66 @@ router.get('/:id', async (req, res) => {
         res.status(404).json({ error: 'User not found' });
     }
 });
+router.get('/enrolled/:id', authenticateToken, async (req, res) => {
+    try {
+
+        const userId = req.user.id; // Extract userId from the token
+        const tripId = req.params.id; // Extract tripId from the request parameters
+
+
+
+        // Fetch trip and populate peopleApplied
+        const trip = await Trip.findById(tripId).populate({
+            path: 'peopleApplied',
+            select: 'name profile_picture dateOfBirth showProfile', // Select relevant fields
+        });
+
+        if (!trip) {
+            return res.status(404).json({ error: 'Trip not found' });
+        }
+
+        // Filter users with showProfile: true and calculate ages
+        const appliedUsers = trip.peopleApplied
+            .filter((user) => user.showProfile && user._id.toString() !== userId) // Exclude the current user
+            .map((user) => {
+                const age = user.dateOfBirth
+                    ? Math.floor(
+                        (new Date() - new Date(user.dateOfBirth)) / (1000 * 60 * 60 * 24 * 365.25)
+                    )
+                    : null; // Calculate age if dateOfBirth exists
+                return {
+                    _id: user._id,
+                    name: user.name,
+                    profilePicture: user.profile_picture?.[0] || 'https://via.placeholder.com/40', // Use first picture or fallback
+                    age,
+                };
+            });
+
+        // Prepare response
+        const response = {
+            _id: trip._id,
+            title: trip.title,
+            MainImageUrl: trip.MainImageUrl,
+            essentials: trip.essentials,
+            numberOfPeopleApplied: trip.numberOfPeopleApplied || 0,
+            itinerary: trip.itinerary,
+            tripRating: trip.tripRating,
+            requirements: trip.requirements,
+            include: trip.include,
+            locationId: trip.locationId,
+            peopleApplied: appliedUsers,
+        };
+
+        res.json(response);
+    } catch (error) {
+        // Handle specific errors
+        if (error.name === 'CastError') {
+            return res.status(400).json({ error: 'Invalid trip ID' });
+        }
+        res.status(500).json({ error: 'Failed to fetch trip details' });
+    }
+});
+
 
 // Update Status of trip 
 router.put('/:id', async (req, res) => {
@@ -115,7 +175,7 @@ router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
         // Find the trip and populate enrolled users
         const trip = await Trip.findById(tripId).populate({
             path: 'peopleApplied',
-            select: 'name profile_picture socialMedias.instagram showProfile dateOfBirth', // Select fields to return
+            select: 'name', // Select fields to return
         });
         if (!trip) {
             return res.status(404).json({ message: 'Trip not found' });
@@ -129,8 +189,9 @@ router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
         // Check if user is already enrolled
         if (trip.peopleApplied.some(user => user._id.toString() === userId)) {
             // get all other users who are willing to showprofile 
-            trip.peopleApplied = trip.peopleApplied.filter(user => user._id.toString() !== userId && user.showProfile == true);
-            return res.status(201).json({ message: 'You are already enrolled in this trip', trip: trip });
+            var redirectionURL = $process.env.BACKEND_URL + 'trips/en/' + tripId;
+            // trip.peopleApplied = trip.peopleApplied.filter(user => user._id.toString() !== userId && user.showProfile == true);
+            return res.status(201).json({ message: 'You are already enrolled in this trip', trip: trip, redirectionURL: redirectionURL });
         }
 
         // Find the user
@@ -154,21 +215,22 @@ router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
         await Promise.all([trip.save(), user.save()]);
 
         // Re-fetch trip with updated peopleApplied (populated)
-        const updatedTrip = await Trip.findById(tripId).populate({
-            path: 'peopleApplied',
-            select: 'name profile_picture socialMedias.instagram dateOfBirth showProfile', // Select fields to return
-        });
+        // const updatedTrip = await Trip.findById(tripId).populate({
+        //     path: 'peopleApplied',
+        //     select: 'name profile_picture socialMedias.instagram dateOfBirth showProfile', // Select fields to return
+        // });
         // console.log('Updated trip:', updatedTrip); // Log the updated trip for debugging
-
-        if (!updatedTrip) {
-            return res.status(404).json({ message: 'Trip not found' });
-        }
-        updatedTrip.peopleApplied = updatedTrip.peopleApplied.filter(user => user.showProfile == true && user._id.toString() !== userId);
+        var redirectionURL = $process.env.BACKEND_URL + 'trips/en/' + tripId;
+        // if (!updatedTrip) {
+        //     return res.status(404).json({ message: 'Trip not found' });
+        // }
+        // updatedTrip.peopleApplied = updatedTrip.peopleApplied.filter(user => user.showProfile == true && user._id.toString() !== userId);
         // Send response
         res.status(200).json({
             success: true,
             message: 'Successfully enrolled in the trip',
-            trip: updatedTrip, // Includes populated peopleApplied
+            // trip: updatedTrip, // Includes populated peopleApplied
+            redirectionURL: redirectionURL,
             user,
         });
     } catch (err) {

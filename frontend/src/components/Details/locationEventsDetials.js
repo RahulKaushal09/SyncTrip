@@ -12,7 +12,7 @@ const LocationEventsDetails = ({ type, location, name, rating, country, title, a
     return (
         <div className="locationEventsDetails">
             <div >
-                <p className="text-muted">Home /{type} /<strong>{location}</strong></p>
+                {/* <p className="text-muted">Home /{type} /<strong>{location}</strong></p> */}
                 <h2 className="locationEventHeadings">{title}</h2>
                 {address && <p>{address} Address Here</p>}
                 <div className="d-flex m-gap-2 justify-content-between">

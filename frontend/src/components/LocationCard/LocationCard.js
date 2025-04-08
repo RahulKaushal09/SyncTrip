@@ -3,7 +3,7 @@ import '../../styles/LocationCard.css'; // Optional: You can create a CSS file f
 import { CiHeart } from "react-icons/ci";
 import { Carousel } from 'react-bootstrap';
 
-const LocationCard = ({ name, rating, places, bestTime, images, onClickFunction }) => {
+const LocationCard = ({ name, rating, places, bestTime, images, onClickFunction, Highlights }) => {
     return (
         <div className="location-card" >
             <div className="card-image" >
@@ -45,8 +45,10 @@ const LocationCard = ({ name, rating, places, bestTime, images, onClickFunction 
                         <span>★ {rating.split("/")[0].trim()}/5</span>
                     </div>
                 </div>
-                <p>{places} places to visit</p>
-                <p>Best time: {bestTime}</p>
+                {places && <p>{places} places to visit</p>}
+                {bestTime && <p>Best time: {bestTime}</p>}
+                {Highlights && <p>{Highlights}</p>}
+
             </div>
         </div>
     );

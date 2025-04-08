@@ -1,0 +1,239 @@
+/* EnrolledTripDetails.css */
+.enrolled-trip-details-container {
+    /* max-width: 1000px; */
+    /* margin: 0 auto; */
+    text-align: left;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}
+
+.back-button {
+    background-color: #000000;
+    color: #ffffff;
+    border: 1px solid #000000;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.back-button:hover {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #000000;
+}
+
+.back-button:focus {
+    outline: 2px solid #000000;
+    outline-offset: 2px;
+}
+
+.enrolled-trip-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #000;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.enrolled-trip-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.location-section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.people-applied {
+    background: #e9f2ff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.applied-users {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.user-profile:hover {
+    transform: translateY(-3px);
+}
+
+.user-profile-picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-user-name {
+
+    position: absolute;
+    bottom: 0;
+    font-size: 20px;
+    padding-left: 20px;
+    font-weight: 500;
+    color: #fff;
+    padding-bottom: 7px;
+
+}
+
+.user-age {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.no-users {
+    font-size: 1rem;
+    color: #333;
+    text-align: center;
+}
+
+.enrolled-trip-details,
+.enrolled-trip-inclusions,
+.enrolled-trip-requirements,
+.enrolled-trip-itinerary {
+    margin-bottom: 30px;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 8px;
+}
+
+.enrolled-trip-details p,
+.enrolled-trip-inclusions p,
+.enrolled-trip-requirements p {
+    font-size: 1rem;
+    color: #333;
+    margin: 8px 0;
+}
+
+.enrolled-trip-details strong,
+.enrolled-trip-inclusions strong,
+.enrolled-trip-requirements strong {
+    color: #000;
+}
+
+.itinerary-content {
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.6;
+}
+
+.itinerary-content ul {
+    padding-left: 20px;
+}
+
+.itinerary-content li {
+    margin-bottom: 8px;
+}
+
+.itinerary-content .day {
+    margin-bottom: 20px;
+}
+
+.itinerary-content h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #000;
+}
+
+.status-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #333;
+    margin: 20px 0;
+}
+
+.status-message.error {
+    color: #d9534f;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .enrolled-trip-details-container {
+        padding: 15px;
+    }
+
+    .enrolled-trip-title {
+        font-size: 2rem;
+    }
+
+    .enrolled-trip-image {
+        max-height: 300px;
+    }
+
+    .section-title {
+        font-size: 1.6rem;
+    }
+
+    .applied-users {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .enrolled-trip-details-container {
+        padding: 10px;
+    }
+
+    .enrolled-trip-title {
+        font-size: 1.8rem;
+    }
+
+    .enrolled-trip-image {
+        max-height: 250px;
+    }
+
+    .back-button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .user-profile-picture {
+        width: 40px;
+        height: 40px;
+    }
+
+    .profile-user-name {
+        font-size: 0.9rem;
+    }
+
+    .user-age {
+        font-size: 0.8rem;
+    }
+}

@@ -15,7 +15,7 @@ import LoginPopup from './components/Popups/LoginPopup';
 import FullProfilePopup from './components/Popups/FullProfilePopup';
 import PhoneNumberPopup from './components/Popups/PhoneNumberPopup';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-
+import EnrolledTripDetails from './pages/Trips/TripEnrolledDetails.js';
 // import pageTypeEnum from './utils/pageType';
 
 import { encryptData, decryptData } from './utils/securityStorage.js';
@@ -267,7 +267,7 @@ const App = () => {
               {/* enrolled Trip */}
               <Route
                 path="/trips/en/:tripId"
-                element={<TripsDetialsPage onLoginClick={() => decideLoginStatePopup()} ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
+                element={<EnrolledTripDetails />}
               />
 
               {/* Optional: Catch-all route for 404 */}

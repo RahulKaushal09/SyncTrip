@@ -8,6 +8,7 @@ const User = require('../models/userModel');
 router.post('/basicRegistration', async (req, res) => {
     try {
         const { name, email, phone, password, sex } = req.body;
+        email = email.toLowerCase(); // Normalize email to lowercase
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new User({ name, email, phone, password: hashedPassword, sex });
         await user.save();

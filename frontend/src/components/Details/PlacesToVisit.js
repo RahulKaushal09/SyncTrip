@@ -21,6 +21,8 @@ const PlacesToVisitSection = ({ title, placesIds }) => {
                 });
                 if (!response.ok) throw new Error('Failed to fetch places');
                 const data = await response.json();
+                console.log("Places data:", data); // Log the fetched places for debugging
+
                 setPlaces(data); // Store the fetched places in state
             } catch (err) {
                 console.error(err.message);
