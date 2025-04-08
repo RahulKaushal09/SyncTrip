@@ -16,6 +16,10 @@ import FullProfilePopup from './components/Popups/FullProfilePopup';
 import PhoneNumberPopup from './components/Popups/PhoneNumberPopup';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+// import pageTypeEnum from './utils/pageType';
+
+import { encryptData, decryptData } from './utils/securityStorage.js';
+
 // import FullProfilePopup from './components/Popups/FullProfilePopup';
 // import WeatherComponent from './data/getWeather';
 // import TripForm from './components/upload/TripFormUpload';
@@ -33,6 +37,8 @@ const App = () => {
   const [locations, setLocations] = useState([]);
   const [error, setError] = useState(null);
   const [locationsForPreMadeItinerary, setLocationsForPreMadeItinerary] = useState([]);
+  // const [pageType, setPageType] = useState(PageTypeEnum?.HOME); // Added for page type
+
 
   useEffect(() => {
     if (localStorage.getItem('user')) {
@@ -46,37 +52,79 @@ const App = () => {
   // Fetch Locations Only Once
   useEffect(() => {
     const fetchInitialLocations = async () => {
+      const cacheKey = "cached_locations";
+      const cacheExpiryKey = "cached_locations_expiry";
+
+      const encryptedData = localStorage.getItem(cacheKey);
+      const encryptedExpiry = localStorage.getItem(cacheExpiryKey);
+      const now = new Date();
+
+      if (encryptedData && encryptedExpiry) {
+        const expiryDate = decryptData(encryptedExpiry);
+        const parsedLocations = decryptData(encryptedData);
+
+        if (expiryDate && new Date(expiryDate) > now && parsedLocations) {
+          console.log("Using encrypted cached locations");
+          setLocations(parsedLocations);
+          setLocationsForPreMadeItinerary(parsedLocations);
+          return;
+        }
+      }
+
       if (hasFetchedLocations.current) {
-        console.log('Locations already fetched, skipping API call');
+        console.log("Locations already fetched, skipping API call");
         return;
       }
-      hasFetchedLocations.current = true;
-      console.log('Fetching locations...');
 
-      handleIsLoading(true); // Show loader
+      hasFetchedLocations.current = true;
+      console.log("Fetching locations...");
+
+      handleIsLoading(true);
 
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/getalllocations`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ limit: 100 }),
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/getalllocations`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ limit: 100 }),
+          }
+        );
 
-        if (!response.ok) throw new Error('Failed to fetch locations');
+        if (!response.ok) throw new Error("Failed to fetch locations");
 
         const data = await response.json();
-        setLocations(data.locations || data);
-        setLocationsForPreMadeItinerary(data.locations || data); // Set locations for Pre-Made Itinerary
+        const locations = data.locations || data;
+
+        setLocations(locations);
+        setLocationsForPreMadeItinerary(locations);
+
+        // Encrypt and store data with expiry (7 days)
+        const expiryDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        localStorage.setItem(cacheKey, encryptData(locations));
+        localStorage.setItem(cacheExpiryKey, encryptData(expiryDate.toISOString()));
       } catch (err) {
         setError(err.message);
       } finally {
-        handleIsLoading(false); // Hide loader
-        console.log('Fetch complete');
+        handleIsLoading(false);
+        console.log("Fetch complete");
       }
     };
 
     fetchInitialLocations();
-  }, [handleIsLoading, hasFetchedLocations]); // Dependencies added for clarity
+  }, [handleIsLoading, hasFetchedLocations]);
+
+  // useEffect(() => {
+  //   const path = window.location.pathname;
+
+  //   if (path === `/${PageTypeEnum.TRIP}`) {
+  //     setPageType(PageTypeEnum.TRIP);
+  //   } else if (path === `/${PageTypeEnum.LOCATION}`) {
+  //     setPageType(PageTypeEnum.LOCATION);
+  //   } else {
+  //     setPageType(PageTypeEnum.HOME);
+  //   }
+  // }, [window.location.pathname]);
 
   const handleLogin = (user, requiresPhone = false) => {
     setUser(user);
@@ -152,6 +200,7 @@ const App = () => {
               ctaAction={() => setAnyCtaPopup(true)}
               onLoginClick={() => setShowLogin(true)}
               user={user}
+            // pageType={pageType} // Pass the page type to Navbar
             />
             {/* <TripForm /> */}
             {/* Conditionally render Popup */}

@@ -14,13 +14,12 @@ const customIcon = new L.Icon({
 });
 
 const LocationMapSection = ({ latitude, longitude }) => {
-    const position = [33.2778322, 75.3000181];
+    const [position, setPosition] = React.useState([latitude, longitude]);
+
     useEffect(() => {
         // Set the default position to the provided latitude and longitude
         if (latitude && longitude) {
-            position[0] = latitude;
-            position[1] = longitude;
-            console.log("Location Map", position);
+            setPosition([latitude, longitude]);
         }
     }, [latitude, longitude]);
 

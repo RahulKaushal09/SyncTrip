@@ -11,41 +11,120 @@ export default function LoginPopup({ onClose, onLogin }) {
         password: '',
         sex: 'Male',
     });
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
+        setError(''); // Clear error on input change
+    };
+
+    const validateForm = () => {
+        if (!form.email || !form.password) {
+            setError('Email and password are required');
+            return false;
+        }
+        if (isRegistering) {
+            if (!form.name) {
+                setError('Name is required for registration');
+                return false;
+            }
+            if (!form.phone) {
+                setError('Phone number is required for registration');
+                return false;
+            }
+        }
+        return true;
     };
 
     const handleManualSubmit = async (e) => {
         e.preventDefault();
-        const endpoint = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/users/basicRegistration`; // Unified endpoint for both login and register
-        const res = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(form),
-        });
-        const data = await res.json();
-        if (data?.user) {
-            if (data?.token) {
-                localStorage.removeItem('userToken'); // Remove old token
-                localStorage.setItem('userToken', data.token); // Store token if available
+        if (!validateForm()) return;
+
+        setIsLoading(true);
+        setError('');
+
+        try {
+            const endpoint = isRegistering
+                ? `${process.env.REACT_APP_BACKEND_BASE_URL}/api/users/basicRegistration`
+                : `${process.env.REACT_APP_BACKEND_BASE_URL}/api/users/login`;
+
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(form),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data?.message || 'Operation failed');
             }
-            onLogin(data.user); // Pass user to App.js, triggers FullProfilePopup
-            onClose();
-        } else {
-            alert(data?.message || 'Registration/Login failed');
+
+            if (data?.user) {
+                if (data?.token) {
+                    localStorage.setItem('userToken', data.token);
+                }
+                onLogin(data.user);
+                onClose();
+            } else {
+                throw new Error(data?.message || 'No user data received');
+            }
+        } catch (err) {
+            setError(err.message || 'An error occurred. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleGoogleLogin = async (credentialResponse) => {
+        setIsLoading(true);
+        setError('');
+
+        try {
+            const res = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/auth/google-login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: credentialResponse.credential }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data?.message || 'Google login failed');
+            }
+
+            if (data?.user) {
+                if (data?.token) {
+                    localStorage.setItem('userToken', data.token);
+                }
+                onLogin(data.user);
+                onClose();
+            } else {
+                throw new Error('No user data received');
+            }
+        } catch (err) {
+            setError(err.message || 'Google login failed. Please try again.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
         <div className="login-popup-overlay">
             <div className="login-popup-container">
-                <button className="login-popup-close-btn" onClick={onClose}>
+                <button
+                    className="login-popup-close-btn"
+                    onClick={onClose}
+                    disabled={isLoading}
+                >
                     ×
                 </button>
                 <h2 className="login-popup-title">
-                    {isRegistering ? 'Register' : 'Login'} to TripMate
+                    {isRegistering ? 'Create an Account' : 'Welcome Back'}
                 </h2>
+
+
 
                 <form onSubmit={handleManualSubmit} className="login-popup-form">
                     {isRegistering && (
@@ -53,39 +132,46 @@ export default function LoginPopup({ onClose, onLogin }) {
                             <input
                                 type="text"
                                 name="name"
-                                placeholder="Name"
+                                placeholder="Full Name"
                                 className="login-popup-input"
                                 onChange={handleChange}
                                 value={form.name}
+                                disabled={isLoading}
+                                required
                             />
                             <select
                                 name="sex"
                                 className="login-popup-input"
                                 onChange={handleChange}
                                 value={form.sex}
+                                disabled={isLoading}
                             >
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                                 <option value="Other">Other</option>
                             </select>
+                            <input
+                                type="tel"
+                                name="phone"
+                                placeholder="Phone Number"
+                                className="login-popup-input"
+                                onChange={handleChange}
+                                value={form.phone}
+                                disabled={isLoading}
+                                required
+                            />
                         </>
                     )}
 
                     <input
                         type="email"
                         name="email"
-                        placeholder="Email"
+                        placeholder="Email Address"
                         className="login-popup-input"
                         onChange={handleChange}
                         value={form.email}
-                    />
-                    <input
-                        type="text"
-                        name="phone"
-                        placeholder="Phone"
-                        className="login-popup-input"
-                        onChange={handleChange}
-                        value={form.phone}
+                        disabled={isLoading}
+                        required
                     />
                     <input
                         type="password"
@@ -94,10 +180,21 @@ export default function LoginPopup({ onClose, onLogin }) {
                         className="login-popup-input"
                         onChange={handleChange}
                         value={form.password}
+                        disabled={isLoading}
+                        required
                     />
-
-                    <button type="submit" className="login-popup-submit-btn">
-                        {isRegistering ? 'Register' : 'Login'}
+                    {error && <div className="login-popup-error" style={{ color: "red" }}>{error}</div>}
+                    <button
+                        type="submit"
+                        className="login-popup-submit-btn"
+                        disabled={isLoading}
+                    >
+                        {isLoading
+                            ? 'Processing...'
+                            : isRegistering
+                                ? 'Create Account'
+                                : 'Sign In'
+                        }
                     </button>
                 </form>
 
@@ -105,35 +202,33 @@ export default function LoginPopup({ onClose, onLogin }) {
 
                 <div className="login-popup-google-container">
                     <GoogleLogin
-                        onSuccess={async (credentialResponse) => {
-                            const res = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/auth/google-login`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ token: credentialResponse.credential }),
-                            });
-                            const data = await res.json();
-                            if (data?.user) {
-                                if (data?.token) {
-                                    localStorage.removeItem('userToken'); // Remove old token
-                                    localStorage.setItem('userToken', data.token); // Store token if available
-                                }
-                                onLogin(data.user); // Pass requiresPhone flag
-                                onClose();
-                            }
-                        }}
+                        onSuccess={handleGoogleLogin}
                         onError={() => {
-                            alert('Gmail login failed');
+                            setError('Google login failed. Please try again.');
+                            setIsLoading(false);
                         }}
+                        disabled={isLoading}
                     />
                 </div>
 
                 <p className="login-popup-toggle-text">
                     {isRegistering ? 'Already have an account?' : "Don't have an account?"}
                     <button
-                        onClick={() => setIsRegistering(!isRegistering)}
+                        onClick={() => {
+                            setIsRegistering(!isRegistering);
+                            setError('');
+                            setForm({
+                                name: '',
+                                email: '',
+                                phone: '',
+                                password: '',
+                                sex: 'Male',
+                            });
+                        }}
                         className="login-popup-toggle-btn"
+                        disabled={isLoading}
                     >
-                        {isRegistering ? 'Login' : 'Register'}
+                        {isRegistering ? 'Sign In' : 'Create Account'}
                     </button>
                 </p>
             </div>

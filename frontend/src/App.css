@@ -206,7 +206,7 @@ section {
 
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1000px) {
   .reviewingBox {
     flex-direction: column !important;
     align-items: flex-start;

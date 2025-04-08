@@ -69,9 +69,10 @@ const TripPlanner = ({ pageType, onLoginClick, EnrollInTrip, ctaAction, startDat
                     <strong>Let's plan your trip{' '}</strong>
 
                 </h2>
-                <button className="clear-dates" onClick={clearDates}>
-                    Clear Dates
-                </button>
+                {pageType != PageTypeEnum.TRIP &&
+                    <button className="clear-dates" onClick={clearDates}>
+                        Clear Dates
+                    </button>}
             </div>
             <div className="date-range">
                 {startDate && endDate
@@ -82,7 +83,9 @@ const TripPlanner = ({ pageType, onLoginClick, EnrollInTrip, ctaAction, startDat
                 <DatePicker
 
                     selected={startDate}
-                    onChange={handleDateChange}
+                    onChange={pageType !== PageTypeEnum.TRIP ? handleDateChange : () => { }}
+
+
                     startDate={startDate}
                     endDate={endDate}
                     selectsRange
@@ -90,9 +93,8 @@ const TripPlanner = ({ pageType, onLoginClick, EnrollInTrip, ctaAction, startDat
                     minDate={today} // Dynamically set to today
                     maxDate={maxDate} // Dynamically set to one year from today
                     monthsShown={2}
-                    onMonthChange={(date) => setSelectedMonth(date)
-
-                    }
+                    onMonthChange={(date) => setSelectedMonth(date)}
+                    readOnly={pageType === PageTypeEnum.TRIP ? true : false}
                 />
             </div>
             <div className="button-container row">

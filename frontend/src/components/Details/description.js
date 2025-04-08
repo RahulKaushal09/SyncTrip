@@ -16,7 +16,7 @@ const Discription = ({ pageType, shortDescription, fullDescription, bestTime }) 
 
     return (
         <div className="travel-info-container">
-            <div className="info-grid">
+            {pageType != PageTypeEnum.TRIP && <div className="info-grid" >
                 <div className="essentials-section">
                     <h2 className='DescriptionHeading'>Essentials</h2>
                     <div className="essentials-item">
@@ -43,6 +43,7 @@ const Discription = ({ pageType, shortDescription, fullDescription, bestTime }) 
                     </div>
                 </div>
             </div>
+            }
 
             <div className="description-section">
                 <h2 className='DescriptionHeading'><strong>{pageType && pageType == PageTypeEnum.TRIP ? "Itinerary" : "Description"}</strong></h2>

@@ -1,9 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SyncTripLogo from "../../assets/images/logoWeb.png";
-import { Dropdown } from 'react-bootstrap';
+import { useLocation } from "react-router-dom";
 
+import { Dropdown } from 'react-bootstrap';
+import { PageTypeEnum } from '../../utils/pageType';
 const Navbar = ({ ctaAction, onLoginClick, user }) => {
     const [showDropdown, setShowDropdown] = useState(false);
+    const [pageType, setPageType] = useState(null);
+    const location = useLocation(); // Get the current location from react-router
+    useEffect(() => {
+        const path = location.pathname;
+
+        if (path === `/${PageTypeEnum.TRIP}`) {
+            setPageType(PageTypeEnum.TRIP);
+        } else if (path === `/${PageTypeEnum.LOCATION}`) {
+            setPageType(PageTypeEnum.LOCATION);
+        } else {
+            setPageType(PageTypeEnum.HOME);
+        }
+    }, [location.pathname]); // 👈 this will now update on route change
+    console.log(pageType, "pageType in navbar");
 
     const toggleDropdown = () => setShowDropdown(!showDropdown);
 
@@ -35,9 +51,13 @@ const Navbar = ({ ctaAction, onLoginClick, user }) => {
 
                 <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul className="navbar-nav" style={{ alignItems: "center" }}>
-                        <li className="nav-item" style={{ cursor: "pointer" }} onClick={ctaAction}>
+                        {pageType == PageTypeEnum.TRIP && <li className="nav-item" style={{ cursor: "pointer" }} onClick={ctaAction}>
                             <span className="nav-link">Create Trip</span>
+                        </li>}
+                        {pageType != PageTypeEnum.TRIP && <li className="nav-item" style={{ cursor: "pointer" }} onClick={() => window.location.href = "/trips"}>
+                            <span className="nav-link">Trips</span>
                         </li>
+                        }
 
                         <li className="nav-item dropdown" style={{ cursor: "pointer" }}>
                             {user ? (
@@ -83,7 +103,7 @@ const Navbar = ({ ctaAction, onLoginClick, user }) => {
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav >
     );
 };
 

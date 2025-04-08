@@ -15,6 +15,7 @@
     "bootstrap": "^5.3.3",
     "cheerio": "^1.0.0",
     "cra-template": "1.2.0",
+    "crypto-js": "^4.2.0",
     "dotenv": "^16.4.7",
     "fuse.js": "^7.1.0",
     "google-auth-library": "^9.15.1",

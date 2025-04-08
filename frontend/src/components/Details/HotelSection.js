@@ -93,7 +93,7 @@ const HotelCard = ({ hotel }) => {
     // console.log(hotel);
 
     return (
-        <div className="hotel-card" onClick={() => window.location.href = hotel?.hotel_link} style={{ cursor: 'pointer' }} onclick={hotel?.hotel_link}>
+        <div className="hotel-card">{/*//onClick={() => window.location.href = hotel?.hotel_link} style={{ cursor: 'pointer' }} onclick={hotel?.hotel_link}>*/}
             <div className='top-rated'>Top Rated</div>
             <CiHeart className="heart-icon" />
             <HotelImageCarousel images={hotel.hotel_images} />
@@ -104,12 +104,12 @@ const HotelCard = ({ hotel }) => {
                 </div>
                 <h3>{hotel.hotel_name}</h3>
                 <p>{hotel.hotel_location.neighbourhood}</p>
-                <div className='d-flex justify-content-between align-items-center'>
+                {/* <div className='d-flex justify-content-between align-items-center'>
                     <div classPrice="price">
                         <strong>2,000</strong> / onwards
                     </div>
                     <div className="btn btn-black">Explore</div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

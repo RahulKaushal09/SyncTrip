@@ -1,4 +1,5 @@
 export const PageTypeEnum = Object.freeze({
     LOCATION: "location",
-    TRIP: "trip"
+    TRIP: "trips",
+    HOME: "home",
 });
