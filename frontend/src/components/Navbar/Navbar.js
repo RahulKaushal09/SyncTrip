@@ -19,7 +19,6 @@ const Navbar = ({ ctaAction, onLoginClick, user }) => {
             setPageType(PageTypeEnum.HOME);
         }
     }, [location.pathname]); // 👈 this will now update on route change
-    console.log(pageType, "pageType in navbar");
 
     const toggleDropdown = () => setShowDropdown(!showDropdown);
 

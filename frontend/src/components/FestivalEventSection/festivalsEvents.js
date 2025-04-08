@@ -2770,13 +2770,13 @@ const findClosestCity = (city) => {
 
         citywords[i] = citywords[i].charAt(0).toUpperCase() + citywords[i].slice(1);
         citywords[i] = citywords[i].trim(); // Trim leading and trailing spaces
-        console.log("Finding closest city for:", citywords[i]);
+        // console.log("Finding closest city for:", citywords[i]);
         const fuse = new Fuse(indianCities, { threshold: 0.1 });
 
         const result = fuse.search(citywords[i]);
-        console.log("Search result:", result);
+        // console.log("Search result:", result);
         if (result.length > 0) {
-            console.log("Search result:", result);
+            // console.log("Search result:", result);
             return result.length > 0 ? result[0].item : "Unknown City";
         }
 
@@ -2799,13 +2799,13 @@ function LocationBlock({ fetchEvents }) {
                     )
                         .then((res) => res.json())
                         .then((data) => {
-                            console.log(data);
+                            // console.log(data);
                             if (!data || !data.address) {
                                 setLocation("Location unavailable");
                                 return;
                             }
                             const city = data.address.state_district || data.address.state || data.address.county || "Unknown City";
-                            console.log(city);
+                            // console.log(city);
 
                             const matchedCity = findClosestCity(city);
                             setLocation(matchedCity);
@@ -2889,7 +2889,7 @@ const FestivalsEvents = () => {
             }
         );
         const data = await res.json();
-        console.log("Events data:", data.events);
+        // console.log("Events data:", data.events);
 
         setEvents(data.events || []);
     };

@@ -36,7 +36,7 @@ const WeatherComponent = ({ locationQuery }) => {
                 );
 
                 // Extract placeId from the response
-                console.log("Location response:", locationResponse.data);
+                // console.log("Location response:", locationResponse.data);
 
                 const placeId =
                     locationResponse.data.dal.getSunV3LocationSearchUrlConfig.data

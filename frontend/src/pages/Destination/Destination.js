@@ -49,27 +49,27 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
     // Fetch location details
     useEffect(() => {
         const fetchLocationDetails = async () => {
-            console.log('Starting fetch for locationId:', locationId);
+            // console.log('Starting fetch for locationId:', locationId);
             // handleIsLoading(true);
             setLoading(true);
 
             try {
                 const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/${locationId}`;
-                console.log('Fetching from:', url);
+                // console.log('Fetching from:', url);
 
                 const locationResponse = await fetch(url, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                 });
 
-                console.log('Response status:', locationResponse.status);
+                // console.log('Response status:', locationResponse.status);
 
                 if (!locationResponse.ok) {
                     throw new Error(`Failed to fetch location: ${locationResponse.statusText}`);
                 }
 
                 const location = await locationResponse.json();
-                console.log('Raw API response:', location);
+                // console.log('Raw API response:', location);
                 location.title = location?.title?.replace(/[0-9. ]/g, '');
                 location.title = extractTextFromHTML(location.title);
                 setHotelids(location?.hotels);
@@ -78,7 +78,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                 }
 
                 setLocationData(location);
-                console.log('Setting locationData state:', location);
+                // console.log('Setting locationData state:', location);
 
             } catch (err) {
                 console.error('Fetch error:', err.message);
@@ -92,21 +92,21 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
         fetchLocationDetails();
     }, [locationId]);
     // Log locationData when it updates
-    useEffect(() => {
-        console.log("useEffect triggered with locationData:", locationData);
-        if (locationData) {
-            console.log('locationData updated:', locationData);
-        } else {
-            console.log('locationData is still null');
-        }
-    }, [locationData]);
+    // useEffect(() => {
+    //     // console.log("useEffect triggered with locationData:", locationData);
+    //     if (locationData) {
+    //         console.log('locationData updated:', locationData);
+    //     } else {
+    //         console.log('locationData is still null');
+    //     }
+    // }, [locationData]);
 
 
     if (!locationData) {
         return <p>Loading...</p>; // Or any placeholder UI
     }
     else {
-        console.log("locationData:", locationData);
+        // console.log("locationData:", locationData);
     }
 
     // Render when data is loaded

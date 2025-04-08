@@ -33,7 +33,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const EnrollInTrip = async (type) => {
         // type == 2 if see others people going in trip
         // else null
-        console.log("EnrollInTrip called with type:", type);
+        // console.log("EnrollInTrip called with type:", type);
         if (type == 2) {
             console.log("See others people going in trip");
             console.log("otherPeopleGoing", otherPeopleGoing);
@@ -46,7 +46,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
 
         if (user && user?.profileCompleted !== undefined && user.profileCompleted === true && userToken) {
             const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/enroll/${tripId}`;
-            console.log('Fetching from:', url);
+            // console.log('Fetching from:', url);
 
             try {
                 const response = await fetch(url, {
@@ -60,7 +60,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
 
                 const data = await response.json();
                 if (response.ok) {
-                    console.log('Successfully enrolled in trip:', data);
+                    // console.log('Successfully enrolled in trip:', data);
                     setOtherPeopleGoing(data.updatedTrip); // Assuming the API returns this data
                     // Optionally update local user state or notify user
                     alert('You have successfully enrolled in the trip!');
@@ -73,7 +73,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                 alert('An error occurred while enrolling. Please try again.');
             }
         } else {
-            console.log('User not logged in or profile incomplete');
+            // console.log('User not logged in or profile incomplete');
             onLoginClick(); // Trigger login popup
         }
     };
@@ -83,7 +83,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     };
     const setLocationDetailsFromLocationId = (locationId) => {
         const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/${locationId}`;
-        console.log('Fetching from:', url);
+        // console.log('Fetching from:', url);
         fetch(url, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
@@ -97,7 +97,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                 return response.json();
             })
             .then((location) => {
-                console.log('Raw API response:', location);
+                // console.log('Raw API response:', location);
                 location.title = location?.title?.replace(/[0-9. ]/g, '');
                 location.title = extractTextFromHTML(location.title);
                 setHotelids(location?.hotels);
@@ -105,7 +105,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                     throw new Error('Location data is empty or null');
                 }
                 setLocationData(location);
-                console.log('Setting locationData state:', location);
+                // console.log('Setting locationData state:', location);
             })
             .catch((err) => {
                 console.error('Fetch error:', err.message);
@@ -129,33 +129,33 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
 
     useEffect(() => {
         const url = window.location.href;
-        console.log("URL:", url);
-        console.log("Current URL:", url);
+        // console.log("URL:", url);
+        // console.log("Current URL:", url);
 
         if (url.includes("/trips/")) {
             setPageType(PageTypeEnum.TRIP);
         } else if (url.includes("/location/")) {
             setPageType(PageTypeEnum.LOCATION);
         }
-        console.log("Page Type:", pageType);
+        // console.log("Page Type:", pageType);
     }, []); // only run once when the component mounts
     // Fetch location details
     useEffect(() => {
         const fetchTripDetails = async () => {
-            console.log('Starting fetch for tripId:', tripId);
+            // console.log('Starting fetch for tripId:', tripId);
             // handleIsLoading(true);
             setLoading(true);
 
             try {
                 const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/${tripId}`;
-                console.log('Fetching from:', url);
+                // console.log('Fetching from:', url);
 
                 const TripResponse = await fetch(url, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                 });
 
-                console.log('Response status:', TripResponse.status);
+                // console.log('Response status:', TripResponse.status);
                 setTripData(TripResponse);
 
                 if (!TripResponse.ok) {
@@ -163,14 +163,14 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                 }
 
                 const Trip = await TripResponse.json();
-                console.log('Raw API response:', Trip);
+                // console.log('Raw API response:', Trip);
                 Trip.title = Trip?.title?.replace(/[0-9. ]/g, '');
                 Trip.title = extractTextFromHTML(Trip.title);
                 setTitle(Trip.title);
                 setDescription(Trip.description);
                 setTripsData(Trip);
                 const locationId = Trip.locationId;
-                console.log("Location ID:", locationId);
+                // console.log("Location ID:", locationId);
                 setLocationDetailsFromLocationId(locationId);
 
             } catch (err) {
@@ -185,21 +185,21 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
         fetchTripDetails();
     }, [tripId]);
     // Log locationData when it updates
-    useEffect(() => {
-        console.log("useEffect triggered with locationData:", locationData);
-        if (locationData) {
-            console.log('locationData updated:', locationData);
-        } else {
-            console.log('locationData is still null');
-        }
-    }, [locationData]);
+    // useEffect(() => {
+    //     console.log("useEffect triggered with locationData:", locationData);
+    //     if (locationData) {
+    //         console.log('locationData updated:', locationData);
+    //     } else {
+    //         console.log('locationData is still null');
+    //     }
+    // }, [locationData]);
 
 
     if (!locationData) {
         return <p>Loading...</p>; // Or any placeholder UI
     }
     else {
-        console.log("locationData:", locationData);
+        // console.log("locationData:", locationData);
     }
 
     // Render when data is loaded

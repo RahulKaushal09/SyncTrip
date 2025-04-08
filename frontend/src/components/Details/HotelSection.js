@@ -90,7 +90,6 @@ const HotelImageCarousel = ({ images }) => {
 };
 const HotelCard = ({ hotel }) => {
 
-    // console.log(hotel);
 
     return (
         <div className="hotel-card">{/*//onClick={() => window.location.href = hotel?.hotel_link} style={{ cursor: 'pointer' }} onclick={hotel?.hotel_link}>*/}

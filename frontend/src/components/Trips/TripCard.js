@@ -49,7 +49,7 @@ const TripCard = ({ trip }) => {
       hotel: includeHotel
     }
   } = trip;
-  console.log(trip);
+  // console.log(trip);
 
   // Format dates for display
   const formatDate = (date) => date ? new Date(date).toLocaleDateString() : 'N/A';

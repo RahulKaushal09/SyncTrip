@@ -93,7 +93,7 @@ router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
         // Find the trip and populate enrolled users
         const trip = await Trip.findById(tripId).populate({
             path: 'peopleApplied',
-            select: 'name profile_picture socialMedias.instagram', // Select fields to return
+            select: 'name profile_picture socialMedias.instagram showProfile dateOfBirth', // Select fields to return
         });
         if (!trip) {
             return res.status(404).json({ message: 'Trip not found' });
@@ -106,7 +106,9 @@ router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
 
         // Check if user is already enrolled
         if (trip.peopleApplied.some(user => user._id.toString() === userId)) {
-            return res.status(400).json({ message: 'You are already enrolled in this trip' });
+            // get all other users who are willing to showprofile 
+            trip.peopleApplied = trip.peopleApplied.filter(user => user._id.toString() !== userId && user.showProfile == true);
+            return res.status(201).json({ message: 'You are already enrolled in this trip', trip });
         }
 
         // Find the user
@@ -132,13 +134,14 @@ router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
         // Re-fetch trip with updated peopleApplied (populated)
         const updatedTrip = await Trip.findById(tripId).populate({
             path: 'peopleApplied',
-            select: 'name profile_picture socialMedias.instagram age', // Select fields to return
+            select: 'name profile_picture socialMedias.instagram dateOfBirth showProfile', // Select fields to return
         });
         // console.log('Updated trip:', updatedTrip); // Log the updated trip for debugging
 
         if (!updatedTrip) {
             return res.status(404).json({ message: 'Trip not found' });
         }
+        updatedTrip.peopleApplied = updatedTrip.peopleApplied.filter(user => user.showProfile == true && user._id.toString() !== userId);
         // Send response
         res.status(200).json({
             success: true,

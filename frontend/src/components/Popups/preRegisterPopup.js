@@ -10,7 +10,7 @@ const PreRegisterPopup = ({ onClose }) => {
 
     const handleSubmit = () => {
         // Handle form submission logic here
-        console.log('Email submitted:', email);
+        // console.log('Email submitted:', email);
         onClose(); // Close the popup after submission
     };
 

@@ -12,7 +12,6 @@ const Discription = ({ pageType, shortDescription, fullDescription, bestTime }) 
     const toggleDescription = () => {
         setIsExpanded(!isExpanded);
     };
-    console.log(pageType, "description");
 
     return (
         <div className="travel-info-container">

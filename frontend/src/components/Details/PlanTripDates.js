@@ -34,8 +34,6 @@ const TripPlanner = ({ pageType, onLoginClick, EnrollInTrip, ctaAction, startDat
         if (startDatePreTrip && endDatePreTrip) {
             setStartDate(new Date(startDatePreTrip));
             setEndDate(new Date(endDatePreTrip));
-            console.log(startDate);
-            console.log(endDate);
 
         }
     }, [startDatePreTrip, endDatePreTrip]);
@@ -60,7 +58,6 @@ const TripPlanner = ({ pageType, onLoginClick, EnrollInTrip, ctaAction, startDat
             alert('Please select both start and end dates.');
         }
     };
-    console.log(pageType, "plantripdates");
 
     return (
         <div className="trip-planner">

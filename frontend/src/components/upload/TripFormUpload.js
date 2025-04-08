@@ -59,7 +59,6 @@ const TripForm = () => {
     const [selectedLocation, setSelectedLocation] = useState('');
     const [pickupPosition, setPickupPosition] = useState({ lat: 0, lng: 0 });
     const [dropPosition, setDropPosition] = useState({ lat: 0, lng: 0 });
-    // console.log(process.env.REACT_APP_BACKEND_BASE_URL);
 
     useEffect(() => {
         const fetchLocations = async () => {
@@ -137,7 +136,7 @@ const TripForm = () => {
         if (fromDate && tillDate) {
             const from = new Date(fromDate);
             const till = new Date(tillDate);
-            console.log("From Date:", from, "Till Date:", till);
+            // console.log("From Date:", from, "Till Date:", till);
 
 
             // Calculate the difference in days
@@ -150,7 +149,7 @@ const TripForm = () => {
 
             // Format the duration as "X days Y nights"
             const duration = `${days}D ${nights}N`;
-            console.log("Calculated Duration:", duration);
+            // console.log("Calculated Duration:", duration);
 
             // Update the formData with the calculated duration
             setFormData(prev => ({
@@ -160,7 +159,7 @@ const TripForm = () => {
                     duration: duration
                 }
             }));
-            console.log(formData.essentials);
+            // console.log(formData.essentials);
 
         }
     };
@@ -206,7 +205,7 @@ const TripForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Submitting form data:", formData);
+        // console.log("Submitting form data:", formData);
 
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/addNewTrip`, {

@@ -57,8 +57,6 @@ const AddLocationCard = ({ pageType, onLoginClick, EnrollInTrip, PeopleGoingInTr
     }, [pageType]);
 
 
-    console.log("pageType", pageType);
-    console.log(pageType == PageTypeEnum.LOCATION);
 
 
 
