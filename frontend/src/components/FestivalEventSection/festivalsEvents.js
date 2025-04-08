@@ -8,7 +8,47 @@ import Fuse from "fuse.js";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import eventsEmptyState from '../../assets/images/eventsEmptyState.jpg'; // Adjust the path based on your project structure
 
+// Empty State Component
+const EmptyState = () => (
+    <div
+        style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            padding: '40px',
+            margin: '20px auto',
+            maxWidth: '600px',
+        }}
+    >
+        <img
+            src={eventsEmptyState}
+            alt="No events available"
+            style={{ maxWidth: '100%', height: 'auto', marginBottom: '20px' }}
+        />
+        <h3>No Events Found</h3>
+        <p>
+            Please allow location permissions to discover exciting festivals and events near you!
+        </p>
+        <button
+            className="btn btn-black"
+            onClick={() => {
+                // Optionally, trigger location permission request again
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        () => window.location.reload(),
+                        () => alert('Location permission is required to fetch events.')
+                    );
+                }
+            }}
+        >
+            Allow Location
+        </button>
+    </div>
+);
 const indianCities = [
     "Aalo",
     "Abohar",
@@ -2815,7 +2855,9 @@ function LocationBlock({ fetchEvents }) {
                         })
                         .catch(() => setLocation("Location unavailable"));
                 },
-                () => setLocation("Location permission denied")
+                () => {
+                    setLocation("Location permission denied")
+                }
             );
         } else {
             setLocation("Geolocation not supported");
@@ -2947,16 +2989,7 @@ const FestivalsEvents = () => {
                 {events.length > 0 ? (
                     <EventList events={events.slice(0, visibleCount)} />
                 ) : (
-                    locations.slice(0, visibleCount).map((location, index) => (
-                        <LocationCard
-                            key={index}
-                            name={location.title?.replace(/[0-9. ]/g, '') || 'Unknown'}
-                            rating={location.rating || 'N/A'}
-                            places={location.placesNumberToVisit || "0"}
-                            bestTime={location.best_time || 'N/A'}
-                            images={location.images || ['https://via.placeholder.com/300x200?text=No+Image']}
-                        />
-                    ))
+                    <EmptyState />
                 )}
             </div>
 

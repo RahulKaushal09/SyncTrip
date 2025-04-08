@@ -35,8 +35,8 @@ router.post('/getEventsForLocation', async (req, res) => {
 
     // console.log("Location Code:", locationCode);
     // console.log("Location Name:", locationName);
-    console.log("Getting events for location code:", locationCode);  // Log the location code for debugging
-    console.log("Getting events for location name:", locationName);  // Log the location name for debugging
+    // console.log("Getting events for location code:", locationCode);  // Log the location code for debugging
+    // console.log("Getting events for location name:", locationName);  // Log the location name for debugging
 
     try {
         // Fetch the location with its last update date from MongoDB
