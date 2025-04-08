@@ -59,6 +59,12 @@ const TripForm = () => {
     const [selectedLocation, setSelectedLocation] = useState('');
     const [pickupPosition, setPickupPosition] = useState({ lat: 0, long: 0 });
     const [dropPosition, setDropPosition] = useState({ lat: 0, long: 0 });
+    useEffect(() => {
+        const token = localStorage.getItem('userToken');
+        if (!token) {
+            window.location.href = '/'; // Redirect to login page
+        }
+    }, []);
 
     useEffect(() => {
         const fetchLocations = async () => {

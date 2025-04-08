@@ -24,6 +24,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [pageType, setPageType] = useState(null);
     const [tripData, setTripData] = useState(null);
     const [otherPeopleGoing, setOtherPeopleGoing] = useState([]);
+    const [TripStatus, setTripStatus] = useState(null);
     const extractTextFromHTML = (htmlString) => {
         if (!htmlString) return "";
         const parser = new DOMParser();
@@ -163,6 +164,10 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                 }
 
                 const Trip = await TripResponse.json();
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const fromDate = new Date(Trip.essentials.timeline.fromDate);
+                setTripStatus(fromDate < today || Trip.requirements.status === 'completed' ? 'completed' : Trip.requirements.status);
                 // console.log('Raw API response:', Trip);
                 Trip.title = Trip?.title?.replace(/[0-9. ]/g, '');
                 Trip.title = extractTextFromHTML(Trip.title);
@@ -214,13 +219,13 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
             />
             <LocationImageGallery locationImages={locationData?.photos} />
 
-            {isMobile && <AddLocationCard pageType={pageType} onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} PeopleGoingInTrip={otherPeopleGoing} btnsStyle={{ width: "100%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} ctaAction={ctaAction} title={title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={TripsData?.essentials.bestTime} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} />}
+            {isMobile && <AddLocationCard showBtns={TripStatus && TripStatus === "completed" ? false : true} pageType={pageType} onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} PeopleGoingInTrip={otherPeopleGoing} btnsStyle={{ width: "100%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} title={title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={TripsData?.essentials.bestTime} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} />}
 
             <div className="row" style={{ position: 'relative' }}>
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
                     <Discription pageType={pageType} shortDescription={TripsData?.itinerary || ""} fullDescription={TripsData?.itinerary || ""} bestTime={TripsData?.essentials.bestTime} />
                     <PlacesToVisitSection title={title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
-                    <PlanTripDates onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} pageType={pageType} ctaAction={ctaAction} startDatePreTrip={TripsData?.essentials?.timeline?.fromDate} endDatePreTrip={TripsData?.essentials?.timeline?.tillDate} />
+                    {TripStatus && TripStatus != "completed" && <PlanTripDates onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} pageType={pageType} ctaAction={ctaAction} startDatePreTrip={TripsData?.essentials?.timeline?.fromDate} endDatePreTrip={TripsData?.essentials?.timeline?.tillDate} />}
                     <LocationMapSection latitude={locationData?.fullDetails?.coordinates?.lat} longitude={locationData?.fullDetails?.coordinates?.long} />
                     <HotelsAndStaysSection hotelIds={hotelIds} />
                 </div>
@@ -235,6 +240,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                             }}
                         >
                             <AddLocationCard
+                                showBtns={TripStatus && TripStatus === "completed" ? false : true}
                                 pageType={pageType}
                                 EnrollInTrip={EnrollInTrip}
                                 onLoginClick={onLoginClick}

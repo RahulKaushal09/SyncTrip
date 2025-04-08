@@ -121,7 +121,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
             />
             <LocationImageGallery locationImages={locationData?.photos} />
 
-            {isMobile && <AddLocationCard pageType={pageType} btnsStyle={{ width: "45%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} ctaAction={ctaAction} title={locationData?.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={locationData?.best_time} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} />}
+            {isMobile && <AddLocationCard showBtns={true} pageType={pageType} btnsStyle={{ width: "45%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} ctaAction={ctaAction} title={locationData?.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={locationData?.best_time} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} />}
 
             <div className="row" style={{ position: 'relative' }}>
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
@@ -142,6 +142,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                             }}
                         >
                             <AddLocationCard
+                                showBtns={true}
                                 pageType={pageType}
                                 ctaAction={ctaAction}
                                 title={locationData?.title}

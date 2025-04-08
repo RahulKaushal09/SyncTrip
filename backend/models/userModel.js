@@ -35,6 +35,14 @@ const UserSchema = new mongoose.Schema({
             status: { type: String, enum: ['pending', 'accepted', 'rejected'], required: true },
         }],
     }],
+    recievedReq: [{
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        trips: [{
+            tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
+            type: { type: String, enum: ['sent', 'received'], required: true },
+            status: { type: String, enum: ['pending', 'accepted', 'rejected'], required: true },
+        }],
+    }],
     profileCompleted: { type: Boolean, default: false },
     socialMedias: {
         instagram: { type: String, default: '' },

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../../styles/popups/FullProfilePopup.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+
 export default function FullProfilePopup({ user, locations, onClose, onProfileComplete }) {
     const [form, setForm] = useState({
         travelStyles: [],
@@ -16,25 +17,36 @@ export default function FullProfilePopup({ user, locations, onClose, onProfileCo
         instagram: '',
         travelGoal: '',
         languages: '',
-        dateOfBirth: '', // New field
+        dateOfBirth: '',
     });
     const [searchTerm, setSearchTerm] = useState('');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [selectedLocationIds, setSelectedLocationIds] = useState([]); // Store location IDs
+    const [selectedLocationIds, setSelectedLocationIds] = useState([]);
 
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        if (type === 'checkbox') {
+    // Modified handleChange to support button toggles
+    const handleChange = (e, field, value) => {
+        if (e) {
+            const { name, value: inputValue, type, checked } = e.target;
+            if (type === 'checkbox') {
+                setForm((prev) => ({
+                    ...prev,
+                    [name]: checked
+                        ? [...prev[name], inputValue]
+                        : prev[name].filter((item) => item !== inputValue),
+                }));
+            } else if (type === 'file') {
+                setForm((prev) => ({ ...prev, [name]: e.target.files[0] }));
+            } else {
+                setForm((prev) => ({ ...prev, [name]: inputValue }));
+            }
+        } else {
+            // Handle button toggle for travelStyles and travelerType
             setForm((prev) => ({
                 ...prev,
-                [name]: checked
-                    ? [...prev[name], value]
-                    : prev[name].filter((item) => item !== value),
+                [field]: prev[field].includes(value)
+                    ? prev[field].filter((item) => item !== value)
+                    : [...prev[field], value],
             }));
-        } else if (type === 'file') {
-            setForm((prev) => ({ ...prev, [name]: e.target.files[0] }));
-        } else {
-            setForm((prev) => ({ ...prev, [name]: value }));
         }
     };
 
@@ -61,7 +73,6 @@ export default function FullProfilePopup({ user, locations, onClose, onProfileCo
                 formData.append(key, form[key]);
             }
         });
-        // Append selectedLocationIds as preferredDestinations
         formData.append('preferredDestinations', JSON.stringify(selectedLocationIds));
 
         try {
@@ -69,7 +80,7 @@ export default function FullProfilePopup({ user, locations, onClose, onProfileCo
                 method: 'POST',
                 body: formData,
                 headers: {
-                    "Authorization": `Bearer ${localStorage.getItem('userToken')}`,
+                    Authorization: `Bearer ${localStorage.getItem('userToken')}`,
                 },
             });
             const data = await res.json();
@@ -88,7 +99,6 @@ export default function FullProfilePopup({ user, locations, onClose, onProfileCo
         dest.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Map selected IDs to titles for display
     const selectedTitles = locations
         .filter((loc) => selectedLocationIds.includes(loc._id))
         .map((loc) => loc.title);
@@ -104,85 +114,75 @@ export default function FullProfilePopup({ user, locations, onClose, onProfileCo
                     {/* Travel Style */}
                     <div className="full-profile-section">
                         <label>How do you like to travel?</label>
-                        {[
-                            'Backpacking',
-                            'Beach vacations',
-                            'Hill stations & adventure',
-                            'City tours',
-                            'Food & culture',
-                            'Pilgrimage',
-                            'Luxury getaways',
-                        ].map((style) => (
-                            <label key={style} className="full-profile-checkbox">
-                                <input
-                                    type="checkbox"
-                                    name="travelStyles"
-                                    value={style}
-                                    onChange={handleChange}
-                                />
-                                {style}
-                            </label>
-                        ))}
+                        <div className="bubble-btn-container">
+                            {[
+                                'Backpacking',
+                                'Beach vacations',
+                                'Hill stations & adventure',
+                                'City tours',
+                                'Food & culture',
+                                'Pilgrimage',
+                                'Luxury getaways',
+                            ].map((style) => (
+                                <button
+                                    key={style}
+                                    type="button"
+                                    className={`bubble-btn ${form.travelStyles.includes(style) ? 'selected' : ''}`}
+                                    onClick={() => handleChange(null, 'travelStyles', style)}
+                                >
+                                    {style}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Traveler Type */}
                     <div className="full-profile-section">
                         <label>What kind of traveler are you?</label>
-                        {[
-                            'Solo traveler',
-                            'Family & friends',
-                            'Planner',
-                            'Spontaneous',
-                            'Foodie',
-                            'Nature lover',
-                        ].map((type) => (
-                            <label key={type} className="full-profile-checkbox">
-                                <input
-                                    type="checkbox"
-                                    name="travelerType"
-                                    value={type}
-                                    onChange={handleChange}
-                                />
-                                {type}
-                            </label>
-                        ))}
+                        <div className="bubble-btn-container">
+                            {[
+                                'Solo traveler',
+                                'Family & friends',
+                                'Planner',
+                                'Spontaneous',
+                                'Foodie',
+                                'Nature lover',
+                            ].map((type) => (
+                                <button
+                                    key={type}
+                                    type="button"
+                                    className={`bubble-btn ${form.travelerType.includes(type) ? 'selected' : ''}`}
+                                    onClick={() => handleChange(null, 'travelerType', type)}
+                                >
+                                    {type}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
-
-                    {/* // Add this input in the form, e.g., before Age Group */}
+                    {/* Date of Birth */}
                     <div className="full-profile-section dob-section">
-                        <label htmlFor="dateOfBirth" >Date of Birth <span className="required-star">*</span></label>
-
+                        <label htmlFor="dateOfBirth">
+                            Date of Birth <span className="required-star">*</span>
+                        </label>
                         <DatePicker
                             id="dateOfBirth"
                             selected={form.dateOfBirth ? new Date(form.dateOfBirth) : null}
-                            onChange={(date) => setForm((prev) => ({ ...prev, dateOfBirth: date.toISOString().split('T')[0] }))}
+                            onChange={(date) =>
+                                setForm((prev) => ({ ...prev, dateOfBirth: date.toISOString().split('T')[0] }))
+                            }
                             className="full-profile-input dob-input"
                             dateFormat="dd-MM-yyyy"
                             placeholderText="Select your date of birth"
-                            maxDate={new Date()} // Restrict to past dates
+                            maxDate={new Date()}
                             showYearDropdown
                             yearDropdownItemNumber={100}
                             scrollableYearDropdown
                             required
-                            // width="100%"
-                            style={{ width: '100%', display: 'block' }}
-
                         />
-                        {/* <input
-                                type="date"
-                                id="dateOfBirth"
-                                name="dateOfBirth"
-                                className="full-profile-input dob-input"
-                                value={form.dateOfBirth}
-                                onChange={handleChange}
-                                max={new Date().toISOString().split('T')[0]} // Restricts to today or earlier
-                                placeholder="Select your date of birth"
-                                required
-                            /> */}
                     </div>
 
-                    {/* Preferred Destinations with Dropdown Search */}
+                    {/* Preferred Destinations */}
                     <div className="full-profile-section">
                         <label>Favorite travel destinations?</label>
                         <div className="full-profile-dropdown-container">
@@ -199,14 +199,14 @@ export default function FullProfilePopup({ user, locations, onClose, onProfileCo
                                 <div className="full-profile-dropdown">
                                     {filteredLocations.length > 0 ? (
                                         filteredLocations.map((dest) => (
-                                            <div
+                                            (!selectedLocationIds.includes(dest._id) && <div
                                                 key={dest._id}
                                                 className={`full-profile-dropdown-item ${selectedLocationIds.includes(dest._id) ? 'selected' : ''
                                                     }`}
                                                 onClick={() => handleDestinationSelect(dest)}
                                             >
-                                                {dest.title}
-                                            </div>
+                                                {dest.title.replace(/[0-9. ]/g, "")}
+                                            </div>)
                                         ))
                                     ) : (
                                         <div className="full-profile-dropdown-item disabled">No matches found</div>
@@ -216,15 +216,13 @@ export default function FullProfilePopup({ user, locations, onClose, onProfileCo
                             <div className="full-profile-selected-destinations">
                                 {selectedTitles.map((title) => (
                                     <span key={title} className="full-profile-selected-tag">
-                                        {title}
+                                        {title.replace(/[0-9. ]/g, "")}
                                         <button
                                             type="button"
                                             className="full-profile-remove-tag"
                                             onClick={() => {
                                                 const destId = locations.find((loc) => loc.title === title)._id;
-                                                setSelectedLocationIds((prev) =>
-                                                    prev.filter((id) => id !== destId)
-                                                );
+                                                setSelectedLocationIds((prev) => prev.filter((id) => id !== destId));
                                             }}
                                         >
                                             ×
@@ -235,6 +233,7 @@ export default function FullProfilePopup({ user, locations, onClose, onProfileCo
                         </div>
                     </div>
 
+                    {/* Other form fields remain unchanged */}
                     {/* Dream Destinations */}
                     <div className="full-profile-section">
                         <label>Your dream travel spots?</label>
@@ -301,22 +300,6 @@ export default function FullProfilePopup({ user, locations, onClose, onProfileCo
                             Allow trip invites
                         </label>
                     </div>
-
-                    {/* Wishlist
-                    <div className="full-profile-section">
-                        <label>Places you want to visit soon?</label>
-                        {['Varanasi', 'Jaipur', 'Udaipur', 'Sri Lanka'].map((dest) => (
-                            <label key={dest} className="full-profile-checkbox">
-                                <input
-                                    type="checkbox"
-                                    name="wishlist"
-                                    value={dest}
-                                    onChange={handleChange}
-                                />
-                                {dest}
-                            </label>
-                        ))}
-                    </div> */}
 
                     {/* Profile Picture */}
                     <div className="full-profile-section">

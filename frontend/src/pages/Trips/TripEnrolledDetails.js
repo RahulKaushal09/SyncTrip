@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import '../../styles/trips/EnrolledTripDetails.css'; // Adjusted path
+import '../../styles/trips/EnrolledTripDetails.css';
 import LocationEventsDetails from '../../components/Details/locationEventsDetials';
 import LocationImageGallery from '../../components/Details/locationImages';
-import DOMPurify from 'dompurify'; // For sanitizing itinerary HTML
+import DOMPurify from 'dompurify';
 import PlacesToVisitSection from '../../components/Details/PlacesToVisit';
 import HotelsAndStaysSection from '../../components/Details/HotelSection';
 
@@ -14,6 +14,9 @@ const EnrolledTripDetails = () => {
   const [locationData, setLocationData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('going');
+  const [parsedUser, setParsedUser] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const user = localStorage.getItem('user');
   const token = localStorage.getItem('userToken');
   const hasFetched = useRef(false);
@@ -41,6 +44,24 @@ const EnrolledTripDetails = () => {
     }
   };
 
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/users/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error('Failed to fetch user data');
+      const updatedUser = await response.json();
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      setParsedUser(updatedUser);
+    } catch (err) {
+      console.error('Failed to fetch user data:', err);
+    }
+  };
+
   useEffect(() => {
     const fetchEnrolledTripDetails = async () => {
       if (!token || !user) {
@@ -49,10 +70,8 @@ const EnrolledTripDetails = () => {
         return;
       }
 
-      const parsedUser = JSON.parse(user);
-      if (parsedUser.profileCompleted === false) {
-        console.log('Profile incomplete, but proceeding');
-      }
+      const userObj = JSON.parse(user);
+      setParsedUser(userObj);
 
       setIsLoading(true);
       try {
@@ -86,17 +105,74 @@ const EnrolledTripDetails = () => {
     }
   }, [tripId, token, navigate, user]);
 
-  if (isLoading) {
-    return <div className="status-message loading">Loading trip details...</div>;
-  }
+  // Check if a request has been sent to a user for this trip
+  const hasSentRequest = (targetUserId) => {
+    if (!parsedUser || !parsedUser.requested) return false;
+    return parsedUser.requested.some((req) =>
+      req.user.toString() === targetUserId &&
+      req.trips.some((t) => t.tripId.toString() === tripId && t.type === 'sent')
+    );
+  };
 
-  if (error) {
-    return <div className="status-message error">{error}</div>;
-  }
+  const apiCall = async (endpoint, method, data) => {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/users${endpoint}`, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
 
-  if (!trip) {
-    return <div className="status-message">Trip not found</div>;
-  }
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.message || 'API call failed');
+    }
+    return result;
+  };
+
+  // Send Request
+  const sendRequest = async (receiverId) => {
+    try {
+      await apiCall('/sendRequest', 'POST', { receiverId, tripId });
+      await fetchUserData(); // Refresh user data after sending request
+      alert('Request sent successfully!');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Accept Request
+  const acceptRequest = async (requesterId) => {
+    try {
+      await apiCall('/acceptRequest', 'POST', { requesterId, tripId });
+      await fetchUserData(); // Refresh user data after accepting request
+      alert('Request accepted successfully!');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Reject Request
+  const rejectRequest = async (requesterId) => {
+    try {
+      await apiCall('/rejectRequest', 'POST', { requesterId, tripId });
+      await fetchUserData(); // Refresh user data after rejecting request
+      alert('Request rejected successfully!');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Placeholder for chat functionality
+  const viewChat = (userId) => {
+    console.log(`View chat with user ${userId} for trip ${tripId}`);
+    // Implement navigation or chat opening logic here
+  };
+
+  if (isLoading) return <div className="status-message loading">Loading trip details...</div>;
+  if (error) return <div className="status-message error">{error}</div>;
+  if (!trip) return <div className="status-message">Trip not found</div>;
 
   const pickupMapUrl = trip.essentials.pickup?.mapLocation
     ? `https://www.google.com/maps?q=${trip.essentials.pickup.mapLocation.lat},${trip.essentials.pickup.mapLocation.long}`
@@ -105,24 +181,22 @@ const EnrolledTripDetails = () => {
     ? `https://www.google.com/maps?q=${trip.essentials.dropPoint.mapLocation.lat},${trip.essentials.dropPoint.mapLocation.long}`
     : '#';
 
+  // Data for tabs
+  const otherGoing = trip.peopleApplied.filter((u) => u._id !== parsedUser?._id);
+  const requestsReceivedUsers = parsedUser?.recievedReq
+    ?.filter((req) =>
+      req.trips.some((t) => t.tripId.toString() === tripId && t.type === 'received' && t.status === 'pending')
+    )
+    .map((req) => trip.peopleApplied.find((u) => u._id === req.user.toString()))
+    .filter((user) => user);
+  const connections = parsedUser?.matched
+    ?.filter((m) => m.tripId.toString() === tripId && m.status === 'accepted')
+    .map((m) => trip.peopleApplied.find((u) => u._id === m.user.toString()))
+    .filter((user) => user);
+
   return (
     <div className="enrolled-trip-details-container">
-      {/* <header className="trip-header">
-        <button className="btn-black back-button" onClick={() => navigate('/trips')}>
-          Back to Enrolled Trips
-        </button>
-        <h1 className="enrolled-trip-title">{trip.title}</h1>
-      </header>
-      <section className="trip-hero">
-        <img
-          src={trip.MainImageUrl}
-          alt={""}
-          className="enrolled-trip-image"
-        />
-        <div className="trip-hero-overlay">
-          <span className="people-count">{trip.numberOfPeopleApplied || 0} People Going</span>
-        </div>
-      </section> */}
+
       <section className="location-section">
         <LocationEventsDetails
           type="Explore"
@@ -131,93 +205,178 @@ const EnrolledTripDetails = () => {
           rating={locationData?.rating || 'N/A'}
           country={locationData?.country || 'India'}
         />
+        {/* <div className="trip-hero-overlay">
+          <span className="people-count">{trip.numberOfPeopleApplied || 0} People Going</span>
+        </div> */}
         <LocationImageGallery locationImages={locationData?.photos || []} />
       </section>
-      <section className="people-applied">
-        <h2 className="section-title">Participants</h2>
-        {trip.peopleApplied?.length > 0 ? (
-          <div className="applied-users">
-            {trip.peopleApplied.map((user) => (
-              <div key={user._id} className="user-card" style={{ position: "relative", width: "200px", height: "200px", background: `url(${user.profilePicture})`, backgroundSize: "cover", borderRadius: "10px" }}>
-                {/* <img
-                  src={user.profilePicture}
-                  alt={""}
-                  className="user-profile-picture"
-                /> */}
-                <div className="user-info">
-                  {user.name && user.age && (
-                    <div className="profile-user-name" ><span>{user.name.split(" ")[0]}</span>, {user.age}</div>)}
+
+      {/* Tabs Section */}
+      <section className="tabs-section">
+        <div className="tabs">
+          <button
+            onClick={() => setActiveTab('going')}
+            className={activeTab === 'going' ? 'active' : ''}
+          >
+            {!isMobile ? "All Other Going" : "Joining"}
+          </button>
+          <button
+            onClick={() => setActiveTab('requests')}
+            className={activeTab === 'requests' ? 'active' : ''}
+          >
+            Requests {!isMobile ? "Received" : ""} <span className='numberOfRequests'>{requestsReceivedUsers && requestsReceivedUsers?.length > 0 ? requestsReceivedUsers?.length : ""}</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('connections')}
+            className={activeTab === 'connections' ? 'active' : ''}
+          >
+            Connections
+          </button>
+        </div>
+        <div className="tab-content">
+          {activeTab === 'going' && parsedUser && (
+            <div>
+              <h2 className="section-title">All Other Going</h2>
+              {otherGoing.length > 0 ? (
+                <div className="user-list">
+                  {otherGoing.map((user) => (
+                    <div key={user._id} className="user-card">
+                      <img src={user.profilePicture} alt={user.name} className="user-profile-picture" />
+                      <div className="user-info">
+                        <span>{user.name}</span>, {user.age}
+                      </div>
+                      {hasSentRequest(user._id) ? (
+                        <span className="requested-text">Requested</span>
+                      ) : (
+                        <button className="action-btn" onClick={() => sendRequest(user._id)}>
+                          Send Request
+                        </button>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="no-users">No visible participants yet.</p>
-        )
-        }
-      </section >
-      <section className="trip-info-grid">
-        <div className="trip-details">
-          <h2 className="section-title">Trip Details</h2>
-          <div className="info-item">
-            <strong>Region:</strong> {trip.essentials.region || 'N/A'}
-          </div>
-          <div className="info-item">
-            <strong>Duration:</strong> {trip.essentials.duration || 'N/A'}
-          </div>
-          <div className="info-item">
-            <strong>Price:</strong> ₹{trip.essentials.price?.toLocaleString() || 'N/A'}
-          </div>
-          <div className="info-item">
-            <strong>Pickup:</strong>{' '}
-            <a href={pickupMapUrl} target="_blank" rel="noopener noreferrer" className="map-link">
-              {trip.essentials.pickup?.name || 'N/A'}
-            </a>
-          </div>
-          <div className="info-item">
-            <strong>Drop Point:</strong>{' '}
-            <a href={dropMapUrl} target="_blank" rel="noopener noreferrer" className="map-link">
-              {trip.essentials.dropPoint?.name || 'N/A'}
-            </a>
-          </div>
-          <div className="info-item">
-            <strong>Dates:</strong>{' '}
-            {new Date(trip.essentials.timeline.fromDate).toLocaleDateString()} -{' '}
-            {new Date(trip.essentials.timeline.tillDate).toLocaleDateString()}
-          </div>
-        </div>
-        <div className="trip-inclusions">
-          <h2 className="section-title">Inclusions</h2>
-          <div className="info-item">
-            <strong>Travel:</strong> {trip.include.travel ? 'Included' : 'Not Included'}
-          </div>
-          <div className="info-item">
-            <strong>Food:</strong> {trip.include.food ? 'Included' : 'Not Included'}
-          </div>
-          <div className="info-item">
-            <strong>Hotel:</strong> {trip.include.hotel ? 'Included' : 'Not Included'}
-          </div>
-        </div>
-        <div className="trip-requirements">
-          <h2 className="section-title">Requirements</h2>
-          <div className="info-item">
-            <strong>Status:</strong>{' '}
-            <span className={`status-${trip.requirements.status?.toLowerCase()}`}>
-              {trip.requirements.status || 'N/A'}
-            </span>
-          </div>
+              ) : (
+                <p className="no-users">No other people going yet.</p>
+              )}
+            </div>
+          )}
+          {activeTab === 'requests' && parsedUser && (
+            <div>
+              <h2 className="section-title">Requests Received</h2>
+              {requestsReceivedUsers?.length > 0 ? (
+                <div className="user-list">
+                  {requestsReceivedUsers.map((user) => (
+                    <div key={user._id} className="user-card">
+                      <img src={user.profilePicture} alt={user.name} className="user-profile-picture" />
+                      <div className="user-info">
+                        <span>{user.name}</span>, {user.age}
+                      </div>
+                      <div className="request-actions">
+                        <button className="action-btn accept" onClick={() => acceptRequest(user._id)}>
+                          Accept
+                        </button>
+                        <button className="action-btn reject" onClick={() => rejectRequest(user._id)}>
+                          Reject
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="no-users">No requests received yet.</p>
+              )}
+            </div>
+          )}
+          {activeTab === 'connections' && parsedUser && (
+            <div>
+              <h2 className="section-title">Connections</h2>
+              {connections?.length > 0 ? (
+                <div className="user-list">
+                  {connections.map((user) => (
+                    <div key={user._id} className="user-card">
+                      <img src={user.profilePicture} alt={user.name} className="user-profile-picture" />
+                      <div className="user-info">
+                        <span>{user.name}</span>, {user.age}
+                      </div>
+                      <button className="action-btn" onClick={() => viewChat(user._id)}>
+                        Chat
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="no-users">No connections yet.</p>
+              )}
+            </div>
+          )}
         </div>
       </section>
-      <section className="trip-itinerary">
-        <h2 className="section-title">Itinerary</h2>
-        <div
-          className="itinerary-content"
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(trip.itinerary) }}
-        />
+
+      {/* Enhanced Trip Information */}
+      <section className="trip-info">
+        <div className="trip-info-grid">
+          <div className="trip-details-card">
+            <h2 className="section-title">Trip Details</h2>
+            <div className="info-item">
+              <strong>Region:</strong> {trip.essentials.region || 'N/A'}
+            </div>
+            <div className="info-item">
+              <strong>Duration:</strong> {trip.essentials.duration || 'N/A'}
+            </div>
+            <div className="info-item">
+              <strong>Price:</strong> ₹{trip.essentials.price?.toLocaleString() || 'N/A'}
+            </div>
+            <div className="info-item">
+              <strong>Pickup:</strong>{' '}
+              <a href={pickupMapUrl} target="_blank" rel="noopener noreferrer" className="map-link">
+                {trip.essentials.pickup?.name || 'N/A'}
+              </a>
+            </div>
+            <div className="info-item">
+              <strong>Drop Point:</strong>{' '}
+              <a href={dropMapUrl} target="_blank" rel="noopener noreferrer" className="map-link">
+                {trip.essentials.dropPoint?.name || 'N/A'}
+              </a>
+            </div>
+            <div className="info-item">
+              <strong>Dates:</strong>{' '}
+              {new Date(trip.essentials.timeline.fromDate).toLocaleDateString()} -{' '}
+              {new Date(trip.essentials.timeline.tillDate).toLocaleDateString()}
+            </div>
+          </div>
+          <div className="trip-inclusions-card">
+            <h2 className="section-title">Inclusions</h2>
+            <div className="info-item">
+              <strong>Travel:</strong> {trip.include.travel ? 'Included' : 'Not Included'}
+            </div>
+            <div className="info-item">
+              <strong>Food:</strong> {trip.include.food ? 'Included' : 'Not Included'}
+            </div>
+            <div className="info-item">
+              <strong>Hotel:</strong> {trip.include.hotel ? 'Included' : 'Not Included'}
+            </div>
+          </div>
+          <div className="trip-requirements-card">
+            <h2 className="section-title">Requirements</h2>
+            <div className="info-item">
+              <strong>Status:</strong>{' '}
+              <span className={`status-${trip.requirements.status?.toLowerCase()}`}>
+                {trip.requirements.status || 'N/A'}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="trip-itinerary-card">
+          <h2 className="section-title">Itinerary</h2>
+          <div
+            className="itinerary-content" style={{ textAlign: 'left' }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(trip.itinerary) }}
+          />
+        </div>
       </section>
       <PlacesToVisitSection title={trip?.title} placesIds={locationData?.placesToVisit} />
       <HotelsAndStaysSection hotelIds={locationData?.hotels} />
-    </div >
+    </div>
   );
 };
 

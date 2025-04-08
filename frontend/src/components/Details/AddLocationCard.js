@@ -6,7 +6,7 @@ import locations from "../../data/locations.json"
 import { FaLeaf, FaBars, FaPlane } from "react-icons/fa";
 // improt enum class 
 import { PageTypeEnum } from '../../utils/pageType';  // adjust path as needed
-const AddLocationCard = ({ pageType, onLoginClick, EnrollInTrip, PeopleGoingInTrip, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage }) => {
+const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, PeopleGoingInTrip, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage }) => {
     const [activeIcon, setActiveIcon] = useState(0);
     const [btn2Text, setBtn2Text] = useState("");
     const [btn2CTA, setBtn2CTA] = useState(() => ctaAction);
@@ -136,18 +136,20 @@ const AddLocationCard = ({ pageType, onLoginClick, EnrollInTrip, PeopleGoingInTr
             <div className="location-card-accommodation">
                 <p>30+ Places to stay</p>
             </div> */}
-            <div className="location-card-buttons">
-                {pageType == PageTypeEnum.LOCATION && <button className="btn btn-white" onClick={ctaAction} style={btnsStyle}>Explore itinerary</button>}
-                {pageType == PageTypeEnum.TRIP && PeopleGoingInTrip && PeopleGoingInTrip.length > 0 && <button className="btn btn-white" onClick={EnrollInTrip(2)} style={btnsStyle}>See Others</button>}
-                {/* <button className="btn btn-white" onClick={ctaAction} style={btnsStyle}>Explore itinerary</button> */}
-                <button
-                    className="btn btn-black"
-                    onClick={btn2CTA}
-                    style={btnsStyle}
-                >
-                    {btn2Text}
-                </button>
-            </div>
+            {showBtns &&
+                <div className="location-card-buttons">
+                    {pageType == PageTypeEnum.LOCATION && <button className="btn btn-white" onClick={ctaAction} style={btnsStyle}>Explore itinerary</button>}
+                    {pageType == PageTypeEnum.TRIP && PeopleGoingInTrip && PeopleGoingInTrip.length > 0 && <button className="btn btn-white" onClick={EnrollInTrip(2)} style={btnsStyle}>See Others</button>}
+                    {/* <button className="btn btn-white" onClick={ctaAction} style={btnsStyle}>Explore itinerary</button> */}
+                    <button
+                        className="btn btn-black"
+                        onClick={btn2CTA}
+                        style={btnsStyle}
+                    >
+                        {btn2Text}
+                    </button>
+                </div>
+            }
         </div>
     );
 };

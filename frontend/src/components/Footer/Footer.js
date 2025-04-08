@@ -4,6 +4,7 @@ import "../../styles/Footer.css"; // Optional: Custom CSS for additional styling
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faGooglePlay, faApple } from '@fortawesome/free-brands-svg-icons';
+import SyncTripLogo from "../../assets/images/logoWeb.png";
 const Footer = ({ links }) => {
     // Default links if none are provided via props
     const defaultLinks = {
@@ -33,7 +34,8 @@ const Footer = ({ links }) => {
         <footer className="footer">
             <div className="footer-content">
                 <div className="footer-section">
-                    <h3 className="footer-title" style={{ fontSize: "40px", fontWeight: "700" }}>Synctrip</h3>
+                    {/* <h3 className="footer-title" style={{ fontSize: "40px", fontWeight: "700" }}>Synctrip</h3> */}
+                    <img src={SyncTripLogo} style={{ width: "30%", marginBottom: "50px" }} alt="SyncTrip Logo" className="footer-logo" />
                     <p className='footerTextColorNormal'>Plan together, travel smarter—sync your perfect trip in minutes.</p>
                 </div>
 

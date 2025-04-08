@@ -137,6 +137,9 @@ const App = () => {
     } else if (!user.profileCompleted) {
       setShowFullProfile(true); // Show full profile popup for manual login
     }
+    else {
+      window.location.reload(); // Reload the page to reflect the changes
+    }
   };
 
   const handlePhoneSubmit = (updatedUser) => {
