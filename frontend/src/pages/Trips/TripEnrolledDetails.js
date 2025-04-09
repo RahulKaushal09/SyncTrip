@@ -6,7 +6,8 @@ import LocationImageGallery from '../../components/Details/locationImages';
 import DOMPurify from 'dompurify';
 import PlacesToVisitSection from '../../components/Details/PlacesToVisit';
 import HotelsAndStaysSection from '../../components/Details/HotelSection';
-
+import ProfileCardUi from '../../components/Profile/ProfileCard.js'; // Import the new component
+import { ProfileCardEnum } from '../../utils/EnumClasses.js';
 const EnrolledTripDetails = () => {
   const { tripId } = useParams();
   const navigate = useNavigate();
@@ -20,6 +21,9 @@ const EnrolledTripDetails = () => {
   const user = localStorage.getItem('user');
   const token = localStorage.getItem('userToken');
   const hasFetched = useRef(false);
+  const [otherGoing, setOtherGoing] = useState([]);
+  const [requestsReceivedUsers, setRequestsReceivedUsers] = useState([]);
+  const [connections, setConnections] = useState([]);
 
   const extractTextFromHTML = (html) => {
     const tempDiv = document.createElement('div');
@@ -57,6 +61,21 @@ const EnrolledTripDetails = () => {
       const updatedUser = await response.json();
       localStorage.setItem('user', JSON.stringify(updatedUser));
       setParsedUser(updatedUser);
+      { trip.peopleApplied && setOtherGoing(trip.peopleApplied.filter((u) => u._id !== parsedUser?._id)) };
+      {
+        trip.peopleApplied && setRequestsReceivedUsers(parsedUser?.recievedReq
+          ?.filter((req) =>
+            req.trips.some((t) => t.tripId.toString() === tripId && t.type === 'received' && t.status === 'pending')
+          )
+          .map((req) => trip.peopleApplied.find((u) => u._id === req.user.toString()))
+          .filter((user) => user))
+      };
+      {
+        trip.peopleApplied && setConnections(parsedUser?.matched
+          ?.filter((m) => m.tripId.toString() === tripId && m.status === 'accepted')
+          .map((m) => trip.peopleApplied.find((u) => u._id === m.user.toString()))
+          .filter((user) => user))
+      };
     } catch (err) {
       console.error('Failed to fetch user data:', err);
     }
@@ -90,9 +109,27 @@ const EnrolledTripDetails = () => {
         }
 
         const data = await response.json();
+
+
         setTrip(data);
         fetchLocationDetails(data.locationId);
+        var filteredPeople = data.peopleApplied.filter((u) => u._id !== userObj._id);
+        setOtherGoing(filteredPeople);
+        var filteredRequestsRecieved = userObj.recievedReq
+          ?.filter((req) =>
+            req.trips.some((t) => t.tripId.toString() === tripId && t.type === 'received' && t.status === 'pending')
+          )
+          .map((req) => data.peopleApplied.find((u) => u._id === req.user.toString()))
+          .filter((user) => user);
+        setRequestsReceivedUsers(filteredRequestsRecieved);
+        var filteredConnections = userObj.matched
+          ?.filter((m) => m.tripId.toString() === tripId && m.status === 'accepted')
+          .map((m) => data.peopleApplied.find((u) => u._id === m.user.toString()))
+          .filter((user) => user)
+        setConnections(filteredConnections);
       } catch (err) {
+        console.log('Error fetching trip details:', err);
+
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -128,6 +165,7 @@ const EnrolledTripDetails = () => {
     if (!response.ok) {
       throw new Error(result.message || 'API call failed');
     }
+
     return result;
   };
 
@@ -164,12 +202,17 @@ const EnrolledTripDetails = () => {
     }
   };
 
-  // Placeholder for chat functionality
+  // View Profile (placeholder)
+  const viewProfile = (userId) => {
+    console.log(`View profile of user ${userId}`);
+    // Implement navigation to profile page
+  };
+
+  // View Chat (placeholder)
   const viewChat = (userId) => {
     console.log(`View chat with user ${userId} for trip ${tripId}`);
     // Implement navigation or chat opening logic here
   };
-
   if (isLoading) return <div className="status-message loading">Loading trip details...</div>;
   if (error) return <div className="status-message error">{error}</div>;
   if (!trip) return <div className="status-message">Trip not found</div>;
@@ -182,17 +225,9 @@ const EnrolledTripDetails = () => {
     : '#';
 
   // Data for tabs
-  const otherGoing = trip.peopleApplied.filter((u) => u._id !== parsedUser?._id);
-  const requestsReceivedUsers = parsedUser?.recievedReq
-    ?.filter((req) =>
-      req.trips.some((t) => t.tripId.toString() === tripId && t.type === 'received' && t.status === 'pending')
-    )
-    .map((req) => trip.peopleApplied.find((u) => u._id === req.user.toString()))
-    .filter((user) => user);
-  const connections = parsedUser?.matched
-    ?.filter((m) => m.tripId.toString() === tripId && m.status === 'accepted')
-    .map((m) => trip.peopleApplied.find((u) => u._id === m.user.toString()))
-    .filter((user) => user);
+
+
+
 
   return (
     <div className="enrolled-trip-details-container">
@@ -218,19 +253,25 @@ const EnrolledTripDetails = () => {
             onClick={() => setActiveTab('going')}
             className={activeTab === 'going' ? 'active' : ''}
           >
-            {!isMobile ? "All Other Going" : "Joining"}
+            {!isMobile ? 'All Other Going' : 'Joining'}
+            {otherGoing && otherGoing?.length > 0 ? <span className="numberOfRequests"> {otherGoing?.length}  </span> : ''}
           </button>
           <button
             onClick={() => setActiveTab('requests')}
             className={activeTab === 'requests' ? 'active' : ''}
           >
-            Requests {!isMobile ? "Received" : ""} <span className='numberOfRequests'>{requestsReceivedUsers && requestsReceivedUsers?.length > 0 ? requestsReceivedUsers?.length : ""}</span>
+            Requests {!isMobile ? 'Received' : ''}{' '}
+
+            {requestsReceivedUsers && requestsReceivedUsers?.length > 0 ? <span className="numberOfRequests"> {requestsReceivedUsers?.length}  </span> : ''}
+
           </button>
           <button
             onClick={() => setActiveTab('connections')}
             className={activeTab === 'connections' ? 'active' : ''}
           >
             Connections
+            {connections && connections?.length > 0 ? <span className="numberOfRequests"> {connections?.length}  </span> : ''}
+
           </button>
         </div>
         <div className="tab-content">
@@ -240,19 +281,32 @@ const EnrolledTripDetails = () => {
               {otherGoing.length > 0 ? (
                 <div className="user-list">
                   {otherGoing.map((user) => (
-                    <div key={user._id} className="user-card">
-                      <img src={user.profilePicture} alt={user.name} className="user-profile-picture" />
-                      <div className="user-info">
-                        <span>{user.name}</span>, {user.age}
-                      </div>
-                      {hasSentRequest(user._id) ? (
-                        <span className="requested-text">Requested</span>
-                      ) : (
-                        <button className="action-btn" onClick={() => sendRequest(user._id)}>
-                          Send Request
-                        </button>
-                      )}
-                    </div>
+                    // <div key={user._id} className="user-card">
+                    //   <img src={user.profilePicture} alt={user.name} className="user-profile-picture" />
+                    //   <div className="user-info">
+                    //     <span>{user.name}</span>, {user.age}
+                    //   </div>
+                    //   {hasSentRequest(user._id) ? (
+                    //     <span className="requested-text">Requested</span>
+                    //   ) : (
+                    //     <button className="action-btn" onClick={() => sendRequest(user._id)}>
+                    //       Send Request
+                    //     </button>
+                    //   )}
+                    // </div>
+
+                    <ProfileCardUi
+                      key={user._id}
+                      user={user}
+                      btns={
+                        [{ text: 'Send Request', onClick: () => sendRequest(user._id), className: 'send-request' }]
+                      }
+                      // onViewProfile={viewProfile}
+                      hasSentRequest={hasSentRequest(user._id)}
+                      isConnected={connections?.some((c) => c._id === user._id)}
+                      type={ProfileCardEnum.AllGoing}
+
+                    />
                   ))}
                 </div>
               ) : (
@@ -266,20 +320,34 @@ const EnrolledTripDetails = () => {
               {requestsReceivedUsers?.length > 0 ? (
                 <div className="user-list">
                   {requestsReceivedUsers.map((user) => (
-                    <div key={user._id} className="user-card">
-                      <img src={user.profilePicture} alt={user.name} className="user-profile-picture" />
-                      <div className="user-info">
-                        <span>{user.name}</span>, {user.age}
-                      </div>
-                      <div className="request-actions">
-                        <button className="action-btn accept" onClick={() => acceptRequest(user._id)}>
-                          Accept
-                        </button>
-                        <button className="action-btn reject" onClick={() => rejectRequest(user._id)}>
-                          Reject
-                        </button>
-                      </div>
-                    </div>
+                    // <div key={user._id} className="user-card">
+                    //   <img src={user.profilePicture} alt={user.name} className="user-profile-picture" />
+                    //   <div className="user-info">
+                    //     <span>{user.name}</span>, {user.age}
+                    //   </div>
+                    //   <div className="request-actions">
+                    //     <button className="action-btn accept" onClick={() => acceptRequest(user._id)}>
+                    //       Accept
+                    //     </button>
+                    //     <button className="action-btn reject" onClick={() => rejectRequest(user._id)}>
+                    //       Reject
+                    //     </button>
+                    //   </div>
+                    // </div>
+                    <ProfileCardUi
+                      key={user._id}
+                      user={user}
+                      // instagramSocialMedia={user.socialMedias.instagram || ""}
+                      btns={
+                        [
+                          { text: 'Accept', onClick: () => acceptRequest(user._id), className: 'accept', inlineStyle: { width: "50%" } },
+                          { text: 'Reject', onClick: () => rejectRequest(user._id), className: 'reject', inlineStyle: { width: "50%" } },
+                        ]
+                      }
+                      onViewProfile={viewProfile}
+                      hasSentRequest={false} // No "Requested" state for received requests
+                      type={ProfileCardEnum.RecivedRequests}
+                    />
                   ))}
                 </div>
               ) : (
@@ -293,15 +361,29 @@ const EnrolledTripDetails = () => {
               {connections?.length > 0 ? (
                 <div className="user-list">
                   {connections.map((user) => (
-                    <div key={user._id} className="user-card">
-                      <img src={user.profilePicture} alt={user.name} className="user-profile-picture" />
-                      <div className="user-info">
-                        <span>{user.name}</span>, {user.age}
-                      </div>
-                      <button className="action-btn" onClick={() => viewChat(user._id)}>
-                        Chat
-                      </button>
-                    </div>
+                    // <div key={user._id} className="user-card">
+                    //   <img src={user.profilePicture} alt={user.name} className="user-profile-picture" />
+                    //   <div className="user-info">
+                    //     <span>{user.name}</span>, {user.age}
+                    //   </div>
+                    //   <button className="action-btn" onClick={() => viewChat(user._id)}>
+                    //     Chat
+                    //   </button>
+                    // </div>
+                    <ProfileCardUi
+                      key={user._id}
+                      user={user}
+                      // instagramSocialMedia={user.socialMedias.instagram || ""}
+                      btns={
+                        [
+                          { text: 'Chat', onClick: () => viewChat(user._id), className: 'chat btn btn-black', inlineStyle: { width: "100%" } },
+                        ]
+                      }
+                      onViewProfile={viewProfile}
+                      hasSentRequest={false} // No "Requested" state for received requests
+                      type={ProfileCardEnum.Connection}
+                    />
+
                   ))}
                 </div>
               ) : (

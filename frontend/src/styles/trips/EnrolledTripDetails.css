@@ -87,6 +87,8 @@
     border-radius: 5px;
     font-size: 1rem;
     transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
 }
 
 .tabs button.active {
@@ -232,7 +234,7 @@
 }
 
 .numberOfRequests {
-    display: inline-block;
+    display: flex;
     width: 20px;
     height: 25px;
     background: black;
@@ -241,6 +243,7 @@
     /* text-align: center; */
     align-items: center;
     justify-content: center;
+    margin-left: 5px;
 
 }
 
@@ -270,11 +273,13 @@
     }
 
     .tabs {
-        flex-direction: column;
+        flex-direction: row;
     }
 
     .tabs button {
         margin: 5px 0;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 }
 

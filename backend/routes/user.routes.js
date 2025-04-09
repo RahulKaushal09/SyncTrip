@@ -4,6 +4,19 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/userModel');
 const authenticateToken = require('../middleware/middleware.js').authenticateToken;
+
+// get user data using token 
+router.get("/", authenticateToken, async (req, res) => {
+    try {
+        const userId = req.userId; // Extract userId from the token
+        const user = await User.findById(userId).select('-password'); // Exclude password from the response
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+);
 // User Registration
 router.post('/basicRegistration', async (req, res) => {
     try {

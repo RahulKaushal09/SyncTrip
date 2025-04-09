@@ -8,7 +8,7 @@ const EventList = ({ events }) => {
         <div className="container mt-4">
             <div className="row">
                 {events.map((event) => (
-                    <div key={event._id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div key={event._id} className="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
                         <EventCard event={event} />
                     </div>
                 ))}

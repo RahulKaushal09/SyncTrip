@@ -3,6 +3,7 @@
     /* position: absolute;
     bottom: 0;
     width: 100%; */
+    position: relative;
     background-color: #000;
     /* Black background */
     color: #fff;
