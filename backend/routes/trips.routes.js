@@ -189,7 +189,7 @@ router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
         // Check if user is already enrolled
         if (trip.peopleApplied.some(user => user._id.toString() === userId)) {
             // get all other users who are willing to showprofile 
-            var redirectionURL = $process.env.BACKEND_URL + 'trips/en/' + tripId;
+            var redirectionURL = process.env.BACKEND_URL + 'trips/en/' + tripId;
             // trip.peopleApplied = trip.peopleApplied.filter(user => user._id.toString() !== userId && user.showProfile == true);
             return res.status(201).json({ message: 'You are already enrolled in this trip', trip: trip, redirectionURL: redirectionURL });
         }
@@ -220,7 +220,7 @@ router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
         //     select: 'name profile_picture socialMedias.instagram dateOfBirth showProfile', // Select fields to return
         // });
         // console.log('Updated trip:', updatedTrip); // Log the updated trip for debugging
-        var redirectionURL = $process.env.BACKEND_URL + 'trips/en/' + tripId;
+        var redirectionURL = process.env.BACKEND_URL + 'trips/en/' + tripId;
         // if (!updatedTrip) {
         //     return res.status(404).json({ message: 'Trip not found' });
         // }

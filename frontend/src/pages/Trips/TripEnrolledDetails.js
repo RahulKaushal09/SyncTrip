@@ -140,6 +140,7 @@ const EnrolledTripDetails = () => {
       hasFetched.current = true;
       fetchEnrolledTripDetails();
     }
+    fetchUserData();
   }, [tripId, token, navigate, user]);
 
   // Check if a request has been sent to a user for this trip

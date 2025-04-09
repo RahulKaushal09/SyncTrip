@@ -10,6 +10,7 @@ import LocationMapSection from '../../components/Details/MapSection';
 import PlacesToVisitSection from '../../components/Details/PlacesToVisit';
 import SyncTripAppPushingSection from '../../components/AppPushingSection/AppPushingSection';
 import { PageTypeEnum } from '../../utils/pageType'; // adjust path as needed
+import { useNavigate } from 'react-router-dom';
 const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
     const [title, setTitle] = useState("");
@@ -25,6 +26,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [tripData, setTripData] = useState(null);
     const [otherPeopleGoing, setOtherPeopleGoing] = useState([]);
     const [TripStatus, setTripStatus] = useState(null);
+    const navigate = useNavigate();
     const extractTextFromHTML = (htmlString) => {
         if (!htmlString) return "";
         const parser = new DOMParser();
@@ -65,6 +67,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                     setOtherPeopleGoing(data.trip); // Assuming the API returns this data
                     // Optionally update local user state or notify user
                     alert('You have successfully enrolled in the trip!');
+                    navigate(`/trips/en/${tripId}`); // Redirect to the trip details page
                 } else {
                     console.error('Enrollment failed:', data.message);
                     alert(data.message || 'Failed to enroll in the trip.');

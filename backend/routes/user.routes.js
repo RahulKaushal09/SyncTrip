@@ -10,6 +10,7 @@ router.get("/", authenticateToken, async (req, res) => {
     try {
         const userId = req.userId; // Extract userId from the token
         const user = await User.findById(userId).select('-password'); // Exclude password from the response
+
         if (!user) return res.status(404).json({ message: 'User not found' });
         res.status(200).json(user);
     } catch (error) {
@@ -82,19 +83,56 @@ router.post('/sendRequest', authenticateToken, async (req, res) => {
             return res.status(400).json({ message: 'Request already sent' });
         }
 
-        // Add to sender's requested array
-        sender.requested = sender.requested || [];
-        sender.requested.push({
-            user: receiverId,
-            trips: [{ tripId, type: 'sent', status: 'pending' }],
-        });
+        let existingRequested = sender.requested?.find(req => req.user.toString() === receiverId.toString());
+        if (existingRequested) {
+            // Check if the trip already exists for this user
+            const tripExists = existingRequested.trips.some(trip => trip.tripId.toString() === tripId.toString());
+
+            if (!tripExists) {
+                // Push the new trip to the existing user's trips array
+                existingRequested.trips.push({ tripId, type: 'sent', status: 'pending' });
+            }
+        } else {
+            // If user doesn't exist in requested, add a new entry
+            sender.requested = sender.requested || [];
+            sender.requested.push({
+                user: receiverId,
+                trips: [{ tripId, type: 'sent', status: 'pending' }]
+            });
+        }
+
+        // sender.requested.push({
+        //     user: receiverId,
+        //     trips: [{ tripId, type: 'sent', status: 'pending' }],
+        // });
+
+
 
         // Add to receiver's recievedReq array
-        receiver.recievedReq = receiver.recievedReq || [];
-        receiver.recievedReq.push({
-            user: senderId,
-            trips: [{ tripId, type: 'received', status: 'pending' }],
-        });
+        // receiver.recievedReq = receiver.recievedReq || [];
+        // receiver.recievedReq.push({
+        //     user: senderId,
+        //     trips: [{ tripId, type: 'received', status: 'pending' }],
+        // });
+
+        let existingReq = receiver.recievedReq.find(req => req.user.toString() === senderId.toString());
+
+        if (existingReq) {
+            // Check if the trip already exists for this user
+            const tripExists = existingReq.trips.some(trip => trip.tripId.toString() === tripId.toString());
+
+            if (!tripExists) {
+                // Push the new trip to the existing user's trips array
+                existingReq.trips.push({ tripId, type: 'received', status: 'pending' });
+            }
+        } else {
+            // If user doesn't exist in recievedReq, add a new entry
+            receiver.recievedReq = receiver.recievedReq || [];
+            receiver.recievedReq.push({
+                user: senderId,
+                trips: [{ tripId, type: 'received', status: 'pending' }]
+            });
+        }
 
         await sender.save();
         await receiver.save();

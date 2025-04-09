@@ -1,9 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useLoadScript, Autocomplete, GoogleMap, Marker } from '@react-google-maps/api';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { useLoadScript, GoogleMap, Autocomplete } from '@react-google-maps/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from "axios";
+import axios from 'axios';
 
+// Define libraries for Google Maps API
 const libraries = ['places'];
+
+// Default map center (e.g., a fallback location like New York City)
+const DEFAULT_CENTER = { lat: 40.7128, long: -74.0060 };
 
 const SearchDropdown = ({ locations, setSelectedLocation }) => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -41,7 +45,11 @@ const SearchDropdown = ({ locations, setSelectedLocation }) => {
                 <ul className="dropdown-menu show w-100" style={{ position: 'absolute', zIndex: 1000 }}>
                     {filteredLocations.length > 0 ? (
                         filteredLocations.map((location) => (
-                            <li key={location._id} className="dropdown-item" onClick={() => handleSelectChange(location)}>
+                            <li
+                                key={location._id}
+                                className="dropdown-item"
+                                onClick={() => handleSelectChange(location)}
+                            >
                                 {location.title.replace(/[0-9. ]/g, '') || 'Unknown'}
                             </li>
                         ))
@@ -57,8 +65,10 @@ const SearchDropdown = ({ locations, setSelectedLocation }) => {
 const TripForm = () => {
     const [locations, setLocations] = useState([]);
     const [selectedLocation, setSelectedLocation] = useState('');
-    const [pickupPosition, setPickupPosition] = useState({ lat: 0, long: 0 });
-    const [dropPosition, setDropPosition] = useState({ lat: 0, long: 0 });
+    // Initialize with valid coordinates using 'long'
+    const [pickupPosition, setPickupPosition] = useState(DEFAULT_CENTER);
+    const [dropPosition, setDropPosition] = useState(DEFAULT_CENTER);
+
     useEffect(() => {
         const token = localStorage.getItem('userToken');
         if (!token) {
@@ -69,11 +79,14 @@ const TripForm = () => {
     useEffect(() => {
         const fetchLocations = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/getalllocations`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ limit: 100 })
-                });
+                const response = await fetch(
+                    `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/getalllocations`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ limit: 100 }),
+                    }
+                );
                 if (!response.ok) throw new Error('Failed to fetch locations');
                 const data = await response.json();
                 setLocations(data.locations || data);
@@ -84,9 +97,9 @@ const TripForm = () => {
         fetchLocations();
     }, []);
 
-    const { isLoaded } = useLoadScript({
+    const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-        libraries
+        libraries,
     });
 
     const [formData, setFormData] = useState({
@@ -99,7 +112,7 @@ const TripForm = () => {
             age: 0,
             fitnessCriteria: '',
             status: '',
-            previousExp: ''
+            previousExp: '',
         },
         essentials: {
             region: '',
@@ -110,8 +123,8 @@ const TripForm = () => {
             typeOfTrip: '',
             price: '',
             season: '',
-            pickup: { name: '', mapLocation: { lat: 0, long: 0 } },
-            dropPoint: { name: '', mapLocation: { lat: 0, long: 0 } },
+            pickup: { name: '', mapLocation: DEFAULT_CENTER },
+            dropPoint: { name: '', mapLocation: DEFAULT_CENTER },
         },
     });
 
@@ -122,7 +135,7 @@ const TripForm = () => {
         const { name, value } = e.target;
         const keys = name.split('.');
 
-        setFormData(prev => {
+        setFormData((prev) => {
             let newData = { ...prev };
             let current = newData;
             for (let i = 0; i < keys.length - 1; i++) {
@@ -132,8 +145,7 @@ const TripForm = () => {
             return { ...newData };
         });
 
-        // If the user updates the timeline, recalculate the duration
-        if (name === "essentials.timeline.fromDate" || name === "essentials.timeline.tillDate") {
+        if (name === 'essentials.timeline.fromDate' || name === 'essentials.timeline.tillDate') {
             calculateDuration(formData.essentials.timeline.fromDate, formData.essentials.timeline.tillDate);
         }
     };
@@ -142,88 +154,109 @@ const TripForm = () => {
         if (fromDate && tillDate) {
             const from = new Date(fromDate);
             const till = new Date(tillDate);
-            // console.log("From Date:", from, "Till Date:", till);
-
-
-            // Calculate the difference in days
             const diffTime = Math.abs(till - from);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            // Update the duration field in the format of 3D 2N
             const days = diffDays;
             const nights = diffDays - 1;
-
-            // Format the duration as "X days Y nights"
             const duration = `${days}D ${nights}N`;
-            // console.log("Calculated Duration:", duration);
 
-            // Update the formData with the calculated duration
-            setFormData(prev => ({
+            setFormData((prev) => ({
                 ...prev,
                 essentials: {
                     ...prev.essentials,
-                    duration: duration
-                }
+                    duration,
+                },
             }));
-            // console.log(formData.essentials);
-
         }
     };
+
     const handlePlaceSelect = (place, type) => {
-        if (place && place.geometry) {
+        if (place && place.geometry && place.geometry.location) {
             const position = {
                 lat: place.geometry.location.lat(),
-                long: place.geometry.location.lng(),
+                long: place.geometry.location.lng(), // Use 'long' to match backend
             };
-            setFormData(prev => ({
+
+            // Validate coordinates
+            if (isNaN(position.lat) || isNaN(position.long)) {
+                console.error(`Invalid coordinates for ${type}:`, position);
+                return;
+            }
+
+            setFormData((prev) => ({
                 ...prev,
                 essentials: {
                     ...prev.essentials,
                     [type]: {
-                        name: place.name || place.formatted_address,
+                        name: place.name || place.formatted_address || 'Unknown',
                         mapLocation: position,
                     },
                 },
             }));
+
             type === 'pickup' ? setPickupPosition(position) : setDropPosition(position);
+        } else {
+            console.error(`No valid geometry for ${type} place:`, place);
         }
     };
 
     const handleMarkerDragEnd = (e, type) => {
         const lat = e.latLng.lat();
-        const long = e.latLng.lng();
-        type === 'pickup' ? setPickupPosition({ lat, long }) : setDropPosition({ lat, long });
+        const long = e.latLng.lng(); // Use 'long' to match backend
 
-        // Update the corresponding location in the form (pickup or drop)
-        setFormData(prev => ({
+        // Validate coordinates
+        if (isNaN(lat) || isNaN(long)) {
+            console.error(`Invalid drag coordinates for ${type}:`, { lat, long });
+            return;
+        }
+
+        const position = { lat, long };
+        type === 'pickup' ? setPickupPosition(position) : setDropPosition(position);
+
+        setFormData((prev) => ({
             ...prev,
             essentials: {
                 ...prev.essentials,
                 [type]: {
                     ...prev.essentials[type],
-                    mapLocation: { lat, long: long },
+                    mapLocation: position,
                 },
             },
         }));
     };
 
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // console.log("Submitting form data:", formData);
+
+        // Validate coordinates before submission
+        const { pickup, dropPoint } = formData.essentials;
+        if (
+            isNaN(pickup.mapLocation.lat) ||
+            isNaN(pickup.mapLocation.long) ||
+            isNaN(dropPoint.mapLocation.lat) ||
+            isNaN(dropPoint.mapLocation.long)
+        ) {
+            alert('Please select valid pickup and drop locations.');
+            return;
+        }
+
+        // Log the payload for debugging
+        console.log('Submitting formData:', JSON.stringify(formData, null, 2));
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/addNewTrip`, {
-                method: 'POST',
-                body: JSON.stringify(formData),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+            const response = await fetch(
+                `${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/addNewTrip`,
+                {
+                    method: 'POST',
+                    body: JSON.stringify(formData),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
 
             if (response.status === 201) {
-                alert("Trip added successfully!");
+                alert('Trip added successfully!');
                 setFormData({
                     title: '',
                     locationId: '',
@@ -234,7 +267,7 @@ const TripForm = () => {
                         age: 0,
                         fitnessCriteria: '',
                         status: '',
-                        previousExp: ''
+                        previousExp: '',
                     },
                     essentials: {
                         region: '',
@@ -245,16 +278,33 @@ const TripForm = () => {
                         typeOfTrip: '',
                         price: '',
                         season: '',
-                        pickup: { name: '', mapLocation: { lat: 0, long: 0 } },
-                        dropPoint: { name: '', mapLocation: { lat: 0, long: 0 } },
+                        pickup: { name: '', mapLocation: DEFAULT_CENTER },
+                        dropPoint: { name: '', mapLocation: DEFAULT_CENTER },
                     },
                 });
+                setPickupPosition(DEFAULT_CENTER);
+                setDropPosition(DEFAULT_CENTER);
+            } else {
+                const errorData = await response.json();
+                throw new Error(`Failed to add trip: ${errorData.message || response.statusText}`);
             }
         } catch (error) {
-            console.error("Error submitting trip:", error);
-            alert("Failed to add trip. Please try again.");
+            console.error('Error submitting trip:', error);
+            alert(`Failed to add trip: ${error.message}`);
         }
     };
+
+    // Memoize the map center to prevent unnecessary re-renders
+    const pickupMapCenter = useMemo(() => pickupPosition, [pickupPosition]);
+    const dropMapCenter = useMemo(() => dropPosition, [dropPosition]);
+
+    if (loadError) {
+        return <div>Error loading Google Maps: {loadError.message}</div>;
+    }
+
+    if (!isLoaded) {
+        return <div>Loading Google Maps...</div>;
+    }
 
     return (
         <div className="container d-flex justify-content-center align-items-center min-vh-100">
@@ -263,72 +313,154 @@ const TripForm = () => {
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label className="form-label">Title:</label>
-                        <input type="text" name="title" value={formData.title} onChange={handleChange} required className="form-control" />
+                        <input
+                            type="text"
+                            name="title"
+                            value={formData.title}
+                            onChange={handleChange}
+                            required
+                            className="form-control"
+                        />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Main Image URL:</label>
-                        <input type="text" name="MainImageUrl" value={formData.MainImageUrl} onChange={handleChange} className="form-control" />
+                        <input
+                            type="text"
+                            name="MainImageUrl"
+                            value={formData.MainImageUrl}
+                            onChange={handleChange}
+                            className="form-control"
+                        />
                     </div>
 
-
-                    {/* Searchable Location Dropdown */}
-                    <SearchDropdown locations={locations} setSelectedLocation={(id) => setFormData({ ...formData, locationId: id })} />
+                    <SearchDropdown
+                        locations={locations}
+                        setSelectedLocation={(id) => setFormData({ ...formData, locationId: id })}
+                    />
 
                     <div className="mb-3">
                         <label className="form-label">Region:</label>
-                        <input type="text" name="essentials.region" value={formData.essentials.region} onChange={handleChange} className="form-control" />
+                        <input
+                            type="text"
+                            name="essentials.region"
+                            value={formData.essentials.region}
+                            onChange={handleChange}
+                            className="form-control"
+                        />
                     </div>
-
-
 
                     <div className="mb-3">
                         <label className="form-label">Best Time to Visit:</label>
-                        <input type="text" name="essentials.bestTime" value={formData.essentials.bestTime} onChange={handleChange} className="form-control" />
+                        <input
+                            type="text"
+                            name="essentials.bestTime"
+                            value={formData.essentials.bestTime}
+                            onChange={handleChange}
+                            className="form-control"
+                        />
                     </div>
 
                     <div className="mb-3">
                         <label className="form-label">Timeline:</label>
                         <div className="d-flex gap-2">
-                            <input type="date" name="essentials.timeline.fromDate" value={formData.essentials.timeline.fromDate} onChange={handleChange} className="form-control" />
-                            <input type="date" name="essentials.timeline.tillDate" value={formData.essentials.timeline.tillDate} onChange={handleChange} className="form-control" />
+                            <input
+                                type="date"
+                                name="essentials.timeline.fromDate"
+                                value={formData.essentials.timeline.fromDate}
+                                onChange={handleChange}
+                                className="form-control"
+                            />
+                            <input
+                                type="date"
+                                name="essentials.timeline.tillDate"
+                                value={formData.essentials.timeline.tillDate}
+                                onChange={handleChange}
+                                className="form-control"
+                            />
                         </div>
                     </div>
 
                     <div className="mb-3">
                         <label className="form-label">Itinerary:</label>
-                        <textarea name="itinerary" value={formData.itinerary} onChange={handleChange} className="form-control" rows="3"></textarea>
+                        <textarea
+                            name="itinerary"
+                            value={formData.itinerary}
+                            onChange={handleChange}
+                            className="form-control"
+                            rows="3"
+                        ></textarea>
                     </div>
+
                     <div className="mb-3">
                         <h3 className="text-start">Requirements</h3>
                         <label className="form-label">Age:</label>
-                        <input type="number" name="requirements.age" value={formData.requirements.age} onChange={handleChange} className="form-control" />
+                        <input
+                            type="number"
+                            name="requirements.age"
+                            value={formData.requirements.age}
+                            onChange={handleChange}
+                            className="form-control"
+                        />
                         <label className="form-label">Fitness Criteria:</label>
-                        <input type="text" name="requirements.fitnessCriteria" value={formData.requirements.fitnessCriteria} onChange={handleChange} className="form-control" />
+                        <input
+                            type="text"
+                            name="requirements.fitnessCriteria"
+                            value={formData.requirements.fitnessCriteria}
+                            onChange={handleChange}
+                            className="form-control"
+                        />
                         <label className="form-label">Status:</label>
-                        <select name="requirements.status" value={formData.requirements.status} onChange={handleChange} className="form-control">
+                        <select
+                            name="requirements.status"
+                            value={formData.requirements.status}
+                            onChange={handleChange}
+                            className="form-control"
+                        >
                             <option value="">Select Status</option>
                             <option value="active">Active</option>
                             <option value="scheduled">Scheduled</option>
                             <option value="completed">Completed</option>
                         </select>
                         <label className="form-label">Previous Experience:</label>
-                        <input type="text" name="requirements.previousExp" value={formData.requirements.previousExp} onChange={handleChange} className="form-control" />
+                        <input
+                            type="text"
+                            name="requirements.previousExp"
+                            value={formData.requirements.previousExp}
+                            onChange={handleChange}
+                            className="form-control"
+                        />
                     </div>
-
 
                     <div className="mb-3">
                         <label className="form-label">Duration:</label>
-                        <input type="text" name="essentials.duration" value={formData.essentials.duration} onChange={handleChange} className="form-control" readOnly />
+                        <input
+                            type="text"
+                            name="essentials.duration"
+                            value={formData.essentials.duration}
+                            className="form-control"
+                            readOnly
+                        />
                     </div>
 
                     <div className="mb-3">
                         <label className="form-label">Altitude:</label>
-                        <input type="number" name="essentials.altitude" value={formData.essentials.altitude} onChange={handleChange} className="form-control" />
+                        <input
+                            type="number"
+                            name="essentials.altitude"
+                            value={formData.essentials.altitude}
+                            onChange={handleChange}
+                            className="form-control"
+                        />
                     </div>
 
                     <div className="mb-3">
                         <label className="form-label">Type of Trip:</label>
-                        <select name="essentials.typeOfTrip" value={formData.essentials.typeOfTrip} onChange={handleChange} className="form-control">
+                        <select
+                            name="essentials.typeOfTrip"
+                            value={formData.essentials.typeOfTrip}
+                            onChange={handleChange}
+                            className="form-control"
+                        >
                             <option value="">Select Type</option>
                             <option value="Adventure">Adventure</option>
                             <option value="Mountains">Mountains</option>
@@ -343,18 +475,28 @@ const TripForm = () => {
                             <option value="Cruise">Cruise</option>
                             <option value="Pilgrimage">Pilgrimage</option>
                             <option value="Rural Tourism">Rural Tourism</option>
-
                         </select>
                     </div>
 
                     <div className="mb-3">
                         <label className="form-label">Price:</label>
-                        <input type="number" name="essentials.price" value={formData.essentials.price} onChange={handleChange} className="form-control" />
+                        <input
+                            type="number"
+                            name="essentials.price"
+                            value={formData.essentials.price}
+                            onChange={handleChange}
+                            className="form-control"
+                        />
                     </div>
 
                     <div className="mb-3">
                         <label className="form-label">Season:</label>
-                        <select name="essentials.season" value={formData.essentials.season} onChange={handleChange} className="form-control">
+                        <select
+                            name="essentials.season"
+                            value={formData.essentials.season}
+                            onChange={handleChange}
+                            className="form-control"
+                        >
                             <option value="">Select Season</option>
                             <option value="Summer">Summer</option>
                             <option value="Winter">Winter</option>
@@ -363,62 +505,61 @@ const TripForm = () => {
                         </select>
                     </div>
 
-                    {/* <div className="mb-3">
-                        <label className="form-label">Pickup Location:</label>
-                        {isLoaded && (
-                            <Autocomplete onLoad={(autocomplete) => (pickupRef.current = autocomplete)} onPlaceChanged={() => handlePlaceSelect(pickupRef.current.getPlace(), 'pickup')}>
-                                <input type="text" placeholder="Enter pickup location" className="form-control" />
-                            </Autocomplete>
-                        )}
-                    </div>
-
-                    <div className="mb-3">
-                        <label className="form-label">Drop Point:</label>
-                        {isLoaded && (
-                            <Autocomplete onLoad={(autocomplete) => (dropRef.current = autocomplete)} onPlaceChanged={() => handlePlaceSelect(dropRef.current.getPlace(), 'dropPoint')}>
-                                <input type="text" placeholder="Enter drop point" className="form-control" />
-                            </Autocomplete>
-                        )}
-                    </div> */}
-
+                    {/* Pickup Location with Autocomplete */}
                     <div className="mb-3">
                         <label className="form-label">Pickup Location:</label>
-                        {isLoaded && (
-                            <Autocomplete onLoad={(autocomplete) => (pickupRef.current = autocomplete)} onPlaceChanged={() => handlePlaceSelect(pickupRef.current.getPlace(), 'pickup')}>
-                                <input type="text" placeholder="Enter pickup location" className="form-control" />
-                            </Autocomplete>
-                        )}
-                        Lat: {pickupPosition.lat}, long: {pickupPosition.long}
+                        <Autocomplete
+                            onLoad={(autocomplete) => (pickupRef.current = autocomplete)}
+                            onPlaceChanged={() => handlePlaceSelect(pickupRef.current.getPlace(), 'pickup')}
+                        >
+                            <input type="text" placeholder="Enter pickup location" className="form-control" />
+                        </Autocomplete>
+                        <div>Lat: {pickupPosition.lat}, Long: {pickupPosition.long}</div>
                     </div>
-                    <GoogleMap center={pickupPosition} zoom={10} mapContainerStyle={{ height: '300px', width: '100%' }}>
-                        <Marker
-                            position={pickupPosition}
-                            draggable={true}
-                            onDragEnd={(e) => handleMarkerDragEnd(e, 'pickup')}
-                        />
-                    </GoogleMap>
 
+                    {/* Pickup Map */}
+                    {isFinite(pickupPosition.lat) && isFinite(pickupPosition.long) && (
+                        <GoogleMap
+                            center={pickupMapCenter}
+                            zoom={10}
+                            mapContainerStyle={{ height: '300px', width: '100%' }}
+                        >
+                            <gmp-advanced-marker
+                                position={pickupPosition}
+                                draggable={true}
+                                ondragend={(e) => handleMarkerDragEnd(e, 'pickup')}
+                            ></gmp-advanced-marker>
+                        </GoogleMap>
+                    )}
+
+                    {/* Drop Point with Autocomplete */}
                     <div className="mb-3">
                         <label className="form-label">Drop Point:</label>
-                        {isLoaded && (
-                            <Autocomplete onLoad={(autocomplete) => (dropRef.current = autocomplete)} onPlaceChanged={() => handlePlaceSelect(dropRef.current.getPlace(), 'dropPoint')}>
-                                <input type="text" placeholder="Enter drop point" className="form-control" />
-                            </Autocomplete>
-                        )}
-                        Lat: {dropPosition.lat}, long: {dropPosition.long}
-
+                        <Autocomplete
+                            onLoad={(autocomplete) => (dropRef.current = autocomplete)}
+                            onPlaceChanged={() => handlePlaceSelect(dropRef.current.getPlace(), 'dropPoint')}
+                        >
+                            <input type="text" placeholder="Enter drop point" className="form-control" />
+                        </Autocomplete>
+                        <div>Lat: {dropPosition.lat}, Long: {dropPosition.long}</div>
                     </div>
 
-                    <GoogleMap center={dropPosition} zoom={10} mapContainerStyle={{ height: '300px', width: '100%' }}>
-                        <Marker
-                            position={dropPosition}
-                            draggable={true}
-                            onDragEnd={(e) => handleMarkerDragEnd(e, 'dropPoint')}
-                        />
-                    </GoogleMap>
+                    {/* Drop Map */}
+                    {isFinite(dropPosition.lat) && isFinite(dropPosition.long) && (
+                        <GoogleMap
+                            center={dropMapCenter}
+                            zoom={10}
+                            mapContainerStyle={{ height: '300px', width: '100%' }}
+                        >
+                            <gmp-advanced-marker
+                                position={dropPosition}
+                                draggable={true}
+                                ondragend={(e) => handleMarkerDragEnd(e, 'dropPoint')}
+                            ></gmp-advanced-marker>
+                        </GoogleMap>
+                    )}
 
-
-                    <button type="submit" className="btn btn-primary w-100" onclic>Create Trip</button>
+                    <button type="submit" className="btn btn-primary w-100">Create Trip</button>
                 </form>
             </div>
         </div>
