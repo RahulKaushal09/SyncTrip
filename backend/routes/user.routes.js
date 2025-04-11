@@ -59,10 +59,10 @@ router.post('/sendRequest', authenticateToken, async (req, res) => {
     try {
         const { receiverId, tripId } = req.body;
         const senderId = req.userId;
-        console.log('senderId:', senderId); // Debugging line
-        console.log('receiverId:', receiverId); // Debugging line
-        console.log('tripId:', tripId); // Debugging line
 
+        if (senderId === receiverId) {
+            return res.status(400).json({ message: 'Cannot send request to yourself' });
+        }
 
         const sender = await User.findById(senderId);
         const receiver = await User.findById(receiverId);
@@ -71,68 +71,38 @@ router.post('/sendRequest', authenticateToken, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        if (senderId === receiverId) {
-            return res.status(400).json({ message: 'Cannot send request to yourself' });
+        // Check if the receiver has already requested the sender
+        const receiverTrip = receiver.friends.find(f => f.tripId.toString() === tripId);
+        const receiverHasRequestedSender = receiverTrip?.users.some(
+            u => u.userId.toString() === senderId && u.status === 1
+        );
+        if (receiverHasRequestedSender) {
+            return res.status(400).json({ message: 'This user has already sent you a request' });
         }
 
-        // Check if request already exists in sender's requested array
-        const existingRequest = sender.requested?.find(
-            (req) => req.user.toString() === receiverId && req.trips.some((t) => t.tripId.toString() === tripId)
-        );
+        // Check if sender already sent a request
+        let senderTrip = sender.friends.find(f => f.tripId.toString() === tripId);
+        if (!senderTrip) {
+            senderTrip = { tripId, users: [] };
+            sender.friends.push(senderTrip);
+        }
+
+        const existingRequest = senderTrip.users.find(u => u.userId.toString() === receiverId);
         if (existingRequest) {
             return res.status(400).json({ message: 'Request already sent' });
         }
 
-        let existingRequested = sender.requested?.find(req => req.user.toString() === receiverId.toString());
-        if (existingRequested) {
-            // Check if the trip already exists for this user
-            const tripExists = existingRequested.trips.some(trip => trip.tripId.toString() === tripId.toString());
+        // Add to sender
+        senderTrip.users.push({ userId: receiverId, status: 1 });
 
-            if (!tripExists) {
-                // Push the new trip to the existing user's trips array
-                existingRequested.trips.push({ tripId, type: 'sent', status: 'pending' });
-            }
-        } else {
-            // If user doesn't exist in requested, add a new entry
-            sender.requested = sender.requested || [];
-            sender.requested.push({
-                user: receiverId,
-                trips: [{ tripId, type: 'sent', status: 'pending' }]
-            });
+        // Add to receiver
+        let receiverTripEntry = receiver.friends.find(f => f.tripId.toString() === tripId);
+        if (!receiverTripEntry) {
+            receiverTripEntry = { tripId, users: [] };
+            receiver.friends.push(receiverTripEntry);
         }
 
-        // sender.requested.push({
-        //     user: receiverId,
-        //     trips: [{ tripId, type: 'sent', status: 'pending' }],
-        // });
-
-
-
-        // Add to receiver's recievedReq array
-        // receiver.recievedReq = receiver.recievedReq || [];
-        // receiver.recievedReq.push({
-        //     user: senderId,
-        //     trips: [{ tripId, type: 'received', status: 'pending' }],
-        // });
-
-        let existingReq = receiver.recievedReq.find(req => req.user.toString() === senderId.toString());
-
-        if (existingReq) {
-            // Check if the trip already exists for this user
-            const tripExists = existingReq.trips.some(trip => trip.tripId.toString() === tripId.toString());
-
-            if (!tripExists) {
-                // Push the new trip to the existing user's trips array
-                existingReq.trips.push({ tripId, type: 'received', status: 'pending' });
-            }
-        } else {
-            // If user doesn't exist in recievedReq, add a new entry
-            receiver.recievedReq = receiver.recievedReq || [];
-            receiver.recievedReq.push({
-                user: senderId,
-                trips: [{ tripId, type: 'received', status: 'pending' }]
-            });
-        }
+        receiverTripEntry.users.push({ userId: senderId, status: -1 });
 
         await sender.save();
         await receiver.save();
@@ -142,8 +112,6 @@ router.post('/sendRequest', authenticateToken, async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-
-// Accept Request
 router.post('/acceptRequest', authenticateToken, async (req, res) => {
     try {
         const { requesterId, tripId } = req.body;
@@ -156,34 +124,27 @@ router.post('/acceptRequest', authenticateToken, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Find request in acceptor's recievedReq array
-        const acceptorRequest = acceptor.recievedReq?.find(
-            (req) => req.user.toString() === requesterId && req.trips.some((t) => t.tripId.toString() === tripId)
+        // Check if the requester had actually sent a request
+        const acceptorTrip = acceptor.friends.find(f => f.tripId.toString() === tripId);
+        const hasRequest = acceptorTrip?.users.find(
+            u => u.userId.toString() === requesterId && u.status === -1
         );
-        if (!acceptorRequest) {
-            return res.status(404).json({ message: 'Request not found' });
+        if (!hasRequest) {
+            return res.status(400).json({ message: 'No incoming request from this user' });
         }
 
-        const tripIndex = acceptorRequest.trips.findIndex((t) => t.tripId.toString() === tripId);
-        acceptorRequest.trips[tripIndex].status = 'accepted';
+        // Update acceptor's status to matched (0)
+        hasRequest.status = 0;
 
-        // Find request in requester's requested array
-        const requesterRequest = requester.requested?.find(
-            (req) => req.user.toString() === acceptorId && req.trips.some((t) => t.tripId.toString() === tripId)
+        // Update requester's entry to matched (0)
+        const requesterTrip = requester.friends.find(f => f.tripId.toString() === tripId);
+        const requesterEntry = requesterTrip?.users.find(
+            u => u.userId.toString() === acceptorId && u.status === 1
         );
-        if (!requesterRequest) {
-            return res.status(404).json({ message: 'Request not found' });
+        if (!requesterEntry) {
+            return res.status(400).json({ message: 'Invalid state: requester did not send request' });
         }
-
-        const requesterTripIndex = requesterRequest.trips.findIndex((t) => t.tripId.toString() === tripId);
-        requesterRequest.trips[requesterTripIndex].status = 'accepted';
-
-        // Add to matched arrays
-        acceptor.matched = acceptor.matched || [];
-        acceptor.matched.push({ user: requesterId, tripId, status: 'accepted' });
-
-        requester.matched = requester.matched || [];
-        requester.matched.push({ user: acceptorId, tripId, status: 'accepted' });
+        requesterEntry.status = 0;
 
         await acceptor.save();
         await requester.save();
@@ -194,49 +155,49 @@ router.post('/acceptRequest', authenticateToken, async (req, res) => {
     }
 });
 
-// Reject Request
-router.post('/rejectRequest', authenticateToken, async (req, res) => {
-    try {
-        const { requesterId, tripId } = req.body;
-        const rejectorId = req.userId;
+// // Reject Request
+// router.post('/rejectRequest', authenticateToken, async (req, res) => {
+//     try {
+//         const { requesterId, tripId } = req.body;
+//         const rejectorId = req.userId;
 
-        const rejector = await User.findById(rejectorId);
-        const requester = await User.findById(requesterId);
+//         const rejector = await User.findById(rejectorId);
+//         const requester = await User.findById(requesterId);
 
-        if (!rejector || !requester) {
-            return res.status(404).json({ message: 'User not found' });
-        }
+//         if (!rejector || !requester) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
 
-        // Find request in rejector's recievedReq array
-        const rejectorRequest = rejector.recievedReq?.find(
-            (req) => req.user.toString() === requesterId && req.trips.some((t) => t.tripId.toString() === tripId)
-        );
-        if (!rejectorRequest) {
-            return res.status(404).json({ message: 'Request not found' });
-        }
+//         // Find request in rejector's recievedReq array
+//         const rejectorRequest = rejector.recievedReq?.find(
+//             (req) => req.user.toString() === requesterId && req.trips.some((t) => t.tripId.toString() === tripId)
+//         );
+//         if (!rejectorRequest) {
+//             return res.status(404).json({ message: 'Request not found' });
+//         }
 
-        const tripIndex = rejectorRequest.trips.findIndex((t) => t.tripId.toString() === tripId);
-        rejectorRequest.trips[tripIndex].status = 'rejected';
+//         const tripIndex = rejectorRequest.trips.findIndex((t) => t.tripId.toString() === tripId);
+//         rejectorRequest.trips[tripIndex].status = 'rejected';
 
-        // Find request in requester's requested array
-        const requesterRequest = requester.requested?.find(
-            (req) => req.user.toString() === rejectorId && req.trips.some((t) => t.tripId.toString() === tripId)
-        );
-        if (!requesterRequest) {
-            return res.status(404).json({ message: 'Request not found' });
-        }
+//         // Find request in requester's requested array
+//         const requesterRequest = requester.requested?.find(
+//             (req) => req.user.toString() === rejectorId && req.trips.some((t) => t.tripId.toString() === tripId)
+//         );
+//         if (!requesterRequest) {
+//             return res.status(404).json({ message: 'Request not found' });
+//         }
 
-        const requesterTripIndex = requesterRequest.trips.findIndex((t) => t.tripId.toString() === tripId);
-        requesterRequest.trips[requesterTripIndex].status = 'rejected';
+//         const requesterTripIndex = requesterRequest.trips.findIndex((t) => t.tripId.toString() === tripId);
+//         requesterRequest.trips[requesterTripIndex].status = 'rejected';
 
-        await rejector.save();
-        await requester.save();
+//         await rejector.save();
+//         await requester.save();
 
-        res.status(200).json({ message: 'Request rejected successfully' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+//         res.status(200).json({ message: 'Request rejected successfully' });
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// });
 
 
 module.exports = router;

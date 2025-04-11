@@ -8,6 +8,8 @@ import PlacesToVisitSection from '../../components/Details/PlacesToVisit';
 import HotelsAndStaysSection from '../../components/Details/HotelSection';
 import ProfileCardUi from '../../components/Profile/ProfileCard.js'; // Import the new component
 import { ProfileCardEnum } from '../../utils/EnumClasses.js';
+import { getLocationById } from '../../utils/CommonServices.js';
+import { extractTextFromHTML } from '../../utils/htmlRelatedServices.js'; // Adjust the import path as needed
 const EnrolledTripDetails = () => {
   const { tripId } = useParams();
   const navigate = useNavigate();
@@ -25,61 +27,26 @@ const EnrolledTripDetails = () => {
   const [requestsReceivedUsers, setRequestsReceivedUsers] = useState([]);
   const [connections, setConnections] = useState([]);
 
-  const extractTextFromHTML = (html) => {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    return tempDiv.textContent || tempDiv.innerText || '';
-  };
+
+
 
   const fetchLocationDetails = async (locationId) => {
     if (!locationId) return;
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/${locationId}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (!response.ok) throw new Error(`Failed to fetch location: ${response.statusText}`);
-      const location = await response.json();
-      location.title = location?.title?.replace(/[0-9. ]/g, '');
-      location.title = extractTextFromHTML(location.title);
-      setLocationData(location);
+      const location = await getLocationById(locationId);
+
+      if (location) {
+        location.title = location?.title?.replace(/[0-9. ]/g, '');
+        location.title = extractTextFromHTML(location.title);
+        setLocationData(location);
+      } else {
+        throw new Error("Location not found");
+      }
     } catch (err) {
       setError(err.message);
     }
   };
 
-  const fetchUserData = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/users/`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) throw new Error('Failed to fetch user data');
-      const updatedUser = await response.json();
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      setParsedUser(updatedUser);
-      { trip.peopleApplied && setOtherGoing(trip.peopleApplied.filter((u) => u._id !== parsedUser?._id)) };
-      {
-        trip.peopleApplied && setRequestsReceivedUsers(parsedUser?.recievedReq
-          ?.filter((req) =>
-            req.trips.some((t) => t.tripId.toString() === tripId && t.type === 'received' && t.status === 'pending')
-          )
-          .map((req) => trip.peopleApplied.find((u) => u._id === req.user.toString()))
-          .filter((user) => user))
-      };
-      {
-        trip.peopleApplied && setConnections(parsedUser?.matched
-          ?.filter((m) => m.tripId.toString() === tripId && m.status === 'accepted')
-          .map((m) => trip.peopleApplied.find((u) => u._id === m.user.toString()))
-          .filter((user) => user))
-      };
-    } catch (err) {
-      console.error('Failed to fetch user data:', err);
-    }
-  };
 
   useEffect(() => {
     const fetchEnrolledTripDetails = async () => {
@@ -91,8 +58,8 @@ const EnrolledTripDetails = () => {
 
       const userObj = JSON.parse(user);
       setParsedUser(userObj);
-
       setIsLoading(true);
+
       try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/enrolled/${tripId}`, {
           method: 'GET',
@@ -110,26 +77,25 @@ const EnrolledTripDetails = () => {
 
         const data = await response.json();
 
-
         setTrip(data);
         fetchLocationDetails(data.locationId);
-        var filteredPeople = data.peopleApplied.filter((u) => u._id !== userObj._id);
-        setOtherGoing(filteredPeople);
-        var filteredRequestsRecieved = userObj.recievedReq
-          ?.filter((req) =>
-            req.trips.some((t) => t.tripId.toString() === tripId && t.type === 'received' && t.status === 'pending')
-          )
-          .map((req) => data.peopleApplied.find((u) => u._id === req.user.toString()))
-          .filter((user) => user);
-        setRequestsReceivedUsers(filteredRequestsRecieved);
-        var filteredConnections = userObj.matched
-          ?.filter((m) => m.tripId.toString() === tripId && m.status === 'accepted')
-          .map((m) => data.peopleApplied.find((u) => u._id === m.user.toString()))
-          .filter((user) => user)
-        setConnections(filteredConnections);
+
+        // Categorize people based on status
+        const allPeople = data.peopleApplied.filter(u => u._id !== userObj._id);
+
+        const connections = allPeople.filter(u => u.status === 0); // Matched
+        const requestsReceived = allPeople.filter(u => u.status === -1); // You received
+        const requestsSent = allPeople.filter(u => u.status === 1); // You sent (optional)
+        const noInteraction = allPeople.filter(u => u.status === null); // No interaction
+
+        // Update relevant states
+        setConnections(connections);
+        setRequestsReceivedUsers(requestsReceived);
+        setOtherGoing([...connections, ...requestsSent, ...requestsReceived, ...noInteraction]); // People going but not yet accepted
+        // Optional: you could also maintain a `setRequestsSentUsers(requestsSent)` if needed
+
       } catch (err) {
         console.log('Error fetching trip details:', err);
-
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -140,17 +106,8 @@ const EnrolledTripDetails = () => {
       hasFetched.current = true;
       fetchEnrolledTripDetails();
     }
-    fetchUserData();
   }, [tripId, token, navigate, user]);
 
-  // Check if a request has been sent to a user for this trip
-  const hasSentRequest = (targetUserId) => {
-    if (!parsedUser || !parsedUser.requested) return false;
-    return parsedUser.requested.some((req) =>
-      req.user.toString() === targetUserId &&
-      req.trips.some((t) => t.tripId.toString() === tripId && t.type === 'sent')
-    );
-  };
 
   const apiCall = async (endpoint, method, data) => {
     const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/users${endpoint}`, {
@@ -173,9 +130,10 @@ const EnrolledTripDetails = () => {
   // Send Request
   const sendRequest = async (receiverId) => {
     try {
-      await apiCall('/sendRequest', 'POST', { receiverId, tripId });
-      await fetchUserData(); // Refresh user data after sending request
-      alert('Request sent successfully!');
+      var result = await apiCall('/sendRequest', 'POST', { receiverId, tripId });
+      alert(result.message || 'Request sent successfully!');
+      window.location.reload(); // Reload the page to reflect changes
+
     } catch (err) {
       setError(err.message);
     }
@@ -184,24 +142,24 @@ const EnrolledTripDetails = () => {
   // Accept Request
   const acceptRequest = async (requesterId) => {
     try {
-      await apiCall('/acceptRequest', 'POST', { requesterId, tripId });
-      await fetchUserData(); // Refresh user data after accepting request
-      alert('Request accepted successfully!');
+      var result = await apiCall('/acceptRequest', 'POST', { requesterId, tripId });
+      // UpdateUserLocalStorage(result.user);
+      alert(result.message || 'Request accepted successfully!');
+      window.location.reload(); // Reload the page to reflect changes
     } catch (err) {
       setError(err.message);
     }
   };
 
   // Reject Request
-  const rejectRequest = async (requesterId) => {
-    try {
-      await apiCall('/rejectRequest', 'POST', { requesterId, tripId });
-      await fetchUserData(); // Refresh user data after rejecting request
-      alert('Request rejected successfully!');
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  // const rejectRequest = async (requesterId) => {
+  //   try {
+  //     await apiCall('/rejectRequest', 'POST', { requesterId, tripId });
+  //     alert('Request rejected successfully!');
+  //   } catch (err) {
+  //     setError(err.message);
+  //   }
+  // };
 
   // View Profile (placeholder)
   const viewProfile = (userId) => {
@@ -281,72 +239,60 @@ const EnrolledTripDetails = () => {
               <h2 className="section-title">All Other Going</h2>
               {otherGoing.length > 0 ? (
                 <div className="user-list">
-                  {otherGoing.map((user) => (
-                    // <div key={user._id} className="user-card">
-                    //   <img src={user.profilePicture} alt={user.name} className="user-profile-picture" />
-                    //   <div className="user-info">
-                    //     <span>{user.name}</span>, {user.age}
-                    //   </div>
-                    //   {hasSentRequest(user._id) ? (
-                    //     <span className="requested-text">Requested</span>
-                    //   ) : (
-                    //     <button className="action-btn" onClick={() => sendRequest(user._id)}>
-                    //       Send Request
-                    //     </button>
-                    //   )}
-                    // </div>
+                  {otherGoing.map((user) => {
+                    const isConnected = user.status === 0;
+                    const hasSentRequest = user.status === 1;
+                    const hasRecievedRequest = user.status === -1;
+                    const noInteraction = user.status === null;
 
-                    <ProfileCardUi
-                      key={user._id}
-                      user={user}
-                      btns={
-                        [{ text: 'Send Request', onClick: () => sendRequest(user._id), className: 'send-request' }]
-                      }
-                      // onViewProfile={viewProfile}
-                      hasSentRequest={hasSentRequest(user._id)}
-                      isConnected={connections?.some((c) => c._id === user._id)}
-                      type={ProfileCardEnum.AllGoing}
+                    let btns = [];
 
-                    />
-                  ))}
+                    if (isConnected) {
+                      btns = [{ text: 'Chat', onClick: () => viewChat(user._id), className: 'chat btn btn-black' }];
+                    } else if (hasSentRequest) {
+                      btns = [{ text: 'Requested', onClick: () => { }, className: 'requested disabled', inlineStyle: { pointerEvents: 'none' } }];
+                    } else if (noInteraction) {
+                      btns = [{ text: 'Send Request', onClick: () => sendRequest(user._id), className: 'send-request' }];
+                    }
+                    else if (hasRecievedRequest) {
+                      btns = [{ text: 'Accept', onClick: () => acceptRequest(user._id), className: 'accept', inlineStyle: { width: "100%" } }];
+                    }
+
+                    return (
+                      <ProfileCardUi
+                        key={user._id}
+                        user={user}
+                        btns={btns}
+                        onViewProfile={viewProfile}
+                        hasSentRequest={hasSentRequest}
+                        isConnected={isConnected}
+                        hasRecievedRequest={hasRecievedRequest}
+                        type={ProfileCardEnum.AllGoing}
+                      />
+                    );
+                  })}
                 </div>
               ) : (
                 <p className="no-users">No other people going yet.</p>
               )}
             </div>
           )}
+
           {activeTab === 'requests' && parsedUser && (
             <div>
               <h2 className="section-title">Requests Received</h2>
               {requestsReceivedUsers?.length > 0 ? (
                 <div className="user-list">
                   {requestsReceivedUsers.map((user) => (
-                    // <div key={user._id} className="user-card">
-                    //   <img src={user.profilePicture} alt={user.name} className="user-profile-picture" />
-                    //   <div className="user-info">
-                    //     <span>{user.name}</span>, {user.age}
-                    //   </div>
-                    //   <div className="request-actions">
-                    //     <button className="action-btn accept" onClick={() => acceptRequest(user._id)}>
-                    //       Accept
-                    //     </button>
-                    //     <button className="action-btn reject" onClick={() => rejectRequest(user._id)}>
-                    //       Reject
-                    //     </button>
-                    //   </div>
-                    // </div>
                     <ProfileCardUi
                       key={user._id}
                       user={user}
-                      // instagramSocialMedia={user.socialMedias.instagram || ""}
-                      btns={
-                        [
-                          { text: 'Accept', onClick: () => acceptRequest(user._id), className: 'accept', inlineStyle: { width: "50%" } },
-                          { text: 'Reject', onClick: () => rejectRequest(user._id), className: 'reject', inlineStyle: { width: "50%" } },
-                        ]
-                      }
+                      btns={[
+                        { text: 'Accept', onClick: () => acceptRequest(user._id), className: 'accept', inlineStyle: { width: "100%" } },
+                        // { text: 'Reject', onClick: () => rejectRequest(user._id), className: 'reject', inlineStyle: { width: "50%" } },
+                      ]}
                       onViewProfile={viewProfile}
-                      hasSentRequest={false} // No "Requested" state for received requests
+                      hasSentRequest={false}
                       type={ProfileCardEnum.RecivedRequests}
                     />
                   ))}
@@ -356,35 +302,23 @@ const EnrolledTripDetails = () => {
               )}
             </div>
           )}
+
           {activeTab === 'connections' && parsedUser && (
             <div>
               <h2 className="section-title">Connections</h2>
               {connections?.length > 0 ? (
                 <div className="user-list">
                   {connections.map((user) => (
-                    // <div key={user._id} className="user-card">
-                    //   <img src={user.profilePicture} alt={user.name} className="user-profile-picture" />
-                    //   <div className="user-info">
-                    //     <span>{user.name}</span>, {user.age}
-                    //   </div>
-                    //   <button className="action-btn" onClick={() => viewChat(user._id)}>
-                    //     Chat
-                    //   </button>
-                    // </div>
                     <ProfileCardUi
                       key={user._id}
                       user={user}
-                      // instagramSocialMedia={user.socialMedias.instagram || ""}
-                      btns={
-                        [
-                          { text: 'Chat', onClick: () => viewChat(user._id), className: 'chat btn btn-black', inlineStyle: { width: "100%" } },
-                        ]
-                      }
+                      btns={[
+                        { text: 'Chat', onClick: () => viewChat(user._id), className: 'chat btn btn-black', inlineStyle: { width: "100%" } },
+                      ]}
                       onViewProfile={viewProfile}
-                      hasSentRequest={false} // No "Requested" state for received requests
+                      hasSentRequest={false}
                       type={ProfileCardEnum.Connection}
                     />
-
                   ))}
                 </div>
               ) : (

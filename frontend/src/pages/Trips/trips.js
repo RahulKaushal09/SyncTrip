@@ -56,7 +56,7 @@ const Trips = () => {
 
                 if (!allTripsResponse.ok) throw new Error('Failed to fetch all trips');
                 const allTripsData = await allTripsResponse.json();
-                setTrips(allTripsData);
+                setTrips(allTripsData.trips);
 
                 // Fetch enrolled trips if logged in
                 if (isLoggedIn && token) {

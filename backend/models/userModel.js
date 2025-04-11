@@ -21,28 +21,38 @@ const UserSchema = new mongoose.Schema({
     }],
     showProfile: { type: Boolean, default: true },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Location' }],
-    matched: [{
-        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    friends: [{
         tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Trip' },
-        chatHistoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'ChatHistory' },
-        status: { type: String, enum: ['accepted', 'rejected'], required: true },
+        users: [
+            {
+                userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+                status: { type: Number, enum: [-1, 0, 1], required: true },// considering -1 => incoming request 0 => matched 1 => requested to the user
+                chatHistoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'ChatHistory' },
+            }
+        ]
     }],
-    requested: [{
-        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        trips: [{
-            tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
-            type: { type: String, enum: ['sent', 'received'], required: true },
-            status: { type: String, enum: ['pending', 'accepted', 'rejected'], required: true },
-        }],
-    }],
-    recievedReq: [{
-        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        trips: [{
-            tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
-            type: { type: String, enum: ['sent', 'received'], required: true },
-            status: { type: String, enum: ['pending', 'accepted', 'rejected'], required: true },
-        }],
-    }],
+    // matched: [{
+    //     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    //     tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Trip' },
+    //     chatHistoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'ChatHistory' },
+    //     status: { type: String, enum: ['accepted', 'rejected'], required: true },
+    // }],
+    // requested: [{
+    //     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    //     trips: [{
+    //         tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
+    //         type: { type: String, enum: ['sent', 'received'], required: true },
+    //         status: { type: String, enum: ['pending', 'accepted', 'rejected'], required: true },
+    //     }],
+    // }],
+    // recievedReq: [{
+    //     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    //     trips: [{
+    //         tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
+    //         type: { type: String, enum: ['sent', 'received'], required: true },
+    //         status: { type: String, enum: ['pending', 'accepted', 'rejected'], required: true },
+    //     }],
+    // }],
     profileCompleted: { type: Boolean, default: false },
     socialMedias: {
         instagram: { type: String, default: '' },
@@ -50,10 +60,10 @@ const UserSchema = new mongoose.Schema({
         twitter: { type: String, default: '' },
     },
     travelGoal: { type: String }, // New field
-    blocked: [{
-        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Trip' },
-    }],
+    // blocked: [{
+    //     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    //     tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Trip' },
+    // }],
     status: { type: String, enum: ['active', 'inactive'], default: 'active' },
 }, { timestamps: true });
 

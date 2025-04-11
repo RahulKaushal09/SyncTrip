@@ -9,8 +9,32 @@ const authenticateToken = require('../middleware/middleware.js').authenticateTok
 // User Registration
 router.post('/getAllTrips', async (req, res) => {
     try {
-        const trips = await Trip.find({});
-        res.json(trips);
+
+        const trips = await Trip.find({
+            peopleApplied: { $exists: true, $ne: [] }
+        }).populate({
+            path: 'peopleApplied',
+            select: 'name profile_picture'
+        });
+        if (!trips) {
+            return res.status(404).json({ message: 'No trips found' });
+        }
+        const appliedUsers = trips.map(trip => {
+            return trip.peopleApplied.map(user => {
+                return {
+                    name: user.name,
+                    profilePicture: user.profile_picture?.[0] || 'https://via.placeholder.com/40',
+                };
+            });
+        });
+        const response = {
+            trips: trips.map((trip, index) => ({
+                ...trip._doc,
+                peopleApplied: appliedUsers[index], // Assign the filtered users to the trip
+            })),
+            totalTrips: trips.length,
+        }
+        res.json(response);
 
     } catch (error) {
         res.status(500).json({ error });
@@ -48,50 +72,89 @@ router.post('/addNewTrip', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         console.log("Fetching trip with ID:", req.params.id);  // Log the trip ID for debugging
-        const trip = await Trip.findById(req.params.id);
+        const trip = await Trip.findById(req.params.id).populate({
+            path: 'peopleApplied',
+            select: 'name profile_picture dateOfBirth rating persona', // Select fields to return
+            where: { showProfile: true } // Only include users who want to show their profile
+            // Add any other fields you want to include
+        });
+        if (!trip) {
+            return res.status(404).json({ error: 'Trip not found' });
+        }
+        const appliedUsers = trip.peopleApplied.map(user => {
+            return {
+                _id: user._id,
+                name: user.name,
+                profilePicture: user.profile_picture?.[0] || 'https://via.placeholder.com/40',
+                age: user.dateOfBirth ? Math.floor((new Date() - new Date(user.dateOfBirth)) / (1000 * 60 * 60 * 24 * 365.25)) : null,
+                rating: user.rating || 5,
+                persona: "",
 
+            };
+        });
+        trip.peopleApplied = appliedUsers; // Replace with filtered users
+        const response = {
+            trip,
+            appliedUsers: appliedUsers,
+        };
 
-        res.json(trip);
+        res.json(response);
     } catch (error) {
         res.status(404).json({ error: 'User not found' });
     }
 });
 router.get('/enrolled/:id', authenticateToken, async (req, res) => {
     try {
+        const userId = req.user.id;
+        const tripId = req.params.id;
 
-        const userId = req.user.id; // Extract userId from the token
-        const tripId = req.params.id; // Extract tripId from the request parameters
-
-
-
-        // Fetch trip and populate peopleApplied
-        const trip = await Trip.findById(tripId).populate({
-            path: 'peopleApplied',
-            select: 'name profile_picture dateOfBirth showProfile', // Select relevant fields
-        });
+        const [trip, currentUser] = await Promise.all([
+            Trip.findById(tripId).populate({
+                path: 'peopleApplied',
+                select: 'name profile_picture dateOfBirth showProfile rating',
+            }),
+            User.findById(userId)
+        ]);
 
         if (!trip) {
             return res.status(404).json({ error: 'Trip not found' });
         }
 
-        // Filter users with showProfile: true and calculate ages
+        // Find the current user's friendship list for this trip
+        const userTripFriends = currentUser.friends.find(
+            f => f.tripId.toString() === tripId
+        );
+
         const appliedUsers = trip.peopleApplied
-            .filter((user) => user.showProfile && user._id.toString() !== userId) // Exclude the current user
-            .map((user) => {
+            .filter(user => user.showProfile && user._id.toString() !== userId)
+            .map(user => {
                 const age = user.dateOfBirth
                     ? Math.floor(
                         (new Date() - new Date(user.dateOfBirth)) / (1000 * 60 * 60 * 24 * 365.25)
                     )
-                    : null; // Calculate age if dateOfBirth exists
+                    : null;
+
+                // Determine friendship status
+                let status = null;
+                if (userTripFriends) {
+                    const friendEntry = userTripFriends.users.find(
+                        u => u.userId.toString() === user._id.toString()
+                    );
+                    if (friendEntry) {
+                        status = friendEntry.status;
+                    }
+                }
+
                 return {
                     _id: user._id,
                     name: user.name,
-                    profilePicture: user.profile_picture?.[0] || 'https://via.placeholder.com/40', // Use first picture or fallback
+                    profilePicture: user.profile_picture?.[0] || 'https://via.placeholder.com/40',
                     age,
+                    status, // Add status to response
+                    rating: user.rating || 5,
                 };
             });
 
-        // Prepare response
         const response = {
             _id: trip._id,
             title: trip.title,
@@ -108,13 +171,13 @@ router.get('/enrolled/:id', authenticateToken, async (req, res) => {
 
         res.json(response);
     } catch (error) {
-        // Handle specific errors
         if (error.name === 'CastError') {
             return res.status(400).json({ error: 'Invalid trip ID' });
         }
         res.status(500).json({ error: 'Failed to fetch trip details' });
     }
 });
+
 
 
 // Update Status of trip 
@@ -173,10 +236,7 @@ router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
 
     try {
         // Find the trip and populate enrolled users
-        const trip = await Trip.findById(tripId).populate({
-            path: 'peopleApplied',
-            select: 'name', // Select fields to return
-        });
+        const trip = await Trip.findById(tripId)
         if (!trip) {
             return res.status(404).json({ message: 'Trip not found' });
         }
@@ -229,7 +289,6 @@ router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'Successfully enrolled in the trip',
-            // trip: updatedTrip, // Includes populated peopleApplied
             redirectionURL: redirectionURL,
             user,
         });

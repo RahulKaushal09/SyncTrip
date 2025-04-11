@@ -9,40 +9,26 @@ import PlanTripDates from '../../components/Details/PlanTripDates';
 import LocationMapSection from '../../components/Details/MapSection';
 import PlacesToVisitSection from '../../components/Details/PlacesToVisit';
 import SyncTripAppPushingSection from '../../components/AppPushingSection/AppPushingSection';
+import ProfileCardUi from '../../components/Profile/ProfileCard.js'; // Import the new component
+import { extractTextFromHTML } from '../../utils/htmlRelatedServices.js'; // adjust path as needed
 import { PageTypeEnum } from '../../utils/pageType'; // adjust path as needed
 import { useNavigate } from 'react-router-dom';
+import { getLocationById } from '../../utils/CommonServices.js';
+import { ProfileCardEnum } from '../../utils/EnumClasses.js';
 const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
     const [locationData, setLocationData] = useState(null);
     const [TripsData, setTripsData] = useState(null);
+    const [otherGoing, setotherGoing] = useState([]);
     const [hotelIds, setHotelids] = useState([]);
-    const [placesToVisit, setPlacesToVisit] = useState([]);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
     const { tripId } = useParams();
     const [pageType, setPageType] = useState(null);
     const [tripData, setTripData] = useState(null);
-    const [otherPeopleGoing, setOtherPeopleGoing] = useState([]);
     const [TripStatus, setTripStatus] = useState(null);
     const navigate = useNavigate();
-    const extractTextFromHTML = (htmlString) => {
-        if (!htmlString) return "";
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlString, "text/html");
-        return doc.body.textContent || "";
-    };
-    const EnrollInTrip = async (type) => {
-        // type == 2 if see others people going in trip
-        // else null
-        // console.log("EnrollInTrip called with type:", type);
-        if (type == 2) {
-            console.log("See others people going in trip");
-            console.log("otherPeopleGoing", otherPeopleGoing);
 
-            return;
-        }
+    const EnrollInTrip = async () => {
+
         // Check if user is logged in and profile is complete
         const user = JSON.parse(localStorage.getItem("user"));
         const userToken = localStorage.getItem("userToken"); // Assuming this is where the token is stored
@@ -64,8 +50,8 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                 const data = await response.json();
                 if (response.ok) {
                     console.log('Successfully enrolled in trip:', data);
-                    setOtherPeopleGoing(data.trip); // Assuming the API returns this data
-                    // Optionally update local user state or notify user
+                    // setOtherPeopleGoing(data.trip); // Assuming the API returns this data
+
                     alert('You have successfully enrolled in the trip!');
                     navigate(`/trips/en/${tripId}`); // Redirect to the trip details page
                 } else {
@@ -85,23 +71,12 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const getRandomNumberReviews = () => {
         return Math.floor(Math.random() * 100) + 1;
     };
-    const setLocationDetailsFromLocationId = (locationId) => {
-        const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/${locationId}`;
-        // console.log('Fetching from:', url);
-        fetch(url, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-        })
+    const fetchLocationDetails = async (locationId) => {
+        if (!locationId) return;
+        try {
+            const location = await getLocationById(locationId);
 
-
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch location: ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then((location) => {
-                // console.log('Raw API response:', location);
+            if (location) {
                 location.title = location?.title?.replace(/[0-9. ]/g, '');
                 location.title = extractTextFromHTML(location.title);
                 setHotelids(location?.hotels);
@@ -109,16 +84,11 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                     throw new Error('Location data is empty or null');
                 }
                 setLocationData(location);
-                // console.log('Setting locationData state:', location);
-            })
-            .catch((err) => {
-                console.error('Fetch error:', err.message);
-                setError(err.message);
-            })
-            .finally(() => {
-                setLoading(false);
-                // handleIsLoading(false);
-            });
+            } else {
+                throw new Error("Location not found");
+            }
+        } catch (err) {
+        }
     };
 
     // Effect to detect screen size
@@ -133,22 +103,16 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
 
     useEffect(() => {
         const url = window.location.href;
-        // console.log("URL:", url);
-        // console.log("Current URL:", url);
 
         if (url.includes("/trips/")) {
             setPageType(PageTypeEnum.TRIP);
         } else if (url.includes("/location/")) {
             setPageType(PageTypeEnum.LOCATION);
         }
-        // console.log("Page Type:", pageType);
     }, []); // only run once when the component mounts
     // Fetch location details
     useEffect(() => {
         const fetchTripDetails = async () => {
-            // console.log('Starting fetch for tripId:', tripId);
-            // handleIsLoading(true);
-            setLoading(true);
 
             try {
                 const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/${tripId}`;
@@ -166,7 +130,8 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                     throw new Error(`Failed to fetch location: ${TripResponse.statusText}`);
                 }
 
-                const Trip = await TripResponse.json();
+                const TripRes = await TripResponse.json();
+                const Trip = TripRes.trip;
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
                 const fromDate = new Date(Trip.essentials.timeline.fromDate);
@@ -174,19 +139,12 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                 // console.log('Raw API response:', Trip);
                 Trip.title = Trip?.title?.replace(/[0-9. ]/g, '');
                 Trip.title = extractTextFromHTML(Trip.title);
-                setTitle(Trip.title);
-                setDescription(Trip.description);
                 setTripsData(Trip);
-                const locationId = Trip.locationId;
-                // console.log("Location ID:", locationId);
-                setLocationDetailsFromLocationId(locationId);
-
+                setotherGoing(TripRes.appliedUsers);
+                fetchLocationDetails(Trip.locationId);
             } catch (err) {
                 console.error('Fetch error:', err.message);
-                setError(err.message);
             } finally {
-                setLoading(false);
-                // handleIsLoading(false);
             }
         };
 
@@ -215,19 +173,62 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
         <div className="DestinationPage">
             <LocationEventsDetails
                 type="Explore"
-                location={title || 'Unknown Location'}
-                title={title || 'Destination'}
+                location={TripsData.title || 'Unknown Location'}
+                title={TripsData.title || 'Destination'}
                 rating={locationData?.rating || 'N/A'}
                 country={locationData?.country || 'India'}
             />
             <LocationImageGallery locationImages={locationData?.photos} />
 
-            {isMobile && <AddLocationCard showBtns={TripStatus && TripStatus === "completed" ? false : true} pageType={pageType} onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} PeopleGoingInTrip={otherPeopleGoing} btnsStyle={{ width: "100%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} title={title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={TripsData?.essentials.bestTime} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} />}
+            {isMobile && <AddLocationCard showBtns={TripStatus && TripStatus === "completed" ? false : true} pageType={pageType} onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} btnsStyle={{ width: "100%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} title={TripsData.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={TripsData?.essentials.bestTime} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} />}
 
             <div className="row" style={{ position: 'relative' }}>
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
+                    <div>
+                        <h2 className="section-title">All Other Going</h2>
+                        {otherGoing.length > 0 ? (
+                            <div className="user-list">
+                                {otherGoing.map((user) => {
+                                    // const isConnected = user.status === 0;
+                                    // const hasSentRequest = user.status === 1;
+                                    // const hasRecievedRequest = user.status === -1;
+                                    // const noInteraction = user.status === null;
+
+                                    // let btns = [];
+
+                                    // if (isConnected) {
+                                    //     btns = [{ text: 'Chat', onClick: () => viewChat(user._id), className: 'chat btn btn-black' }];
+                                    // } else if (hasSentRequest) {
+                                    //     btns = [{ text: 'Requested', onClick: () => { }, className: 'requested disabled', inlineStyle: { pointerEvents: 'none' } }];
+                                    // } else if (noInteraction) {
+                                    //     btns = [{ text: 'Send Request', onClick: () => sendRequest(user._id), className: 'send-request' }];
+                                    // }
+                                    // else if (hasRecievedRequest) {
+                                    //     btns = [{ text: 'Accept', onClick: () => acceptRequest(user._id), className: 'accept', inlineStyle: { width: "100%" } }];
+                                    // }
+
+                                    return (
+                                        <ProfileCardUi
+                                            profileCardInlineStyle={{ display: "block" }}
+                                            key={user._id}
+                                            user={user}
+                                            // btns={btns}
+                                            // onViewProfile={viewProfile}
+                                            // hasSentRequest={hasSentRequest}
+                                            // isConnected={isConnected}
+                                            // hasRecievedRequest={hasRecievedRequest}
+                                            type={ProfileCardEnum.AllGoing}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <p className="no-users">No other people going yet.</p>
+                        )}
+
+                    </div>
                     <Discription pageType={pageType} shortDescription={TripsData?.itinerary || ""} fullDescription={TripsData?.itinerary || ""} bestTime={TripsData?.essentials.bestTime} />
-                    <PlacesToVisitSection title={title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
+                    <PlacesToVisitSection title={TripsData.title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
                     {TripStatus && TripStatus != "completed" && <PlanTripDates onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} pageType={pageType} ctaAction={ctaAction} startDatePreTrip={TripsData?.essentials?.timeline?.fromDate} endDatePreTrip={TripsData?.essentials?.timeline?.tillDate} />}
                     <LocationMapSection latitude={locationData?.fullDetails?.coordinates?.lat} longitude={locationData?.fullDetails?.coordinates?.long} />
                     <HotelsAndStaysSection hotelIds={hotelIds} />
@@ -247,9 +248,8 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                                 pageType={pageType}
                                 EnrollInTrip={EnrollInTrip}
                                 onLoginClick={onLoginClick}
-                                PeopleGoingInTrip={otherPeopleGoing}
                                 ctaAction={ctaAction}
-                                title={title}
+                                title={TripsData.title}
                                 rating={locationData?.rating}
                                 reviews={getRandomNumberReviews()}
                                 bestTime={locationData?.best_time}
@@ -263,7 +263,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
             </div>
 
             <SyncTripAppPushingSection showWork={false} ctaAction={ctaAction} />
-        </div>
+        </div >
     );
 };
 
