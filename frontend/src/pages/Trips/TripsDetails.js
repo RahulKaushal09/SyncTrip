@@ -184,9 +184,9 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
 
             <div className="row" style={{ position: 'relative' }}>
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
-                    <div>
-                        <h2 className="section-title">All Other Going</h2>
-                        {otherGoing.length > 0 ? (
+                    {otherGoing.length > 0 ? (
+                        <div>
+                            <h2 className="section-title">All Other Going</h2>
                             <div className="user-list">
                                 {otherGoing.map((user) => {
                                     // const isConnected = user.status === 0;
@@ -222,11 +222,9 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                                     );
                                 })}
                             </div>
-                        ) : (
-                            <p className="no-users">No other people going yet.</p>
-                        )}
 
-                    </div>
+                        </div>
+                    ) : ("")}
                     <Discription pageType={pageType} shortDescription={TripsData?.itinerary || ""} fullDescription={TripsData?.itinerary || ""} bestTime={TripsData?.essentials.bestTime} />
                     <PlacesToVisitSection title={TripsData.title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
                     {TripStatus && TripStatus != "completed" && <PlanTripDates onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} pageType={pageType} ctaAction={ctaAction} startDatePreTrip={TripsData?.essentials?.timeline?.fromDate} endDatePreTrip={TripsData?.essentials?.timeline?.tillDate} />}
