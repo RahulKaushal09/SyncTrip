@@ -15,6 +15,7 @@ import { PageTypeEnum } from '../../utils/pageType'; // adjust path as needed
 import { useNavigate } from 'react-router-dom';
 import { getLocationById } from '../../utils/CommonServices.js';
 import { ProfileCardEnum } from '../../utils/EnumClasses.js';
+import toast from 'react-hot-toast';
 const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
     const [locationData, setLocationData] = useState(null);
@@ -52,15 +53,15 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                     console.log('Successfully enrolled in trip:', data);
                     // setOtherPeopleGoing(data.trip); // Assuming the API returns this data
 
-                    alert('You have successfully enrolled in the trip!');
+                    toast.success('You have successfully enrolled in the trip!');
                     navigate(`/trips/en/${tripId}`); // Redirect to the trip details page
                 } else {
                     console.error('Enrollment failed:', data.message);
-                    alert(data.message || 'Failed to enroll in the trip.');
+                    toast.error(data.message || 'Failed to enroll in the trip.');
                 }
             } catch (error) {
                 console.error('Error enrolling in trip:', error);
-                alert('An error occurred while enrolling. Please try again.');
+                toast.error('An error occurred while enrolling. Please try again.');
             }
         } else {
             // console.log('User not logged in or profile incomplete');

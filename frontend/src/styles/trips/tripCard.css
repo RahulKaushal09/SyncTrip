@@ -171,3 +171,26 @@
         padding: 3px 8px;
     }
 }
+
+.tripCard-heading-font {
+    font-size: 28px !important;
+    font-weight: bold;
+    color: #000 !important;
+}
+
+.dayNights-font {
+    font-size: 16px !important;
+    font-weight: bold;
+    color: #000 !important;
+}
+
+.price-font {
+    font-size: 16px !important;
+    font-weight: bold;
+    color: #012e41;
+}
+
+.otherDetails-font {
+    font-size: 16px !important;
+    color: #464E47 !important;
+}

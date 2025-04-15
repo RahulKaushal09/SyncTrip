@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../../styles/popups/FullProfilePopup.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
+import toast from 'react-hot-toast';
 export default function FullProfilePopup({ user, locations, onClose, onProfileComplete }) {
     const [form, setForm] = useState({
         travelStyles: [],
@@ -88,10 +88,10 @@ export default function FullProfilePopup({ user, locations, onClose, onProfileCo
                 onProfileComplete(data.user);
                 onClose();
             } else {
-                alert(data.message || 'Profile completion failed');
+                toast.error(data.message || 'Profile completion failed');
             }
         } catch (error) {
-            alert('An error occurred. Please try again.');
+            toast.error('An error occurred. Please try again.');
         }
     };
 

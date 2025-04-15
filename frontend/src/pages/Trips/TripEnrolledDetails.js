@@ -10,6 +10,7 @@ import ProfileCardUi from '../../components/Profile/ProfileCard.js'; // Import t
 import { ProfileCardEnum } from '../../utils/EnumClasses.js';
 import { getLocationById } from '../../utils/CommonServices.js';
 import { extractTextFromHTML } from '../../utils/htmlRelatedServices.js'; // Adjust the import path as needed
+import toast from 'react-hot-toast';
 const EnrolledTripDetails = () => {
   const { tripId } = useParams();
   const navigate = useNavigate();
@@ -131,7 +132,7 @@ const EnrolledTripDetails = () => {
   const sendRequest = async (receiverId) => {
     try {
       var result = await apiCall('/sendRequest', 'POST', { receiverId, tripId });
-      alert(result.message || 'Request sent successfully!');
+      toast.success(result.message || 'Request sent successfully!');
       window.location.reload(); // Reload the page to reflect changes
 
     } catch (err) {
@@ -144,7 +145,7 @@ const EnrolledTripDetails = () => {
     try {
       var result = await apiCall('/acceptRequest', 'POST', { requesterId, tripId });
       // UpdateUserLocalStorage(result.user);
-      alert(result.message || 'Request accepted successfully!');
+      toast.success(result.message || 'Request accepted successfully!');
       window.location.reload(); // Reload the page to reflect changes
     } catch (err) {
       setError(err.message);

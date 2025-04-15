@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/popups/phoneNumberPopup.css'; // New CSS file
-
+import toast from 'react-hot-toast';
 export default function PhoneNumberPopup({ user, onClose, onPhoneSubmit }) {
     const [phone, setPhone] = useState('');
 
@@ -17,10 +17,10 @@ export default function PhoneNumberPopup({ user, onClose, onPhoneSubmit }) {
                 onPhoneSubmit(data.user); // Update user with phone number
                 onClose();
             } else {
-                alert(data?.message || 'Failed to save phone number');
+                toast.error(data?.message || 'Failed to save phone number');
             }
         } catch (error) {
-            alert('An error occurred. Please try again.');
+            toast.error('An error occurred. Please try again.');
         }
     };
 

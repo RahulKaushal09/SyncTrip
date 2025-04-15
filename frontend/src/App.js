@@ -17,6 +17,7 @@ import PhoneNumberPopup from './components/Popups/PhoneNumberPopup';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import EnrolledTripDetails from './pages/Trips/TripEnrolledDetails.js';
 // import pageTypeEnum from './utils/pageType';
+import { Toaster } from 'react-hot-toast';
 
 import { encryptData, decryptData } from './utils/securityStorage.js';
 
@@ -166,6 +167,8 @@ const App = () => {
   return (
     <BrowserRouter>
       <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+        <Toaster position="top-right" reverseOrder={false} />
+
         <div>
 
 

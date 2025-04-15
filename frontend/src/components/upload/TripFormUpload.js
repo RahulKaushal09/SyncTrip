@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useLoadScript, GoogleMap, Autocomplete } from '@react-google-maps/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 // Define libraries for Google Maps API
 const libraries = ['places'];
@@ -236,7 +237,7 @@ const TripForm = () => {
             isNaN(dropPoint.mapLocation.lat) ||
             isNaN(dropPoint.mapLocation.long)
         ) {
-            alert('Please select valid pickup and drop locations.');
+            toast.error('Please select valid pickup and drop locations.');
             return;
         }
 
@@ -256,7 +257,7 @@ const TripForm = () => {
             );
 
             if (response.status === 201) {
-                alert('Trip added successfully!');
+                toast.success('Trip added successfully!');
                 setFormData({
                     title: '',
                     locationId: '',
@@ -286,11 +287,11 @@ const TripForm = () => {
                 setDropPosition(DEFAULT_CENTER);
             } else {
                 const errorData = await response.json();
-                throw new Error(`Failed to add trip: ${errorData.message || response.statusText}`);
+                throw new toast.error(`Failed to add trip: ${errorData.message || response.statusText}`);
             }
         } catch (error) {
             console.error('Error submitting trip:', error);
-            alert(`Failed to add trip: ${error.message}`);
+            toast.error(`Failed to add trip: ${error.message}`);
         }
     };
 

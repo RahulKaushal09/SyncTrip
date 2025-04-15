@@ -5,6 +5,8 @@ import LocationCard from '../LocationCard/LocationCard';
 import locations from "../../data/locations.json"
 import EventList from '../Events/EventsListingBlock';
 import Fuse from "fuse.js";
+import toast from 'react-hot-toast';
+
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
@@ -40,7 +42,7 @@ const EmptyState = () => (
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
                         () => window.location.reload(),
-                        () => alert('Location permission is required to fetch events.')
+                        () => toast.error('Location permission is required to fetch events.')
                     );
                 }
             }}

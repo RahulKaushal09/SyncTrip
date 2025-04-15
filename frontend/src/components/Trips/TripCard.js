@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react';
 import "../../styles/trips/tripCard.css";
 import tripsHeaderImg from "../../assets/images/TripsHeader.png";
 
+import '../../styles/LocationCard.css'; // Optional: You can create a CSS file for styling
+import { CiHeart } from "react-icons/ci";
+import { Carousel } from 'react-bootstrap';
+import { FaRupeeSign } from 'react-icons/fa';
 const TripCard = ({ trip, activeTab }) => {
   const {
     _id,
     title,
-    locationId,
     MainImageUrl,
-    itinerary,
     tripRating,
     essentials: {
-      region,
       duration,
       bestTime,
       timeline: {
@@ -22,20 +23,6 @@ const TripCard = ({ trip, activeTab }) => {
       typeOfTrip,
       price,
       season,
-      pickup: {
-        name: pickupName,
-        mapLocation: {
-          lat: pickupLat,
-          long: pickupLong
-        }
-      },
-      dropPoint: {
-        name: dropPointName,
-        mapLocation: {
-          lat: dropPointLat,
-          long: dropPointLong
-        }
-      },
     },
     requirements: {
       age,
@@ -70,72 +57,70 @@ const TripCard = ({ trip, activeTab }) => {
     }
   }, [activeTab]);
 
+  var include = ""
+  if (includeTravel && includeFood && includeHotel) {
+    include = "Hotel, Food & Travel"
+  } else if (includeTravel && includeFood) {
+    include = "Hotel & Travel"
+  }
+  else if (includeTravel && includeHotel) {
+    include = "Hotel & Food"
+  }
+  else if (includeFood && includeHotel) {
+    include = "Food & Travel"
+  }
+  else if (includeTravel) {
+    include = "Travel"
+  }
+  else if (includeFood) {
+    include = "Food"
+  }
+  else if (includeHotel) {
+    include = "Hotel"
+  }
+  else {
+    include = "None"
+  }
 
   // Format dates for display
   const formatDate = (date) => date ? new Date(date).toLocaleDateString() : 'N/A';
 
+  const availableSpots = 5;
+
   return (
-    <div className="tripCard" onClick={() => window.location.href = `${urlToTrip}`} style={{ cursor: 'pointer' }}>
-      {/* Background Image */}
-      <div className="tripCard-image" style={{ backgroundImage: `url(${MainImageUrl || tripsHeaderImg})` }}>
-        <div className="tripCard-bookNow">Book Now @₹1</div>
+    <div className="location-card">
+      <div className="card-image">
+        <Carousel
+          interval={null} // Disable auto-play
+          controls={false} // Show navigation arrows
+          indicators={false} // Show indicators
+          wrap={true} // Allow wrapping
+        >
+          <Carousel.Item key={1} onClick={() => window.location.href = `${urlToTrip}`} style={{ cursor: "pointer" }}>
+            <img
+              className="d-block"
+              src={MainImageUrl}
+              alt={`${title} Landscape`}
+              style={{ objectFit: 'cover' }}
+            />
+          </Carousel.Item>
+        </Carousel>
+        <CiHeart className="heart-icon" />
       </div>
-
-      {/* Trip Details */}
-      <div className="tripCard-content">
-        <div className="tripCard-header">
-          <h2>{region}: {title}</h2>
-          <span className="tripCard-duration">{duration || 'Flexible'}</span>
-        </div>
-
-        {/* Price Section */}
-        <div className="tripCard-price">
-          <span className="exclusive-offer">{season ? `Best in ${season}` : 'Exclusive Offers At Checkout'}</span>
-          <div className="price-details">
-            <span className="price-per-person">₹{price ? price.toLocaleString() : 'TBA'}/Person</span>
-            <span className="total-price">Total Price ₹{price ? (price * 2).toLocaleString() : 'TBA'}</span>
+      <div className="card-content" onClick={() => window.location.href = `${urlToTrip}`} style={{ cursor: "pointer" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h3 className='tripCard-heading-font'>{title}</h3>
+          <div className="rating">
+            <span style={{ display: "flex", alignItems: "center" }}><FaRupeeSign style={{ width: "8px", marginRight: "5px" }} />  {price}</span>
           </div>
         </div>
-
-        {/* Itinerary Highlights
-        <div className="tripCard-highlights">
-          {itinerary ? (
-            <span style={{ color: "black" }} dangerouslySetInnerHTML={{ __html: itinerary.trim() }} />
-          ) : (
-            <span>No itinerary available</span>
-          )}
-        </div> */}
-
-        {/* Inclusions and Additional Info */}
-        <div className="tripCard-inclusions">
-          <div className="inclusion-item">
-            <span>{bestTime ? `Best Time: ${bestTime}` : 'Anytime'}</span>
-          </div>
-          <div className="inclusion-item">
-            <span>
-              {includeTravel ? 'Travel Included' : 'Pickup: ' + (pickupName || 'N/A')}
-            </span>
-          </div>
-          <div className="inclusion-item">
-            <span>
-              {typeOfTrip ? `${typeOfTrip} Trip` : 'Drop: ' + (dropPointName || 'N/A')}
-            </span>
-          </div>
-          <div className="inclusion-item">
-            <span>
-              {includeFood ? 'Meals Included' : 'Food Not Included'}
-              {includeHotel ? ' + Hotel Stay' : ''}
-            </span>
-          </div>
-        </div>
-
-        {/* Additional Details (Optional) */}
-        <div className="tripCard-footer" style={{ fontSize: '12px', color: '#666' }}>
-          <span>From: {formatDate(fromDate)} - To: {formatDate(tillDate)}</span>
-          {altitude && <span> | Altitude: {altitude} ft</span>}
-          {tripRating && <span> | Rating: {tripRating}/5</span>}
-          {age && <span> | Age: {age}+</span>}
-          {fitnessCriteria && <span> | Fitness: {fitnessCriteria}</span>}
+        <div className="trip-details">
+          <p className='dayNights-font'>{duration}</p>
+          <p className='otherDetails-font'>Dates: {formatDate(fromDate)} - {formatDate(tillDate)}</p>
+          <p className='otherDetails-font'>Price: {price}</p>
+          <p className='otherDetails-font'>Available Spots: <span style={{ color: '#dc3545', fontWeight: 'bold' }}>{availableSpots} Left</span></p>
+          <p className='otherDetails-font'>Includes: <span style={{ color: '#28a745' }}>{include} included</span></p>
+          <p className='otherDetails-font'>Age: <span >{age}+</span></p>
         </div>
       </div>
     </div>
