@@ -11,7 +11,8 @@ const ProfileCardUi = ({
     hasSentRequest,
     isConnected,
     type,
-    btns
+    btns,
+    showviewProfile
 }) => {
     const { name, profilePicture, age, rating, persona, interestedAgeGroups, _id } = user;
     const handle = instagramSocialMedia || "";
@@ -48,9 +49,9 @@ const ProfileCardUi = ({
                                     </button>
                                 ))}
                             </div>
-                            <button className="action-btn view-btn" onClick={() => onViewProfile(_id)}>
+                            {showviewProfile && <button className="action-btn view-btn" onClick={() => onViewProfile(_id)}>
                                 View Profile
-                            </button>
+                            </button>}
                         </>
                     )}
 
@@ -71,9 +72,9 @@ const ProfileCardUi = ({
                                             {btn.text}
                                         </button>
                                     ))}
-                                    <button className="action-btn view-btn" onClick={() => onViewProfile(_id)}>
+                                    {showviewProfile && <button className="action-btn view-btn" onClick={() => onViewProfile(_id)}>
                                         View Profile
-                                    </button>
+                                    </button>}
                                 </>
                             )}
                         </>
@@ -90,9 +91,9 @@ const ProfileCardUi = ({
                                     {btn.text}
                                 </button>
                             ))}
-                            <button className="action-btn view-btn" onClick={() => onViewProfile(_id)}>
+                            {showviewProfile && <button className="action-btn view-btn" onClick={() => onViewProfile(_id)}>
                                 View Profile
-                            </button>
+                            </button>}
                         </>
                     )}
                 </div>

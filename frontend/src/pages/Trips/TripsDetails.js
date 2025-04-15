@@ -219,6 +219,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                                             // isConnected={isConnected}
                                             // hasRecievedRequest={hasRecievedRequest}
                                             type={ProfileCardEnum.AllGoing}
+                                            showviewProfile={false}
                                         />
                                     );
                                 })}
