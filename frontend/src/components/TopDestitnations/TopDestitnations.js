@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import '../../styles/TopDestinations.css'
 import LocationCard from '../LocationCard/LocationCard';
-import locations from "../../data/locations.json"
 
 
-const TopDestitnations = () => {
-    const [visibleCount, setVisibleCount] = useState(12); // St
+const TopDestitnations = ({ locations }) => {
+    const [visibleCount, setVisibleCount] = useState(window.innerWidth < 550 ? 6 : 12); // St
     const handleShowMore = () => {
         setVisibleCount(locations.length); // Show all locations
     };
@@ -35,7 +34,7 @@ const TopDestitnations = () => {
                 ))}
 
             </div>
-            {
+            {/* {
                 visibleCount < locations.length && (
                     <div style={{ textAlign: 'center', margin: '20px 0' }}>
                         <button className="btn btn-black" onClick={handleShowMore}>
@@ -43,7 +42,7 @@ const TopDestitnations = () => {
                         </button>
                     </div>
                 )
-            }
+            } */}
         </section>
     )
 }

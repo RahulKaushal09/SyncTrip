@@ -291,6 +291,11 @@ section {
   .d-flex {
     flex-direction: row !important;
   }
+
+  .mobileViewPaddingLRZero {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
 }
 
 @media screen and (max-width: 500px) {

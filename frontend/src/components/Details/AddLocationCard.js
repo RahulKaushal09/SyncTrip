@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faLeaf, faBars, faPlane } from '@fortawesome/free-solid-svg-icons';
 import '../../styles/AddLocationCard.css';
-import locations from "../../data/locations.json"
+// import locations from "../../data/locations.json"
 import { FaLeaf, FaBars, FaPlane } from "react-icons/fa";
 // improt enum class 
 import { PageTypeEnum } from '../../utils/pageType';  // adjust path as needed

@@ -35,7 +35,7 @@ const EventCard = ({ event }) => {
     const imageURL = imageLink.split("events/")[0] + "events/" + imageLink.split("events/")[1].split("/")[1]
 
     return (
-        <div className={`eventsCards-card mb-3 ${getCardClass()}`} style={{ maxWidth: '18rem', borderRadius: '10px', cursor: "pointer" }} onClick={() => window.open(bookingLink, "_blank")}>
+        <div className={`eventsCards-card mb-3 ${getCardClass()}`} style={{ borderRadius: '10px', cursor: "pointer" }} onClick={() => window.open(bookingLink, "_blank")}>
             <img src={imageURL} className="eventsCards-card-img-top" alt={title} />
             <div className="eventsCards-card-body p-0">
                 {tags && tags.includes("PROMOTED") && (

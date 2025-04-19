@@ -3,6 +3,10 @@
     background-color: white;
 }
 
+.AppPushingBlock {
+    padding: 0px 0px 0px 20px;
+}
+
 h1 {
     font-size: 1.875rem;
     font-weight: bold;
@@ -16,6 +20,7 @@ h1 {
 }
 
 @media (min-width: 768px) {
+
     .features {
         width: 50%;
     }
@@ -38,6 +43,10 @@ h1 {
     .appPushingSection2 {
         height: auto !important;
         overflow: hidden;
+    }
+
+    .AppPushingBlock {
+        padding: 0px 0px 0px 0px;
     }
 
     .marginR50InWebOnly {

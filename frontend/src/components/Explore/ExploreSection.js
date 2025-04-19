@@ -3,7 +3,7 @@ import LocationCard from '../LocationCard/LocationCard';
 import loader from '../../assets/images/loader.gif';
 
 const ExploreSection = ({ locations, isLoading }) => {
-    const [visibleCount, setVisibleCount] = useState(16);
+    const [visibleCount, setVisibleCount] = useState(window.innerWidth < 550 ? 10 : 16);
     const [isAllLoaded, setIsAllLoaded] = useState(false);
 
     const handleShowMoreClick = () => {

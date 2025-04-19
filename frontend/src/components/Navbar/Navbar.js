@@ -9,6 +9,10 @@ const Navbar = ({ ctaAction, onLoginClick, user }) => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [pageType, setPageType] = useState(null);
     const location = useLocation(); // Get the current location from react-router
+    const [mobileNavOpen, setMobileNavOpen] = useState(false);
+    const closeDrawer = () => {
+        setMobileNavOpen(false);
+    };
     useEffect(() => {
         const path = location.pathname;
 
@@ -41,11 +45,7 @@ const Navbar = ({ ctaAction, onLoginClick, user }) => {
                 <button
                     className="navbar-toggler"
                     type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav"
-                    aria-controls="navbarNav"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
+                    onClick={() => setMobileNavOpen(!mobileNavOpen)}
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -103,6 +103,59 @@ const Navbar = ({ ctaAction, onLoginClick, user }) => {
                         </li>
                     </ul>
                 </div>
+            </div>
+            {mobileNavOpen && (
+                <div className="mobile-overlay" onClick={closeDrawer}></div>
+            )}
+
+            {/* Mobile Drawer */}
+            <div className={`mobile-drawer ${mobileNavOpen ? "open" : ""}`}>
+                <div className='' style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem" }}>
+                    <div><a className="navbar-brand" href="/" style={{ display: 'inline-block', color: '#65CAD3', fontSize: "30px", fontWeight: "700", width: "100px" }}>
+                        <img src={SyncTripLogo} alt="SyncTrip" style={{ width: "100%", }} />
+                    </a>
+                    </div>
+                    <div className="drawer-header">
+                        <span className="drawer-close" onClick={closeDrawer}>&times;</span>
+                    </div>
+                </div>
+                <ul className="navbar-nav" style={{ alignItems: "flex-start", padding: "1rem" }}>
+                    {pageType == PageTypeEnum.TRIP ? (
+                        <li className="nav-item" onClick={() => { ctaAction(); closeDrawer(); }}>
+                            <span className="nav-link">Create Trip</span>
+                        </li>
+                    ) : (
+                        <li className="nav-item" onClick={() => { window.location.href = "/trips"; closeDrawer(); }}>
+                            <span className="nav-link">Trips</span>
+                        </li>
+                    )}
+
+                    <li className="nav-item dropdown">
+                        {user ? (
+                            <>
+                                <img
+                                    src={user?.profile_picture[0] || "https://via.placeholder.com/40"}
+                                    alt="Profile"
+                                    style={{
+                                        width: "40px",
+                                        height: "40px",
+                                        borderRadius: "50%",
+                                        objectFit: "cover",
+                                    }}
+                                />
+                                <span className="ms-2 mt-2">{user?.name || "User"}</span>
+                                <div className="mt-2">
+                                    <a href="/profile" className="dropdown-item" onClick={closeDrawer}>Profile</a>
+                                    <span className="dropdown-item" onClick={() => { handleLogout(); closeDrawer(); }}>Logout</span>
+                                </div>
+                            </>
+                        ) : (
+                            <button className="btn btn-black mt-2" onClick={() => { onLoginClick(); closeDrawer(); }}>
+                                Login / Register
+                            </button>
+                        )}
+                    </li>
+                </ul>
             </div>
         </nav >
     );

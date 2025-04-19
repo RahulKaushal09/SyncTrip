@@ -4,7 +4,7 @@ import { TiWeatherPartlySunny } from "react-icons/ti";
 import { CiTimer } from "react-icons/ci";
 import { MdSentimentVerySatisfied } from "react-icons/md";
 import { TbTemperatureSun } from "react-icons/tb";
-import location from "../../data/locations.json";
+// import location from "../../data/locations.json";
 import { PageTypeEnum } from '../../utils/pageType';
 const Discription = ({ pageType, shortDescription, fullDescription, bestTime }) => {
     const [isExpanded, setIsExpanded] = useState(false);

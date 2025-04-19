@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/HotelSection.css'; // We'll create this CSS file separately
-import location from "../../data/locations.json";
+// import location from "../../data/locations.json";
 import { CiHeart } from "react-icons/ci";
 import LocationCard from '../LocationCard/LocationCard';
 

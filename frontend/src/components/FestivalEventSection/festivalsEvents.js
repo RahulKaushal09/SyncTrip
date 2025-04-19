@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import '../../styles/festivalsEvents.css'; // Optional: Custom CSS for additional styling
 // import { BsHeart, BsStarFill } from 'react-icons/bs'; // Add this line
 import LocationCard from '../LocationCard/LocationCard';
-import locations from "../../data/locations.json"
+// import locations from "../../data/locations.json"
 import EventList from '../Events/EventsListingBlock';
 import Fuse from "fuse.js";
 import toast from 'react-hot-toast';
@@ -14,42 +14,42 @@ import eventsEmptyState from '../../assets/images/eventsEmptyState.jpg'; // Adju
 
 // Empty State Component
 const EmptyState = () => (
-    <div
-        style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            padding: '40px',
-            margin: '20px auto',
-            maxWidth: '600px',
-        }}
-    >
-        <img
-            src={eventsEmptyState}
-            alt="No events available"
-            style={{ maxWidth: '100%', height: 'auto', marginBottom: '20px' }}
-        />
-        <h3>No Events Found</h3>
-        <p>
-            Please allow location permissions to discover exciting festivals and events near you!
-        </p>
-        <button
-            className="btn btn-black"
-            onClick={() => {
-                // Optionally, trigger location permission request again
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        () => window.location.reload(),
-                        () => toast.error('Location permission is required to fetch events.')
-                    );
-                }
-            }}
-        >
-            Allow Location
-        </button>
-    </div>
+	<div
+		style={{
+			display: 'flex',
+			flexDirection: 'column',
+			alignItems: 'center',
+			justifyContent: 'center',
+			textAlign: 'center',
+			padding: '40px',
+			margin: '20px auto',
+			maxWidth: '600px',
+		}}
+	>
+		<img
+			src={eventsEmptyState}
+			alt="No events available"
+			style={{ maxWidth: '100%', height: 'auto', marginBottom: '20px' }}
+		/>
+		<h3>No Events Found</h3>
+		<p>
+			Please allow location permissions to discover exciting festivals and events near you!
+		</p>
+		<button
+			className="btn btn-black"
+			onClick={() => {
+				// Optionally, trigger location permission request again
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(
+						() => window.location.reload(),
+						() => toast.error('Location permission is required to fetch events.')
+					);
+				}
+			}}
+		>
+			Allow Location
+		</button>
+	</div>
 );
 
 const indianCitiesPageData = [
@@ -7599,194 +7599,196 @@ const indianCitiesPageData = [
 
 
 const findClosestCity = (city, indianCities) => {
-    var citywords = city.split(" ");
-    var citywords = citywords.filter(word => word.length > 2); // Filter out words with length <= 2
-    for (var i = 0; i < citywords.length; i++) {
-        citywords[i] = citywords[i].replace(/[^a-zA-Z]/g, ""); // Remove special characters
-        citywords[i] = citywords[i].replace(/_/g, " "); // Replace underscores with spaces
-        citywords[i] = citywords[i].replace(/-/g, " "); // Replace hyphens with spaces
-        citywords[i] = citywords[i].replace(/\s+/g, " "); // Replace multiple spaces with a single space
-        citywords[i] = citywords[i].replace(/,/g, " "); // Replace commas with spaces
+	var citywords = city.split(" ");
+	var citywords = citywords.filter(word => word.length > 2); // Filter out words with length <= 2
+	for (var i = 0; i < citywords.length; i++) {
+		citywords[i] = citywords[i].replace(/[^a-zA-Z]/g, ""); // Remove special characters
+		citywords[i] = citywords[i].replace(/_/g, " "); // Replace underscores with spaces
+		citywords[i] = citywords[i].replace(/-/g, " "); // Replace hyphens with spaces
+		citywords[i] = citywords[i].replace(/\s+/g, " "); // Replace multiple spaces with a single space
+		citywords[i] = citywords[i].replace(/,/g, " "); // Replace commas with spaces
 
-        citywords[i] = citywords[i].charAt(0).toUpperCase() + citywords[i].slice(1);
-        citywords[i] = citywords[i].trim(); // Trim leading and trailing spaces
-        // console.log("Finding closest city for:", citywords[i]);
-        var indianCitiesLocationName = indianCities.map(city => city.locationName);
-        const fuse = new Fuse(indianCitiesLocationName, { threshold: 0.1 });
+		citywords[i] = citywords[i].charAt(0).toUpperCase() + citywords[i].slice(1);
+		citywords[i] = citywords[i].trim(); // Trim leading and trailing spaces
+		// console.log("Finding closest city for:", citywords[i]);
+		var indianCitiesLocationName = indianCities.map(city => city.locationName);
+		const fuse = new Fuse(indianCitiesLocationName, { threshold: 0.1 });
 
-        const result = fuse.search(citywords[i]);
-        // console.log("Search result:", result);
-        if (result.length > 0) {
-            // console.log("Search result:", result);
-            return result.length > 0 ? result[0].item : "Unknown City";
-        }
+		const result = fuse.search(citywords[i]);
+		// console.log("Search result:", result);
+		if (result.length > 0) {
+			// console.log("Search result:", result);
+			return result.length > 0 ? result[0].item : "Unknown City";
+		}
 
-    }
-    return city;
+	}
+	return city;
 
 
 };
 function LocationBlock({ fetchEvents, indianCities }) {
-    const [location, setLocation] = useState("Fetching location...");
-    const [customLocation, setCustomLocation] = useState("");
-    const [suggestions, setSuggestions] = useState([]);
+	const [location, setLocation] = useState("Fetching location...");
+	const [customLocation, setCustomLocation] = useState("");
+	const [suggestions, setSuggestions] = useState([]);
 
-    useEffect(() => {
+	useEffect(() => {
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    fetch(
-                        `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`
-                    )
-                        .then((res) => res.json())
-                        .then((data) => {
-                            // console.log(data);
-                            if (!data || !data.address) {
-                                setLocation("Location unavailable");
-                                return;
-                            }
-                            const city = data.address.state_district || data.address.state || data.address.county || "Unknown City";
-                            // console.log(city);
-                            var indianCityLocationName = indianCities.map(city => city.locationName);
-                            console.log("Indian city location names:", indianCityLocationName);
-                            const matchedCity = findClosestCity(city, indianCityLocationName);
-                            console.log("Matched city:", matchedCity);
-                            var cityObj = indianCities.find(city => city.locationName === matchedCity);
-                            console.log("City object:", cityObj);
-                            setLocation(matchedCity);
-                            if (matchedCity !== location) {
-                                fetchEvents(cityObj);
-                            }
-                        })
-                        .catch(() => setLocation("Location unavailable"));
-                },
-                () => {
-                    setLocation("Location permission denied")
-                }
-            );
-        } else {
-            setLocation("Geolocation not supported");
-        }
-    }, []);
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
+					fetch(
+						`https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`
+					)
+						.then((res) => res.json())
+						.then((data) => {
+							// console.log(data);
+							if (!data || !data.address) {
+								setLocation("Location unavailable");
+								return;
+							}
+							const city = data.address.state_district || data.address.state || data.address.county || "Unknown City";
+							// console.log(city);
+							var indianCityLocationName = indianCities.map(city => city.locationName);
+							console.log("Indian city location names:", indianCityLocationName);
+							const matchedCity = findClosestCity(city, indianCityLocationName);
+							console.log("Matched city:", matchedCity);
+							var cityObj = indianCities.find(city => city.locationName === matchedCity);
+							console.log("City object:", cityObj);
+							setLocation(matchedCity);
+							if (matchedCity !== location) {
+								fetchEvents(cityObj);
+							}
+						})
+						.catch(() => setLocation("Location unavailable"));
+				},
+				() => {
+					setLocation("Location permission denied")
+				}
+			);
+		} else {
+			setLocation("Geolocation not supported");
+		}
+	}, []);
 
-    const fetchLocations = (query) => {
-        if (query.length > 2) {
-            const filteredCities = indianCities.filter(city => city.locationName.toLowerCase().includes(query.toLowerCase()));
-            setSuggestions(filteredCities);
-        } else {
-            setSuggestions([]);
-        }
-    };
+	const fetchLocations = (query) => {
+		if (query.length > 2) {
+			const filteredCities = indianCities.filter(city => city.locationName.toLowerCase().includes(query.toLowerCase()));
+			setSuggestions(filteredCities);
+		} else {
+			setSuggestions([]);
+		}
+	};
 
-    return (
-        <div className="d-flex flex-column align-items-end gap-2">
-            <div className="d-flex align-items-center gap-2">
-                <FontAwesomeIcon icon={faMapMarkerAlt} className="text-primary" />
-                <span className="text-muted">{location}</span>
-            </div>
-            <div className="position-relative">
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter location"
-                    value={customLocation}
-                    onChange={(e) => {
-                        setCustomLocation(e.target.value);
-                        fetchLocations(e.target.value);
-                    }}
-                />
-                {suggestions.length > 0 && (
-                    <ul className="list-group position-absolute w-100 mt-1" style={{ zIndex: 10 }}>
-                        {suggestions.map((city, index) => (
-                            <li
-                                key={index}
-                                className="list-group-item list-group-item-action"
-                                onClick={() => {
-                                    setLocation(city.locationName);
-                                    fetchEvents(city);
-                                    setCustomLocation("");
-                                    setSuggestions([]);
-                                }}
-                            >
-                                {city.locationName}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
-        </div>
-    );
+	return (
+		<div className="d-flex flex-column align-items-end gap-2">
+			<div className="d-flex align-items-center gap-2">
+				<FontAwesomeIcon icon={faMapMarkerAlt} className="text-primary" />
+				<span className="text-muted">{location}</span>
+			</div>
+			<div className="position-relative">
+				<input
+					type="text"
+					className="form-control"
+					placeholder="Enter location"
+					value={customLocation}
+					onChange={(e) => {
+						setCustomLocation(e.target.value);
+						fetchLocations(e.target.value);
+					}}
+				/>
+				{suggestions.length > 0 && (
+					<ul className="list-group position-absolute w-100 mt-1" style={{ zIndex: 10 }}>
+						{suggestions.map((city, index) => (
+							<li
+								key={index}
+								className="list-group-item list-group-item-action"
+								onClick={() => {
+									setLocation(city.locationName);
+									fetchEvents(city);
+									setCustomLocation("");
+									setSuggestions([]);
+								}}
+							>
+								{city.locationName}
+							</li>
+						))}
+					</ul>
+				)}
+			</div>
+		</div>
+	);
 }
 const FestivalsEvents = () => {
-    const [visibleCount, setVisibleCount] = useState(12);
-    const [selectedFilter, setSelectedFilter] = useState(null);
-    const [currentLocation, setCurrentLocation] = useState(null);
-    const [events, setEvents] = useState([]);
-    const [indianCities, setIndianCities] = useState(indianCitiesPageData);
-    useEffect(() => {
-        const fetchCities = async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/events/getLocationNamesWithCode`); // Replace with your API endpoint
-                const data = await response.json();
-                // var arrayOfLocationName = data.map((item) => item.locationName);
-                // for indiancitites each add correcponsign locationCode to lcoationName 
-                const updatedCities = indianCities.map((city) => {
-                    const matchedData = data.find((d) =>
-                        city.locationName.toLowerCase().includes(d.locationName.toLowerCase())
-                    );
-                
-                    if (matchedData) {
-                        return {
-                            ...city,
-                            locationCode: matchedData.locationCode,
-                        };
-                    }
-                    return city;
-                });
-                console.log("Updated cities:", updatedCities);
-                
-                setIndianCities(updatedCities);
-            } catch (error) {
-                console.error('Error fetching cities:', error);
-            }
-        };
-        fetchCities();
-    }, []);
-    const fetchEvents = async (city) => {
-        // const encodedCity = encodeURIComponent(city);
-        console.log("Fetching events for city:", city);
-
-        const res = await fetch(
-            `${process.env.REACT_APP_BACKEND_BASE_URL}/api/events/getEventsForLocation`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ locationName: city.locationName.split("-")[0], locationCode: city.locationCode ? city.locationCode : "" }),
-            }
-        );
-        const data = await res.json();
-        console.log("Events data:", data.events);
-
-        setEvents(data.events || []);
-    };
+	const [visibleCount, setVisibleCount] = useState(window.innerWidth < 550 ? 6 : 12);
+	const [selectedFilter, setSelectedFilter] = useState(null);
+	const [currentLocation, setCurrentLocation] = useState(null);
+	const [events, setEvents] = useState([]);
+	const [indianCities, setIndianCities] = useState(indianCitiesPageData);
 
 
-    const handleShowMore = () => {
-        setVisibleCount(locations.length); // Show all locations
-    };
+	useEffect(() => {
+		const fetchCities = async () => {
+			try {
+				const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/events/getLocationNamesWithCode`); // Replace with your API endpoint
+				const data = await response.json();
+				// var arrayOfLocationName = data.map((item) => item.locationName);
+				// for indiancitites each add correcponsign locationCode to lcoationName 
+				const updatedCities = indianCities.map((city) => {
+					const matchedData = data.find((d) =>
+						city.locationName.toLowerCase().includes(d.locationName.toLowerCase())
+					);
+
+					if (matchedData) {
+						return {
+							...city,
+							locationCode: matchedData.locationCode,
+						};
+					}
+					return city;
+				});
+				console.log("Updated cities:", updatedCities);
+
+				setIndianCities(updatedCities);
+			} catch (error) {
+				console.error('Error fetching cities:', error);
+			}
+		};
+		fetchCities();
+	}, []);
+	const fetchEvents = async (city) => {
+		// const encodedCity = encodeURIComponent(city);
+		console.log("Fetching events for city:", city);
+
+		const res = await fetch(
+			`${process.env.REACT_APP_BACKEND_BASE_URL}/api/events/getEventsForLocation`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ locationName: city.locationName.split("-")[0], locationCode: city.locationCode ? city.locationCode : "" }),
+			}
+		);
+		const data = await res.json();
+		console.log("Events data:", data.events);
+
+		setEvents(data.events || []);
+	};
+
+
+	const handleShowMore = () => {
+		setVisibleCount(events.length); // Show all locations
+	};
 
 
 
-    return (
-        <section className="">
-            <div className='row'>
-                <div className='col-lg-8 col-sm-12 col-md-8'>
-                    <h2 className="fw-bold majorHeadings" style={{ textAlign: "left" }}>Festivals & Events</h2>
-                    {/* Filters */}
-                    {/* <div className="mt-3">
+	return (
+		<section className="">
+			<div className='row'>
+				<div className='col-lg-8 col-sm-12 col-md-8'>
+					<h2 className="fw-bold majorHeadings" style={{ textAlign: "left" }}>Festivals & Events</h2>
+					{/* Filters */}
+					{/* <div className="mt-3">
                         {Object.keys(eventCategories).map((category) => (
                             <button
                                 key={category}
@@ -7797,40 +7799,40 @@ const FestivalsEvents = () => {
                             </button>
                         ))}
                     </div> */}
-                </div>
+				</div>
 
-                <div className='col-lg-4 col-sm-12 col-md-4'>
-                    {indianCities.length > 0 && (
-                        <LocationBlock fetchEvents={fetchEvents} indianCities={indianCities} />
-                    )}
-                    {/* <LocationBlock fetchEvents={fetchEvents} indianCities={indianCities} /> */}
-                </div>
-            </div>
+				<div className='col-lg-4 col-sm-12 col-md-4'>
+					{indianCities.length > 0 && (
+						<LocationBlock fetchEvents={fetchEvents} indianCities={indianCities} />
+					)}
+					{/* <LocationBlock fetchEvents={fetchEvents} indianCities={indianCities} /> */}
+				</div>
+			</div>
 
-            {/* Display Events or Locations */}
-            <div className='col-lg-12'
-                style={{
-                    display: "flex",
-                    justifyContent: "space-around",
-                    flexWrap: "wrap"
-                }}
-            >
+			{/* Display Events or Locations */}
+			<div className='col-lg-12'
+				style={{
+					display: "flex",
+					justifyContent: "space-around",
+					flexWrap: "wrap"
+				}}
+			>
 
-                {events.length > 0 ? (
-                    <EventList events={events.slice(0, visibleCount)} />
-                ) : (
-                    <EmptyState />
-                )}
-            </div>
+				{events.length > 0 ? (
+					<EventList events={events.slice(0, visibleCount)} />
+				) : (
+					<EmptyState />
+				)}
+			</div>
 
-            {visibleCount < locations.length && events.length > 0 && (
-                <div style={{ textAlign: 'center', margin: '20px 0' }}>
-                    <button className="btn btn-black" onClick={handleShowMore}>
-                        Show More
-                    </button>
-                </div>
-            )}
-        </section>
-    );
+			{visibleCount < events.length && events.length > 0 && (
+				<div style={{ textAlign: 'center', margin: '20px 0' }}>
+					<button className="btn btn-black" onClick={handleShowMore}>
+						Show More
+					</button>
+				</div>
+			)}
+		</section>
+	);
 };
 export default FestivalsEvents;

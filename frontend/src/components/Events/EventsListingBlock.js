@@ -5,10 +5,10 @@ import '../../styles/events/events.css'; // Import custom CSS for event listing 
 
 const EventList = ({ events }) => {
     return (
-        <div className="container mt-4">
+        <div className=" mt-4">
             <div className="row">
                 {events.map((event) => (
-                    <div key={event._id} className="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
+                    <div key={event._id} className="col-lg-2 col-6 col-sm-3 col-md-3  mb-4 ">
                         <EventCard event={event} />
                     </div>
                 ))}

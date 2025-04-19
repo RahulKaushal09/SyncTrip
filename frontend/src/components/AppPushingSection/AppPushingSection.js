@@ -7,6 +7,7 @@ import peopleTravelling from "../../assets/images/peopleTravelling.svg"; // Repl
 import syncTripApp from '../../assets/images/syncTripMobile.png'; // Replace with your image path
 import "../../styles/appPushing.css";
 const SyncTripAppPushingSection = ({ showWork, ctaAction }) => {
+    const [mobileView, setMobileView] = React.useState(window.innerWidth <= 768);
     const iconStyle = {
         width: "100px",
         height: "40px",
@@ -34,11 +35,11 @@ const SyncTripAppPushingSection = ({ showWork, ctaAction }) => {
         },
     ];
     return (
-        <div className="container-appPushing mx-auto px-4 py-8 bg-white">
+        <div className="container-appPushing mx-auto  py-8 bg-white">
             {showWork &&
                 <h1 className="fw-bold text-custom-secondary majorHeadings" >How SyncTrip works?</h1>
             }
-            <Container fluid className=" pre-made-itinerary" style={{ textAlign: "left", padding: "0px 0px 0px 20px" }}>
+            <div className=" AppPushingBlock" style={{ textAlign: "left" }}>
                 {showWork &&
                     <Row className="justify-content-center align-items-center mb-5">
                         {/* Left Column: Text Content */}
@@ -73,13 +74,13 @@ const SyncTripAppPushingSection = ({ showWork, ctaAction }) => {
                     </Row>
                 }
                 <Row className="justify-content-center appPushingSection2">
-                    <Col md={6} lg={3} className="marginR50InWebOnly" >
+                    {!mobileView && <Col md={6} lg={3} className="marginR50InWebOnly" >
                         <img
                             src={syncTripApp}
                             alt="SyncTrip app screenshot "
                             className="w-full max-w-sm  mb-6 img-appPushing"
                         />
-                    </Col>
+                    </Col>}
                     <Col md={6} lg={8} className="">
 
                         <div className="">
@@ -96,7 +97,7 @@ const SyncTripAppPushingSection = ({ showWork, ctaAction }) => {
                         </div>
                     </Col>
                 </Row>
-            </Container>
+            </div>
             <div className="flex flex-col md:flex-row items-center justify-between gap-8">
                 {/* Left Column - Features
                 <div className="w-full md:w-1/2 space-y-6">

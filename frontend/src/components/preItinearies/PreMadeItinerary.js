@@ -40,7 +40,7 @@ const PreMadeItinerary = ({ locations }) => {
             <Container fluid className=" py-5 pre-made-itinerary mb-5 mt-5" style={{ textAlign: "left" }}>
                 <Row className="justify-content-center align-items-center">
                     {/* Left Column: Text Content */}
-                    <Col md={6} lg={5} className="text-left text-md-start mb-4 mb-md-0">
+                    <Col md={6} lg={5} className="text-left text-md-start mb-4 mb-md-0" style={{ padding: "0px" }}>
                         <h6 className="text-muted" style={{ fontWeight: "700" }}>Easy and Fast</h6>
                         <h1 className="fw-bold text-custom-secondary majorHeadings" >Save The Hassle With Pre-Made Itinerary</h1>
 

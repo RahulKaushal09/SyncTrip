@@ -9,7 +9,7 @@ import SyncTripAppPushingSection from '../../components/AppPushingSection/AppPus
 
 const Home = ({ ctaAction, locations, locationsForPreMadeItinerary, handleIsLoading, hasFetchedLocations }) => {
     const [searchTerm, setSearchTerm] = useState('');
-
+    const [mobileView, setMobileView] = useState(window.innerWidth < 550);
     // const [locations, setLocations] = useState([]);
     // const [locationsForPreMadeItinerary, setLocationsForPreMadeItinerary] = useState([]);
 
@@ -59,7 +59,12 @@ const Home = ({ ctaAction, locations, locationsForPreMadeItinerary, handleIsLoad
             location.title?.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [locations, searchTerm]);
-
+    // get random 12 lcoations form locaiton variable 
+    let randomLocations = useMemo(() => {
+        const shuffled = [...locations].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, 12);
+    }
+        , [locations]);
     return (
         <div className="HomePage">
             <MainSearchBar searchTerm={searchTerm} setSearchTerm={handleSearchChange} searchBarPlaceHolder={"Search destinations, hotels"} />
@@ -67,8 +72,9 @@ const Home = ({ ctaAction, locations, locationsForPreMadeItinerary, handleIsLoad
             {/* {error && <div>Error: {error}</div>} */}
             <PreMadeItinerary locations={locationsForPreMadeItinerary} />
             <FestivalsEvents />
-            <TrendingSection ctaAction={ctaAction} />
-            <TopDestitnations />
+            {!mobileView && <TrendingSection ctaAction={ctaAction} />}
+
+            <TopDestitnations locations={randomLocations} />
             <SyncTripAppPushingSection ctaAction={ctaAction} />
         </div>
     );
