@@ -10,6 +10,15 @@ const isDataOlderThanOneWeek = (lastUpdatedDate) => {
     const oneWeekInMillis = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
     return new Date().getTime() - lastUpdatedDate > oneWeekInMillis;
 };
+const isDataOlderThanClosestEventDateTime = (closestEventDateTime) => {
+    const today = new Date().getDate(); // Convert to milliseconds
+    const closestEventDateTimeDate = new Date(closestEventDateTime).getDate(); // Convert to milliseconds
+    // Check if the closest event date is greater than the last updated date
+    return today > closestEventDateTimeDate;
+    // return lastUpdatedDateTime > closestEventDateTime;
+
+};
+
 router.get('/getLocationsWithCode', async (req, res) => {
     try {
         // Fetch all locations with their location codes from MongoDB
@@ -28,25 +37,37 @@ router.get('/getLocationsWithCode', async (req, res) => {
     }
 }
 );
+router.get('/getLocationNamesWithCode', async (req, res) => {
+    try {
+        // Fetch all locations with their location codes from MongoDB
+        // console.log("Fetching all locations with codes from MongoDB...");  // Log the action for debugging
 
+        const locations = await LocationWithEventsModel.find({}, { locationName: 1, locationCode: 1, latitude: 1, longitude: 1 });
+
+        if (!locations || locations.length === 0) {
+            return res.status(404).json({ message: 'No locations found' });
+        }
+
+        return res.status(200).json(locations);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Server Error', error: error.message });
+    }
+}
+);
 // Route to get the events for a location code
 router.post('/getEventsForLocation', async (req, res) => {
     var { locationCode, locationName } = req.body;
 
-    // console.log("Location Code:", locationCode);
-    // console.log("Location Name:", locationName);
-    // console.log("Getting events for location code:", locationCode);  // Log the location code for debugging
-    // console.log("Getting events for location name:", locationName);  // Log the location name for debugging
 
     try {
         // Fetch the location with its last update date from MongoDB
-        if (locationCode != "" && !locationCode) {
+        if (locationCode != "") {
 
             const locationDetails = await LocationWithEventsModel.findOne({ locationCode });
-
             if (locationDetails) {
                 // Check if the last updated date is older than a week
-                if (isDataOlderThanOneWeek(locationDetails.lastUpdatedDate)) {
+                if (isDataOlderThanClosestEventDateTime(locationDetails.closestEventDateTime)) {
                     // Make a POST request to fetch new data from the external API
                     const LocationNameSearch = locationDetails.locationName.trim().replace(" ", "-").replace("(", "").replace(")", "").toLowerCase();
                     // const LocationNameSearch = locationDetails.locationName.replace(" ", "-").toLowerCase(); // Convert to lowercase and replace spaces with hyphens
@@ -58,28 +79,29 @@ router.post('/getEventsForLocation', async (req, res) => {
                     const newEvents = response.data.events;  // Adjust based on actual response structure
 
                     // Update the location's events (excluding latitude, longitude, locationCode, and locationName)
-                    location.events = newEvents.map(event => ({
+                    locationDetails.events = newEvents.map(event => ({
                         ...event,
                         lastUpdatedDate: Date.now() // Set the last updated date for each event as epoch timestamp
                     }));
-                    location.closestEventDateTime = response.data.closestEventDateTime || 0; // Set the closest event date time
+                    locationDetails.closestEventDateTime = response.data.closestEventDateTime || 0; // Set the closest event date time
 
-                    // Update the lastUpdatedDate for the location as epoch timestamp
-                    location.lastUpdatedDate = Date.now();
+                    // Update the lastUpdatedDate for the locationDetails as epoch timestamp
+                    locationDetails.lastUpdatedDate = Date.now();
 
-                    // Save the updated location with the new events
-                    await location.save();
+                    // Save the updated locationDetails with the new events
+                    await locationDetails.save();
 
-                    return res.status(200).json({ message: 'Location events updated successfully', events: location.events });
+                    return res.status(200).json({ message: 'locationDetails events updated successfully', events: locationDetails.events });
                 }
                 else {
                     // return events directly 
-                    return res.status(200).json({ message: 'Location events Still Valid', events: location.events });
+                    return res.status(200).json({ message: 'locationDetails events Still Valid', events: locationDetails.events });
                 }
             }
         }
         else {
             const locationDetails = await LocationWithEventsModel.findOne({ locationName });
+
             if (locationDetails) {
                 return res.status(200).json({ message: 'Location events Still Valid', events: locationDetails.events });
             }

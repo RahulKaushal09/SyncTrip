@@ -27,7 +27,7 @@ router.post('/basicRegistration', async (req, res) => {
         const user = new User({ name, email, phone, password: hashedPassword, sex });
         await user.save();
         const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-            expiresIn: '7d',
+            // expiresIn: '100d',
         });
 
         res.status(200).json({ user, token: accessToken, message: 'User BasicEnrollment successfully' });
@@ -48,7 +48,8 @@ router.post('/login', async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { //expiresIn: '1d'
+        });
         res.json({ token, user });
     } catch (error) {
         res.status(500).json({ error });
