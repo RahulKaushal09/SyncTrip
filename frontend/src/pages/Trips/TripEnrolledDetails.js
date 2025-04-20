@@ -212,7 +212,6 @@ const EnrolledTripDetails = () => {
           <button
             onClick={() => setActiveTab('going')}
             className={activeTab === 'going' ? 'active' : ''}
-            style={{ color: "black" }}
           >
             {!isMobile ? 'All Other Going' : 'Joining'}
             {otherGoing && otherGoing?.length > 0 ? <span className="numberOfRequests"> {otherGoing?.length}  </span> : ''}
@@ -220,7 +219,6 @@ const EnrolledTripDetails = () => {
           <button
             onClick={() => setActiveTab('requests')}
             className={activeTab === 'requests' ? 'active' : ''}
-            style={{ color: "black" }}
 
           >
             Requests {!isMobile ? 'Received' : ''}{' '}
@@ -231,7 +229,6 @@ const EnrolledTripDetails = () => {
           <button
             onClick={() => setActiveTab('connections')}
             className={activeTab === 'connections' ? 'active' : ''}
-            style={{ color: "black" }}
 
           >
             Connections
