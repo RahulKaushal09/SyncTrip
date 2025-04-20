@@ -9,12 +9,14 @@ import PlanTripDates from '../../components/Details/PlanTripDates';
 import LocationMapSection from '../../components/Details/MapSection';
 import PlacesToVisitSection from '../../components/Details/PlacesToVisit';
 import SyncTripAppPushingSection from '../../components/AppPushingSection/AppPushingSection';
+
 import { PageTypeEnum } from '../../utils/pageType'; // adjust path as needed
+import { decryptData, encryptData } from '../../utils/securityStorage';
+import Loader from '../../components/Loader/loader';
 const DestinationPage = ({ ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
     const [locationData, setLocationData] = useState(null);
     const [hotelIds, setHotelids] = useState([]);
-    const [placesToVisit, setPlacesToVisit] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const { locationId } = useParams();
@@ -45,52 +47,118 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-
-    // Fetch location details
     useEffect(() => {
         const fetchLocationDetails = async () => {
-            // console.log('Starting fetch for locationId:', locationId);
-            // handleIsLoading(true);
             setLoading(true);
+            const now = new Date();
+            const cacheKey = process.env.REACT_APP_CACHE_KEY || 'cached_locations';
+            const expiryKey = process.env.REACT_APP_CACHE_EXPIRY_KEY || 'cached_locations_expiry';
 
             try {
-                const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/${locationId}`;
-                // console.log('Fetching from:', url);
+                // Step 1: Try reading from cache
+                const encryptedData = localStorage.getItem(cacheKey);
+                const encryptedExpiry = localStorage.getItem(expiryKey);
+                let cachedLocations = [];
 
-                const locationResponse = await fetch(url, {
+                if (encryptedData && encryptedExpiry) {
+                    const expiry = decryptData(encryptedExpiry);
+                    if (expiry && new Date(expiry) > now) {
+                        const decrypted = decryptData(encryptedData);
+                        if (Array.isArray(decrypted)) {
+                            cachedLocations = decrypted;
+
+                            // ✅ Find the location in cache
+                            const cachedLocation = cachedLocations.find(loc => loc._id === locationId);
+                            if (cachedLocation) {
+                                cachedLocation.title = extractTextFromHTML(
+                                    cachedLocation?.title?.replace(/[0-9. ]/g, '')
+                                );
+                                setHotelids(cachedLocation?.hotels || []);
+                                setLocationData(cachedLocation);
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                // Step 2: Not in cache – fetch from server
+                const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/${locationId}`;
+                const response = await fetch(url, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                 });
 
-                // console.log('Response status:', locationResponse.status);
+                if (!response.ok) throw new Error(`Failed to fetch location: ${response.statusText}`);
 
-                if (!locationResponse.ok) {
-                    throw new Error(`Failed to fetch location: ${locationResponse.statusText}`);
-                }
-
-                const location = await locationResponse.json();
-                // console.log('Raw API response:', location);
-                location.title = location?.title?.replace(/[0-9. ]/g, '');
-                location.title = extractTextFromHTML(location.title);
-                setHotelids(location?.hotels);
-                if (!location) {
-                    throw new Error('Location data is empty or null');
-                }
-
+                const location = await response.json();
+                location.title = extractTextFromHTML(location?.title?.replace(/[0-9. ]/g, ''));
+                setHotelids(location?.hotels || []);
                 setLocationData(location);
-                // console.log('Setting locationData state:', location);
+
+                // Step 3: Add to cache uniquely
+                const updatedLocations = [...cachedLocations.filter(loc => loc._id !== locationId), location];
+                const newExpiry = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
+
+                localStorage.setItem(cacheKey, encryptData(updatedLocations));
+                localStorage.setItem(expiryKey, encryptData(newExpiry.toISOString()));
 
             } catch (err) {
                 console.error('Fetch error:', err.message);
                 setError(err.message);
             } finally {
                 setLoading(false);
-                // handleIsLoading(false);
             }
         };
 
         fetchLocationDetails();
     }, [locationId]);
+    // Fetch location details
+    // useEffect(() => {
+    //     const fetchLocationDetails = async () => {
+    //         // console.log('Starting fetch for locationId:', locationId);
+    //         // handleIsLoading(true);
+    //         setLoading(true);
+
+    //         try {
+    //             const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/${locationId}`;
+    //             // console.log('Fetching from:', url);
+
+    //             const locationResponse = await fetch(url, {
+    //                 method: 'GET',
+    //                 headers: { 'Content-Type': 'application/json' },
+    //             });
+
+    //             // console.log('Response status:', locationResponse.status);
+
+    //             if (!locationResponse.ok) {
+    //                 throw new Error(`Failed to fetch location: ${locationResponse.statusText}`);
+    //             }
+
+    //             const location = await locationResponse.json();
+    //             // console.log('Raw API response:', location);
+    //             location.title = location?.title?.replace(/[0-9. ]/g, '');
+    //             location.title = extractTextFromHTML(location.title);
+    //             setHotelids(location?.hotels);
+    //             if (!location) {
+    //                 throw new Error('Location data is empty or null');
+    //             }
+
+    //             setLocationData(location);
+    //             // console.log('Setting locationData state:', location);
+
+    //         } catch (err) {
+    //             console.error('Fetch error:', err.message);
+    //             setError(err.message);
+    //         } finally {
+    //             setLoading(false);
+    //             // handleIsLoading(false);
+    //         }
+    //     };
+
+    //     fetchLocationDetails();
+    // }, [locationId]);
+
+
     // Log locationData when it updates
     // useEffect(() => {
     //     // console.log("useEffect triggered with locationData:", locationData);
@@ -102,8 +170,11 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
     // }, [locationData]);
 
 
-    if (!locationData) {
-        return <p>Loading...</p>; // Or any placeholder UI
+    if (loading) {
+        return (<div className='loader-container' >
+            <Loader setLoadingState={loading} TextToShow={"Loading Details"} />
+        </div>);
+        // return <p>Loading...</p>; // Or any placeholder UI
     }
     else {
         // console.log("locationData:", locationData);

@@ -361,6 +361,12 @@ const EnrolledTripDetails = () => {
               {new Date(trip.essentials.timeline.fromDate).toLocaleDateString()} -{' '}
               {new Date(trip.essentials.timeline.tillDate).toLocaleDateString()}
             </div>
+            <div className="info-item">
+              <strong>Status:</strong>{' '}
+              <span className={`status-${trip.requirements.status?.toLowerCase()}`}>
+                {trip.requirements.status || 'N/A'}
+              </span>
+            </div>
           </div>
           <div className="trip-inclusions-card">
             <h2 className="section-title">Inclusions</h2>
@@ -376,10 +382,23 @@ const EnrolledTripDetails = () => {
           </div>
           <div className="trip-requirements-card">
             <h2 className="section-title">Requirements</h2>
+
             <div className="info-item">
-              <strong>Status:</strong>{' '}
-              <span className={`status-${trip.requirements.status?.toLowerCase()}`}>
-                {trip.requirements.status || 'N/A'}
+              <strong>Age :</strong>{' '}
+              <span className={`age-${trip.requirements.age}`}>
+                {trip.requirements.age || 'N/A'}
+              </span>
+            </div>
+            <div className="info-item">
+              <strong>Fitness Criteria :</strong>{' '}
+              <span className={`fitness-${trip.requirements.fitnessCriteria?.toLowerCase()}`}>
+                {trip.requirements.fitnessCriteria || 'N/A'}
+              </span>
+            </div>
+            <div className="info-item">
+              <strong>Previous Experience:</strong>{' '}
+              <span className={`experience-${trip.requirements.previousExp?.toLowerCase()}`}>
+                {trip.requirements.previousExp || 'N/A'}
               </span>
             </div>
           </div>

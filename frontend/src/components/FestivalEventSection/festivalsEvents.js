@@ -52,418 +52,420 @@ const EmptyState = () => (
 	</div>
 );
 
+
+
 const indianCitiesPageData = [
 	{
 		"locationName": "Aalo",
-		"locationCode": ""
+		"locationCode": "AALU"
 	},
 	{
 		"locationName": "Abohar",
-		"locationCode": ""
+		"locationCode": "ABOR"
 	},
 	{
 		"locationName": "Abu Road",
-		"locationCode": ""
+		"locationCode": "ABRD"
 	},
 	{
 		"locationName": "Achampet",
-		"locationCode": ""
+		"locationCode": "ACHM"
 	},
 	{
 		"locationName": "Acharapakkam",
-		"locationCode": ""
+		"locationCode": "ACHA"
 	},
 	{
 		"locationName": "Addanki",
-		"locationCode": ""
+		"locationCode": "ADKI"
 	},
 	{
 		"locationName": "Adilabad",
-		"locationCode": ""
+		"locationCode": "ADIL"
 	},
 	{
 		"locationName": "Adimali",
-		"locationCode": ""
+		"locationCode": "ADIM"
 	},
 	{
 		"locationName": "Adipur",
-		"locationCode": ""
+		"locationCode": "ADPR"
 	},
 	{
 		"locationName": "Adoni",
-		"locationCode": ""
+		"locationCode": "ADNI"
 	},
 	{
 		"locationName": "Agar Malwa",
-		"locationCode": ""
+		"locationCode": "AGOR"
 	},
 	{
 		"locationName": "Agartala",
-		"locationCode": ""
+		"locationCode": "AGAR"
 	},
 	{
 		"locationName": "Agiripalli",
-		"locationCode": ""
+		"locationCode": "AGIR"
 	},
 	{
 		"locationName": "Agra",
-		"locationCode": ""
+		"locationCode": "AGRA"
 	},
 	{
 		"locationName": "Ahilyanagar (Ahmednagar)",
-		"locationCode": ""
+		"locationCode": "AHMED"
 	},
 	{
 		"locationName": "Ahmedgarh",
-		"locationCode": ""
+		"locationCode": "AHMG"
 	},
 	{
 		"locationName": "Ahore",
-		"locationCode": ""
+		"locationCode": "AHOR"
 	},
 	{
 		"locationName": "Aizawl",
-		"locationCode": ""
+		"locationCode": "AIZW"
 	},
 	{
 		"locationName": "Ajmer",
-		"locationCode": ""
+		"locationCode": "AJMER"
 	},
 	{
 		"locationName": "Akaltara",
-		"locationCode": ""
+		"locationCode": "AKAL"
 	},
 	{
 		"locationName": "Akbarpur",
-		"locationCode": ""
+		"locationCode": "AKBR"
 	},
 	{
 		"locationName": "Akividu",
-		"locationCode": ""
+		"locationCode": "AKVD"
 	},
 	{
 		"locationName": "Akluj",
-		"locationCode": ""
+		"locationCode": "AKLJ"
 	},
 	{
 		"locationName": "Akola",
-		"locationCode": ""
+		"locationCode": "AKOL"
 	},
 	{
 		"locationName": "Akot",
-		"locationCode": ""
+		"locationCode": "TKOT"
 	},
 	{
 		"locationName": "Alakode",
-		"locationCode": ""
+		"locationCode": "ALAK"
 	},
 	{
 		"locationName": "Alangudi",
-		"locationCode": ""
+		"locationCode": "ALNI"
 	},
 	{
 		"locationName": "Alangulam",
-		"locationCode": ""
+		"locationCode": "ALKM"
 	},
 	{
 		"locationName": "Alappuzha",
-		"locationCode": ""
+		"locationCode": "ALPZ"
 	},
 	{
 		"locationName": "Alathur",
-		"locationCode": ""
+		"locationCode": "ALAR"
 	},
 	{
 		"locationName": "Alibaug",
-		"locationCode": ""
+		"locationCode": "ALBG"
 	},
 	{
 		"locationName": "Aligarh",
-		"locationCode": ""
+		"locationCode": "ALI"
 	},
 	{
 		"locationName": "Alipurduar",
-		"locationCode": ""
+		"locationCode": "ALIP"
 	},
 	{
 		"locationName": "Almora",
-		"locationCode": ""
+		"locationCode": "ALMO"
 	},
 	{
 		"locationName": "Alsisar (Rajasthan)",
-		"locationCode": ""
+		"locationCode": "ALSR"
 	},
 	{
 		"locationName": "Alur",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Alwar",
-		"locationCode": ""
+		"locationCode": "ALWR"
 	},
 	{
 		"locationName": "Amadalavalasa",
-		"locationCode": ""
+		"locationCode": "ADAM"
 	},
 	{
 		"locationName": "Amalapuram",
-		"locationCode": ""
+		"locationCode": "AMAP"
 	},
 	{
 		"locationName": "Amalner",
-		"locationCode": ""
+		"locationCode": "AMLN"
 	},
 	{
 		"locationName": "Amangal",
-		"locationCode": ""
+		"locationCode": "AMAN"
 	},
 	{
 		"locationName": "Amanpur",
-		"locationCode": ""
+		"locationCode": "ZAMA"
 	},
 	{
 		"locationName": "Amaravathi",
-		"locationCode": ""
+		"locationCode": "AVTI"
 	},
 	{
 		"locationName": "Ambajogai",
-		"locationCode": ""
+		"locationCode": "AMBG"
 	},
 	{
 		"locationName": "Ambala",
-		"locationCode": ""
+		"locationCode": "AMB"
 	},
 	{
 		"locationName": "Ambikapur",
-		"locationCode": ""
+		"locationCode": "AMBI"
 	},
 	{
 		"locationName": "Ambur",
-		"locationCode": ""
+		"locationCode": "AMBR"
 	},
 	{
 		"locationName": "Amgaon",
-		"locationCode": ""
+		"locationCode": "AMGN"
 	},
 	{
 		"locationName": "Amravati",
-		"locationCode": ""
+		"locationCode": "AMRA"
 	},
 	{
 		"locationName": "Amreli",
-		"locationCode": ""
+		"locationCode": "AMRE"
 	},
 	{
 		"locationName": "Amritsar",
-		"locationCode": ""
+		"locationCode": "AMRI"
 	},
 	{
 		"locationName": "Amroha",
-		"locationCode": ""
+		"locationCode": "AMRO"
 	},
 	{
 		"locationName": "Anaikatti",
-		"locationCode": ""
+		"locationCode": "ANAI"
 	},
 	{
 		"locationName": "Anakapalle",
-		"locationCode": ""
+		"locationCode": "ANKP"
 	},
 	{
 		"locationName": "Anand",
-		"locationCode": ""
+		"locationCode": "AND"
 	},
 	{
 		"locationName": "Anandapur",
-		"locationCode": ""
+		"locationCode": "AND"
 	},
 	{
 		"locationName": "Anantapalli",
-		"locationCode": ""
+		"locationCode": "ANTT"
 	},
 	{
 		"locationName": "Anantapur",
-		"locationCode": ""
+		"locationCode": "ANAN"
 	},
 	{
 		"locationName": "Anaparthi",
-		"locationCode": ""
+		"locationCode": "ANPT"
 	},
 	{
 		"locationName": "Anchal",
-		"locationCode": ""
+		"locationCode": "ANHL"
 	},
 	{
 		"locationName": "Andaman And Nicobar",
-		"locationCode": ""
+		"locationCode": "DAMA"
 	},
 	{
 		"locationName": "Anekal",
-		"locationCode": ""
+		"locationCode": "ANEK"
 	},
 	{
 		"locationName": "Angadipuram",
-		"locationCode": ""
+		"locationCode": "ADPR"
 	},
 	{
 		"locationName": "Angamaly",
-		"locationCode": ""
+		"locationCode": "ANGA"
 	},
 	{
 		"locationName": "Angara",
-		"locationCode": ""
+		"locationCode": "ANGR"
 	},
 	{
 		"locationName": "Angul",
-		"locationCode": ""
+		"locationCode": "ANGL"
 	},
 	{
 		"locationName": "Anjad",
-		"locationCode": ""
+		"locationCode": "ANJA"
 	},
 	{
 		"locationName": "Anjar",
-		"locationCode": ""
+		"locationCode": "ANJR"
 	},
 	{
 		"locationName": "Anklav",
-		"locationCode": ""
+		"locationCode": "ANKV"
 	},
 	{
 		"locationName": "Ankleshwar",
-		"locationCode": ""
+		"locationCode": "ANKL"
 	},
 	{
 		"locationName": "Ankola",
-		"locationCode": ""
+		"locationCode": "ANKO"
 	},
 	{
 		"locationName": "Annavaram",
-		"locationCode": ""
+		"locationCode": "ANVR"
 	},
 	{
 		"locationName": "Annigeri",
-		"locationCode": ""
+		"locationCode": "ANGI"
 	},
 	{
 		"locationName": "Anthiyur",
-		"locationCode": ""
+		"locationCode": "ATYR"
 	},
 	{
 		"locationName": "Apra",
-		"locationCode": ""
+		"locationCode": "APRA"
 	},
 	{
 		"locationName": "Arakkonam",
-		"locationCode": ""
+		"locationCode": "ARAK"
 	},
 	{
 		"locationName": "Arambagh",
-		"locationCode": ""
+		"locationCode": "AMBH"
 	},
 	{
 		"locationName": "Arambol",
-		"locationCode": ""
+		"locationCode": "ARMB"
 	},
 	{
 		"locationName": "Aranthangi",
-		"locationCode": ""
+		"locationCode": "ARNT"
 	},
 	{
 		"locationName": "Aravakurichi",
-		"locationCode": ""
+		"locationCode": "ARAV"
 	},
 	{
 		"locationName": "Ariyalur",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Arkalgud",
-		"locationCode": ""
+		"locationCode": "ARGU"
 	},
 	{
 		"locationName": "Armoor",
-		"locationCode": ""
+		"locationCode": "ARMO"
 	},
 	{
 		"locationName": "Arni",
-		"locationCode": ""
+		"locationCode": "ARNI"
 	},
 	{
 		"locationName": "Arsikere",
-		"locationCode": ""
+		"locationCode": "ARSI"
 	},
 	{
 		"locationName": "Aruppukottai",
-		"locationCode": ""
+		"locationCode": "ARUP"
 	},
 	{
 		"locationName": "Asansol",
-		"locationCode": ""
+		"locationCode": "ASANSOL"
 	},
 	{
 		"locationName": "Ashoknagar",
-		"locationCode": ""
+		"locationCode": "AKMP"
 	},
 	{
 		"locationName": "Ashoknagar (West Bengal)",
-		"locationCode": ""
+		"locationCode": "AKMP"
 	},
 	{
 		"locationName": "Ashta",
-		"locationCode": ""
+		"locationCode": "ASTA"
 	},
 	{
 		"locationName": "Ashta (Maharashtra)",
-		"locationCode": ""
+		"locationCode": "ASTA"
 	},
 	{
 		"locationName": "Asika",
-		"locationCode": ""
+		"locationCode": "ASIK"
 	},
 	{
 		"locationName": "Aswaraopeta",
-		"locationCode": ""
+		"locationCode": "ASWA"
 	},
 	{
 		"locationName": "Athagarh",
-		"locationCode": ""
+		"locationCode": "ATHG"
 	},
 	{
 		"locationName": "Athani",
-		"locationCode": ""
+		"locationCode": "ATHN"
 	},
 	{
 		"locationName": "Atmakur (Nellore)",
-		"locationCode": ""
+		"locationCode": "ATMK"
 	},
 	{
 		"locationName": "Atpadi",
-		"locationCode": ""
+		"locationCode": "ATPA"
 	},
 	{
 		"locationName": "Atraulia",
-		"locationCode": ""
+		"locationCode": "ATRA"
 	},
 	{
 		"locationName": "Attibele",
-		"locationCode": ""
+		"locationCode": "ATTO"
 	},
 	{
 		"locationName": "Attili",
-		"locationCode": ""
+		"locationCode": "ATLI"
 	},
 	{
 		"locationName": "Attingal",
-		"locationCode": ""
+		"locationCode": "ATTI"
 	},
 	{
 		"locationName": "Attur",
-		"locationCode": ""
+		"locationCode": "ATTR"
 	},
 	{
 		"locationName": "Aurangabad (Bihar)",
-		"locationCode": ""
+		"locationCode": "AUBI"
 	},
 	{
 		"locationName": "Aurangabad (West Bengal)",
@@ -471,399 +473,399 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Auroville",
-		"locationCode": ""
+		"locationCode": "AURV"
 	},
 	{
 		"locationName": "Aushapur",
-		"locationCode": ""
+		"locationCode": "AUSH"
 	},
 	{
 		"locationName": "Avinashi",
-		"locationCode": ""
+		"locationCode": "AVII"
 	},
 	{
 		"locationName": "Ayodhya",
-		"locationCode": ""
+		"locationCode": "AYOD"
 	},
 	{
 		"locationName": "Azamgarh",
-		"locationCode": ""
+		"locationCode": "AZMG"
 	},
 	{
 		"locationName": "B. Kothakota",
-		"locationCode": ""
+		"locationCode": "TKOT"
 	},
 	{
 		"locationName": "Babra",
-		"locationCode": ""
+		"locationCode": "BABT"
 	},
 	{
 		"locationName": "Badami",
-		"locationCode": ""
+		"locationCode": "BAMA"
 	},
 	{
 		"locationName": "Badaun",
-		"locationCode": ""
+		"locationCode": "BADN"
 	},
 	{
 		"locationName": "Baddi",
-		"locationCode": ""
+		"locationCode": "BADD"
 	},
 	{
 		"locationName": "Badhra",
-		"locationCode": ""
+		"locationCode": "BAHR"
 	},
 	{
 		"locationName": "Badnagar",
-		"locationCode": ""
+		"locationCode": "BADA"
 	},
 	{
 		"locationName": "Badnawar",
-		"locationCode": ""
+		"locationCode": "BADR"
 	},
 	{
 		"locationName": "Badvel",
-		"locationCode": ""
+		"locationCode": "BADV"
 	},
 	{
 		"locationName": "Bagaha",
-		"locationCode": ""
+		"locationCode": "BAAG"
 	},
 	{
 		"locationName": "Bagalkot",
-		"locationCode": ""
+		"locationCode": "BAGA"
 	},
 	{
 		"locationName": "Bagbahara",
-		"locationCode": ""
+		"locationCode": "BBHA"
 	},
 	{
 		"locationName": "Bagepalli",
-		"locationCode": ""
+		"locationCode": "BGPI"
 	},
 	{
 		"locationName": "Bagha Purana",
-		"locationCode": ""
+		"locationCode": "BAPU"
 	},
 	{
 		"locationName": "Baghmari",
-		"locationCode": ""
+		"locationCode": "BGAM"
 	},
 	{
 		"locationName": "Bagnan",
-		"locationCode": ""
+		"locationCode": "BAGN"
 	},
 	{
 		"locationName": "Bagru",
-		"locationCode": ""
+		"locationCode": "BAGU"
 	},
 	{
 		"locationName": "Bahadurgarh",
-		"locationCode": ""
+		"locationCode": "BAHD"
 	},
 	{
 		"locationName": "Bahraich",
-		"locationCode": ""
+		"locationCode": "BHRH"
 	},
 	{
 		"locationName": "Baidyabati",
-		"locationCode": ""
+		"locationCode": "BAID"
 	},
 	{
 		"locationName": "Baihar",
-		"locationCode": ""
+		"locationCode": "BIAH"
 	},
 	{
 		"locationName": "Baijnath",
-		"locationCode": ""
+		"locationCode": "BAIJ"
 	},
 	{
 		"locationName": "Baikunthpur",
-		"locationCode": ""
+		"locationCode": "BKTH"
 	},
 	{
 		"locationName": "Baindur",
-		"locationCode": ""
+		"locationCode": "BAND"
 	},
 	{
 		"locationName": "Bakhrahat",
-		"locationCode": ""
+		"locationCode": "BART"
 	},
 	{
 		"locationName": "Balaghat",
-		"locationCode": ""
+		"locationCode": "BLGT"
 	},
 	{
 		"locationName": "Balangir",
-		"locationCode": ""
+		"locationCode": "BALG"
 	},
 	{
 		"locationName": "Balasore",
-		"locationCode": ""
+		"locationCode": "BLSR"
 	},
 	{
 		"locationName": "Balijipeta",
-		"locationCode": ""
+		"locationCode": "BLIJ"
 	},
 	{
 		"locationName": "Ballia",
-		"locationCode": ""
+		"locationCode": "ALBI"
 	},
 	{
 		"locationName": "Balod",
-		"locationCode": ""
+		"locationCode": "BALD"
 	},
 	{
 		"locationName": "Baloda Bazar",
-		"locationCode": ""
+		"locationCode": "BALD"
 	},
 	{
 		"locationName": "Balotra",
-		"locationCode": ""
+		"locationCode": "BALO"
 	},
 	{
 		"locationName": "Balrampur",
-		"locationCode": ""
+		"locationCode": "BLUR"
 	},
 	{
 		"locationName": "Balurghat",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Banaganapalli",
-		"locationCode": ""
+		"locationCode": "BNPL"
 	},
 	{
 		"locationName": "Banahatti",
-		"locationCode": ""
+		"locationCode": "BANZ"
 	},
 	{
 		"locationName": "Banaskantha",
-		"locationCode": ""
+		"locationCode": "BANA"
 	},
 	{
 		"locationName": "Banga",
-		"locationCode": ""
+		"locationCode": "BNGA"
 	},
 	{
 		"locationName": "Bangaon",
-		"locationCode": ""
+		"locationCode": "BNGA"
 	},
 	{
 		"locationName": "Bangarpet",
-		"locationCode": ""
+		"locationCode": "BNGA"
 	},
 	{
 		"locationName": "Bangarupalem",
-		"locationCode": ""
+		"locationCode": "BNGA"
 	},
 	{
 		"locationName": "Banki",
-		"locationCode": ""
+		"locationCode": "BANK"
 	},
 	{
 		"locationName": "Bankura",
-		"locationCode": ""
+		"locationCode": "BNKU"
 	},
 	{
 		"locationName": "Banswada",
-		"locationCode": ""
+		"locationCode": "BNSA"
 	},
 	{
 		"locationName": "Banswara",
-		"locationCode": ""
+		"locationCode": "BANS"
 	},
 	{
 		"locationName": "Bantumilli",
-		"locationCode": ""
+		"locationCode": "BANT"
 	},
 	{
 		"locationName": "Bapatla",
-		"locationCode": ""
+		"locationCode": "BAPA"
 	},
 	{
 		"locationName": "Barabanki",
-		"locationCode": ""
+		"locationCode": "BANK"
 	},
 	{
 		"locationName": "Baramati",
-		"locationCode": ""
+		"locationCode": "BARA"
 	},
 	{
 		"locationName": "Baramulla",
-		"locationCode": ""
+		"locationCode": "BRML"
 	},
 	{
 		"locationName": "Baran",
-		"locationCode": ""
+		"locationCode": "BARN"
 	},
 	{
 		"locationName": "Barasat",
-		"locationCode": ""
+		"locationCode": "BSRT"
 	},
 	{
 		"locationName": "Baraut",
-		"locationCode": ""
+		"locationCode": "BARL"
 	},
 	{
 		"locationName": "Barbil",
-		"locationCode": ""
+		"locationCode": "BABR"
 	},
 	{
 		"locationName": "Bardoli",
-		"locationCode": ""
+		"locationCode": "BRDL"
 	},
 	{
 		"locationName": "Bareilly",
-		"locationCode": ""
+		"locationCode": "BARE"
 	},
 	{
 		"locationName": "Bareja",
-		"locationCode": ""
+		"locationCode": "BEJA"
 	},
 	{
 		"locationName": "Bargarh",
-		"locationCode": ""
+		"locationCode": "BARG"
 	},
 	{
 		"locationName": "Barharwa",
-		"locationCode": ""
+		"locationCode": "BRWA"
 	},
 	{
 		"locationName": "Barhi",
-		"locationCode": ""
+		"locationCode": "BHAI"
 	},
 	{
 		"locationName": "Baripada",
-		"locationCode": ""
+		"locationCode": "BARI"
 	},
 	{
 		"locationName": "Barmer",
-		"locationCode": ""
+		"locationCode": "BARM"
 	},
 	{
 		"locationName": "Barnala",
-		"locationCode": ""
+		"locationCode": "BAR"
 	},
 	{
 		"locationName": "Barpeta Road",
-		"locationCode": ""
+		"locationCode": "BRPD"
 	},
 	{
 		"locationName": "Barrackpore",
-		"locationCode": ""
+		"locationCode": "BARR"
 	},
 	{
 		"locationName": "Barshi",
-		"locationCode": ""
+		"locationCode": "BRHI"
 	},
 	{
 		"locationName": "Baruipur",
-		"locationCode": ""
+		"locationCode": "BARU"
 	},
 	{
 		"locationName": "Barwadih",
-		"locationCode": ""
+		"locationCode": "BARQ"
 	},
 	{
 		"locationName": "Barwaha",
-		"locationCode": ""
+		"locationCode": "BARH"
 	},
 	{
 		"locationName": "Barwani",
-		"locationCode": ""
+		"locationCode": "BRWN"
 	},
 	{
 		"locationName": "Basantpur",
-		"locationCode": ""
+		"locationCode": "BABA"
 	},
 	{
 		"locationName": "Basirhat",
-		"locationCode": ""
+		"locationCode": "BIRH"
 	},
 	{
 		"locationName": "Basna",
-		"locationCode": ""
+		"locationCode": "BASN"
 	},
 	{
 		"locationName": "Basti",
-		"locationCode": ""
+		"locationCode": "BAST"
 	},
 	{
 		"locationName": "Bathinda",
-		"locationCode": ""
+		"locationCode": "BHAT"
 	},
 	{
 		"locationName": "Batlagundu",
-		"locationCode": ""
+		"locationCode": "BTGD"
 	},
 	{
 		"locationName": "Bavla",
-		"locationCode": ""
+		"locationCode": "BAVL"
 	},
 	{
 		"locationName": "Bayad",
-		"locationCode": ""
+		"locationCode": "BAYA"
 	},
 	{
 		"locationName": "Bayana",
-		"locationCode": ""
+		"locationCode": "BANY"
 	},
 	{
 		"locationName": "Bazpur",
-		"locationCode": ""
+		"locationCode": "BAZP"
 	},
 	{
 		"locationName": "Beawar",
-		"locationCode": ""
+		"locationCode": "BEAW"
 	},
 	{
 		"locationName": "Beed",
-		"locationCode": ""
+		"locationCode": "BEED"
 	},
 	{
 		"locationName": "Beguniapada",
-		"locationCode": ""
+		"locationCode": "BEGU"
 	},
 	{
 		"locationName": "Begusarai",
-		"locationCode": ""
+		"locationCode": "BEGS"
 	},
 	{
 		"locationName": "Behror",
-		"locationCode": ""
+		"locationCode": "BEHR"
 	},
 	{
 		"locationName": "Belagavi (Belgaum)",
-		"locationCode": ""
+		"locationCode": "BELG"
 	},
 	{
 		"locationName": "Belakavadi",
-		"locationCode": ""
+		"locationCode": "BLVD"
 	},
 	{
 		"locationName": "Belghoria",
-		"locationCode": ""
+		"locationCode": "BELB"
 	},
 	{
 		"locationName": "Bellampalli",
-		"locationCode": ""
+		"locationCode": "BELL"
 	},
 	{
 		"locationName": "Bellary",
-		"locationCode": ""
+		"locationCode": "BLRY"
 	},
 	{
 		"locationName": "Belur",
-		"locationCode": ""
+		"locationCode": "BELU"
 	},
 	{
 		"locationName": "Bemetara",
-		"locationCode": ""
+		"locationCode": "BMTA"
 	},
 	{
 		"locationName": "Berachampa",
-		"locationCode": ""
+		"locationCode": "BRAC"
 	},
 	{
 		"locationName": "Berhampore (W.B.)",
@@ -871,571 +873,571 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Berhampur (Odisha)",
-		"locationCode": ""
+		"locationCode": "BERP"
 	},
 	{
 		"locationName": "Bestavaripeta",
-		"locationCode": ""
+		"locationCode": "BEST"
 	},
 	{
 		"locationName": "Betalbatim",
-		"locationCode": ""
+		"locationCode": "BTBM"
 	},
 	{
 		"locationName": "Betberia",
-		"locationCode": ""
+		"locationCode": "BETB"
 	},
 	{
 		"locationName": "Bethamcherla",
-		"locationCode": ""
+		"locationCode": "BETH"
 	},
 	{
 		"locationName": "Bettiah",
-		"locationCode": ""
+		"locationCode": "BETA"
 	},
 	{
 		"locationName": "Betul",
-		"locationCode": ""
+		"locationCode": "BETU"
 	},
 	{
 		"locationName": "Bhadrachalam",
-		"locationCode": ""
+		"locationCode": "BHDR"
 	},
 	{
 		"locationName": "Bhadrak",
-		"locationCode": ""
+		"locationCode": "BHAD"
 	},
 	{
 		"locationName": "Bhadravati",
-		"locationCode": ""
+		"locationCode": "BDVT"
 	},
 	{
 		"locationName": "Bhagalpur",
-		"locationCode": ""
+		"locationCode": "BHAG"
 	},
 	{
 		"locationName": "Bhainsa",
-		"locationCode": ""
+		"locationCode": "BHAN"
 	},
 	{
 		"locationName": "Bhandara",
-		"locationCode": ""
+		"locationCode": "BHAA"
 	},
 	{
 		"locationName": "Bharamasagara",
-		"locationCode": ""
+		"locationCode": "BASA"
 	},
 	{
 		"locationName": "Bharatpur",
-		"locationCode": ""
+		"locationCode": "BHRT"
 	},
 	{
 		"locationName": "Bharuch",
-		"locationCode": ""
+		"locationCode": "BHAR"
 	},
 	{
 		"locationName": "Bhatapara",
-		"locationCode": ""
+		"locationCode": "BTAP"
 	},
 	{
 		"locationName": "Bhatgaon",
-		"locationCode": ""
+		"locationCode": "BHAZ"
 	},
 	{
 		"locationName": "Bhatkal",
-		"locationCode": ""
+		"locationCode": "BAKL"
 	},
 	{
 		"locationName": "Bhattiprolu",
-		"locationCode": ""
+		"locationCode": "BATT"
 	},
 	{
 		"locationName": "Bhavani",
-		"locationCode": ""
+		"locationCode": "BHNI"
 	},
 	{
 		"locationName": "Bhavnagar",
-		"locationCode": ""
+		"locationCode": "BHNG"
 	},
 	{
 		"locationName": "Bhawanipatna",
-		"locationCode": ""
+		"locationCode": "BHAW"
 	},
 	{
 		"locationName": "Bheemgal",
-		"locationCode": ""
+		"locationCode": "BHMG"
 	},
 	{
 		"locationName": "Bhilai",
-		"locationCode": ""
+		"locationCode": "BHILAI"
 	},
 	{
 		"locationName": "Bhilwara",
-		"locationCode": ""
+		"locationCode": "BHIL"
 	},
 	{
 		"locationName": "Bhimadole",
-		"locationCode": ""
+		"locationCode": "BMDE"
 	},
 	{
 		"locationName": "Bhimavaram",
-		"locationCode": ""
+		"locationCode": "BHIM"
 	},
 	{
 		"locationName": "Bhind",
-		"locationCode": ""
+		"locationCode": "BIND"
 	},
 	{
 		"locationName": "Bhiwadi",
-		"locationCode": ""
+		"locationCode": "BHWD"
 	},
 	{
 		"locationName": "Bhiwani",
-		"locationCode": ""
+		"locationCode": "BHWN"
 	},
 	{
 		"locationName": "Bhogapuram",
-		"locationCode": ""
+		"locationCode": "BHOG"
 	},
 	{
 		"locationName": "Bhongir",
-		"locationCode": ""
+		"locationCode": "BHON"
 	},
 	{
 		"locationName": "Bhopal",
-		"locationCode": ""
+		"locationCode": "BHOP"
 	},
 	{
 		"locationName": "Bhubaneswar",
-		"locationCode": ""
+		"locationCode": "BHUB"
 	},
 	{
 		"locationName": "Bhuj",
-		"locationCode": ""
+		"locationCode": "BHUJ"
 	},
 	{
 		"locationName": "Bhuntar",
-		"locationCode": ""
+		"locationCode": "BHUN"
 	},
 	{
 		"locationName": "Bhupalpalle",
-		"locationCode": ""
+		"locationCode": "BHUP"
 	},
 	{
 		"locationName": "Bhusawal",
-		"locationCode": ""
+		"locationCode": "BHUS"
 	},
 	{
 		"locationName": "Bhutan",
-		"locationCode": ""
+		"locationCode": "BHUT"
 	},
 	{
 		"locationName": "Bhuvanagiri",
-		"locationCode": ""
+		"locationCode": "BHUV"
 	},
 	{
 		"locationName": "Biaora",
-		"locationCode": ""
+		"locationCode": "BIAR"
 	},
 	{
 		"locationName": "Bibinagar",
-		"locationCode": ""
+		"locationCode": "BBNG"
 	},
 	{
 		"locationName": "Bichkunda",
-		"locationCode": ""
+		"locationCode": "BHCK"
 	},
 	{
 		"locationName": "Bidadi",
-		"locationCode": ""
+		"locationCode": "BIDI"
 	},
 	{
 		"locationName": "Bidar",
-		"locationCode": ""
+		"locationCode": "BIDR"
 	},
 	{
 		"locationName": "Bihar Sharif",
-		"locationCode": ""
+		"locationCode": "BIHS"
 	},
 	{
 		"locationName": "Bihpuria",
-		"locationCode": ""
+		"locationCode": "BIHP"
 	},
 	{
 		"locationName": "Bijainagar",
-		"locationCode": ""
+		"locationCode": "BINW"
 	},
 	{
 		"locationName": "Bijnor",
-		"locationCode": ""
+		"locationCode": "BIJ"
 	},
 	{
 		"locationName": "Bijoynagar",
-		"locationCode": ""
+		"locationCode": "BIJO"
 	},
 	{
 		"locationName": "Bikaner",
-		"locationCode": ""
+		"locationCode": "BIK"
 	},
 	{
 		"locationName": "Bikramganj",
-		"locationCode": ""
+		"locationCode": "BANJ"
 	},
 	{
 		"locationName": "Bilara",
-		"locationCode": ""
+		"locationCode": "BILR"
 	},
 	{
 		"locationName": "Bilaspur",
-		"locationCode": ""
+		"locationCode": "BILA"
 	},
 	{
 		"locationName": "Bilaspur (Himachal Pradesh)",
-		"locationCode": ""
+		"locationCode": "BILA"
 	},
 	{
 		"locationName": "Bilgi",
-		"locationCode": ""
+		"locationCode": "BILG"
 	},
 	{
 		"locationName": "Bilimora",
-		"locationCode": ""
+		"locationCode": "BILI"
 	},
 	{
 		"locationName": "Billawar",
-		"locationCode": ""
+		"locationCode": "BILL"
 	},
 	{
 		"locationName": "Biraul",
-		"locationCode": ""
+		"locationCode": "BIRL"
 	},
 	{
 		"locationName": "Birra",
-		"locationCode": ""
+		"locationCode": "BIRR"
 	},
 	{
 		"locationName": "Bishnupur",
-		"locationCode": ""
+		"locationCode": "VVDF"
 	},
 	{
 		"locationName": "Bishrampur",
-		"locationCode": ""
+		"locationCode": "BSRM"
 	},
 	{
 		"locationName": "Biswanath Chariali",
-		"locationCode": ""
+		"locationCode": "BICH"
 	},
 	{
 		"locationName": "Bobbili",
-		"locationCode": ""
+		"locationCode": "BOBB"
 	},
 	{
 		"locationName": "Bodhan",
-		"locationCode": ""
+		"locationCode": "BODH"
 	},
 	{
 		"locationName": "Bodinayakanur",
-		"locationCode": ""
+		"locationCode": "BODI"
 	},
 	{
 		"locationName": "Boisar",
-		"locationCode": ""
+		"locationCode": "BOIS"
 	},
 	{
 		"locationName": "Bokaro",
-		"locationCode": ""
+		"locationCode": "BOKA"
 	},
 	{
 		"locationName": "Bolpur",
-		"locationCode": ""
+		"locationCode": "BLPR"
 	},
 	{
 		"locationName": "Bomdila",
-		"locationCode": ""
+		"locationCode": "BMDA"
 	},
 	{
 		"locationName": "Bommidi",
-		"locationCode": ""
+		"locationCode": "BOMM"
 	},
 	{
 		"locationName": "Bonakal",
-		"locationCode": ""
+		"locationCode": "BNKL"
 	},
 	{
 		"locationName": "Bongaigaon",
-		"locationCode": ""
+		"locationCode": "BONG"
 	},
 	{
 		"locationName": "Bongaon",
-		"locationCode": ""
+		"locationCode": "BONI"
 	},
 	{
 		"locationName": "Borsad",
-		"locationCode": ""
+		"locationCode": "BORM"
 	},
 	{
 		"locationName": "Botad",
-		"locationCode": ""
+		"locationCode": "BOTA"
 	},
 	{
 		"locationName": "Brahmapur",
-		"locationCode": ""
+		"locationCode": "KHUB"
 	},
 	{
 		"locationName": "Brahmapuri",
-		"locationCode": ""
+		"locationCode": "KHUB"
 	},
 	{
 		"locationName": "Brajrajnagar",
-		"locationCode": ""
+		"locationCode": "BJNG"
 	},
 	{
 		"locationName": "Buchireddypalem",
-		"locationCode": ""
+		"locationCode": "BCHR"
 	},
 	{
 		"locationName": "Budhlada",
-		"locationCode": ""
+		"locationCode": "BUDL"
 	},
 	{
 		"locationName": "Buhari",
-		"locationCode": ""
+		"locationCode": "BUHA"
 	},
 	{
 		"locationName": "Bulandshahr",
-		"locationCode": ""
+		"locationCode": "BULA"
 	},
 	{
 		"locationName": "Buldana",
-		"locationCode": ""
+		"locationCode": "BULD"
 	},
 	{
 		"locationName": "Bundu",
-		"locationCode": ""
+		"locationCode": "BUND"
 	},
 	{
 		"locationName": "Burdwan",
-		"locationCode": ""
+		"locationCode": "BURD"
 	},
 	{
 		"locationName": "Burhanpur",
-		"locationCode": ""
+		"locationCode": "BRHP"
 	},
 	{
 		"locationName": "Burhar",
-		"locationCode": ""
+		"locationCode": "BRHR"
 	},
 	{
 		"locationName": "Buttayagudem",
-		"locationCode": ""
+		"locationCode": "BUTY"
 	},
 	{
 		"locationName": "Byadagi",
-		"locationCode": ""
+		"locationCode": "BYAD"
 	},
 	{
 		"locationName": "Byadgi",
-		"locationCode": ""
+		"locationCode": "BYDA"
 	},
 	{
 		"locationName": "Byasanagar",
-		"locationCode": ""
+		"locationCode": "BYAS"
 	},
 	{
 		"locationName": "Calicut",
-		"locationCode": ""
+		"locationCode": "CALC"
 	},
 	{
 		"locationName": "Canning",
-		"locationCode": ""
+		"locationCode": "CANN"
 	},
 	{
 		"locationName": "Chagallu",
-		"locationCode": ""
+		"locationCode": "CHAG"
 	},
 	{
 		"locationName": "Chakan",
-		"locationCode": ""
+		"locationCode": "CHAK"
 	},
 	{
 		"locationName": "Chalakudy",
-		"locationCode": ""
+		"locationCode": "CHAL"
 	},
 	{
 		"locationName": "Chalisgaon",
-		"locationCode": ""
+		"locationCode": "CHLS"
 	},
 	{
 		"locationName": "Challakere",
-		"locationCode": ""
+		"locationCode": "CHLA"
 	},
 	{
 		"locationName": "Challapalli",
-		"locationCode": ""
+		"locationCode": "CHAP"
 	},
 	{
 		"locationName": "Chamarajnagar",
-		"locationCode": ""
+		"locationCode": "CHAJ"
 	},
 	{
 		"locationName": "Chamba",
-		"locationCode": ""
+		"locationCode": "CHMB"
 	},
 	{
 		"locationName": "Chamoli",
-		"locationCode": ""
+		"locationCode": "CHMK"
 	},
 	{
 		"locationName": "Champa",
-		"locationCode": ""
+		"locationCode": "CHAM"
 	},
 	{
 		"locationName": "Champahati",
-		"locationCode": ""
+		"locationCode": "CHAI"
 	},
 	{
 		"locationName": "Chanchal",
-		"locationCode": ""
+		"locationCode": "ANHL"
 	},
 	{
 		"locationName": "Chandannagar",
-		"locationCode": ""
+		"locationCode": "CHDD"
 	},
 	{
 		"locationName": "Chandausi",
-		"locationCode": ""
+		"locationCode": "CHDN"
 	},
 	{
 		"locationName": "Chandbali",
-		"locationCode": ""
+		"locationCode": "CHAZ"
 	},
 	{
 		"locationName": "Chandpur Siau",
-		"locationCode": ""
+		"locationCode": "CHHA"
 	},
 	{
 		"locationName": "Chandrakona",
-		"locationCode": ""
+		"locationCode": "CKNA"
 	},
 	{
 		"locationName": "Chandrapur",
-		"locationCode": ""
+		"locationCode": "CHAN"
 	},
 	{
 		"locationName": "Chandur",
-		"locationCode": ""
+		"locationCode": "CAND"
 	},
 	{
 		"locationName": "Changanassery",
-		"locationCode": ""
+		"locationCode": "CNSY"
 	},
 	{
 		"locationName": "Changaramkulam",
-		"locationCode": ""
+		"locationCode": "ANGR"
 	},
 	{
 		"locationName": "Channagiri",
-		"locationCode": ""
+		"locationCode": "CHGI"
 	},
 	{
 		"locationName": "Channapatna",
-		"locationCode": ""
+		"locationCode": "CPTN"
 	},
 	{
 		"locationName": "Channarayapatna",
-		"locationCode": ""
+		"locationCode": "CHNN"
 	},
 	{
 		"locationName": "Chanpatia",
-		"locationCode": ""
+		"locationCode": "CHAT"
 	},
 	{
 		"locationName": "Chapra",
-		"locationCode": ""
+		"locationCode": "APRA"
 	},
 	{
 		"locationName": "Charkhi Dadri",
-		"locationCode": ""
+		"locationCode": "CCDD"
 	},
 	{
 		"locationName": "Chaygaon",
-		"locationCode": ""
+		"locationCode": "CHOG"
 	},
 	{
 		"locationName": "Cheeka",
-		"locationCode": ""
+		"locationCode": "CHEK"
 	},
 	{
 		"locationName": "Cheepurupalli",
-		"locationCode": ""
+		"locationCode": "CHEE"
 	},
 	{
 		"locationName": "Chelpur",
-		"locationCode": ""
+		"locationCode": "CHEL"
 	},
 	{
 		"locationName": "Chendrapinni",
-		"locationCode": ""
+		"locationCode": "CNPI"
 	},
 	{
 		"locationName": "Chengalpattu",
-		"locationCode": ""
+		"locationCode": "CHET"
 	},
 	{
 		"locationName": "Chengannur",
-		"locationCode": ""
+		"locationCode": "CHEG"
 	},
 	{
 		"locationName": "Chennur",
-		"locationCode": ""
+		"locationCode": "CHNU"
 	},
 	{
 		"locationName": "Chenthrapini",
-		"locationCode": ""
+		"locationCode": "CHEI"
 	},
 	{
 		"locationName": "Cherial",
-		"locationCode": ""
+		"locationCode": "CHRY"
 	},
 	{
 		"locationName": "Cherla",
-		"locationCode": ""
+		"locationCode": "CHRL"
 	},
 	{
 		"locationName": "Cherpulassery",
-		"locationCode": ""
+		"locationCode": "CHER"
 	},
 	{
 		"locationName": "Cherrapunji",
-		"locationCode": ""
+		"locationCode": "CHPU"
 	},
 	{
 		"locationName": "Cherthala",
-		"locationCode": ""
+		"locationCode": "CRTL"
 	},
 	{
 		"locationName": "Chetpet",
-		"locationCode": ""
+		"locationCode": "PPPT"
 	},
 	{
 		"locationName": "Chevella",
-		"locationCode": ""
+		"locationCode": "CHEV"
 	},
 	{
 		"locationName": "Cheyyar",
-		"locationCode": ""
+		"locationCode": "CHEY"
 	},
 	{
 		"locationName": "Cheyyur",
-		"locationCode": ""
+		"locationCode": "CHYR"
 	},
 	{
 		"locationName": "Chhabra",
-		"locationCode": ""
+		"locationCode": "CHHB"
 	},
 	{
 		"locationName": "Chhatarpur",
-		"locationCode": ""
+		"locationCode": "CHHT"
 	},
 	{
 		"locationName": "Chhatrapati Sambhajinagar (Aurangabad)",
@@ -1443,699 +1445,699 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Chhibramau",
-		"locationCode": ""
+		"locationCode": "CHHI"
 	},
 	{
 		"locationName": "Chhindwara",
-		"locationCode": ""
+		"locationCode": "CHIN"
 	},
 	{
 		"locationName": "Chickmagaluru",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Chidambaram",
-		"locationCode": ""
+		"locationCode": "CHID"
 	},
 	{
 		"locationName": "Chikhli",
-		"locationCode": ""
+		"locationCode": "CHIH"
 	},
 	{
 		"locationName": "Chikkaballapur",
-		"locationCode": ""
+		"locationCode": "CHIK"
 	},
 	{
 		"locationName": "Chikmagalur",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Chikodi",
-		"locationCode": ""
+		"locationCode": "CHOK"
 	},
 	{
 		"locationName": "Chilakaluripet",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Chinnalapatti",
-		"locationCode": ""
+		"locationCode": "CNPT"
 	},
 	{
 		"locationName": "Chinnamandem",
-		"locationCode": ""
+		"locationCode": "CHNA"
 	},
 	{
 		"locationName": "Chinnamanur",
-		"locationCode": ""
+		"locationCode": "CHAR"
 	},
 	{
 		"locationName": "Chinsurah",
-		"locationCode": ""
+		"locationCode": "CHSA"
 	},
 	{
 		"locationName": "Chintalapudi",
-		"locationCode": ""
+		"locationCode": "CHPD"
 	},
 	{
 		"locationName": "Chintamani",
-		"locationCode": ""
+		"locationCode": "CHTI"
 	},
 	{
 		"locationName": "Chinturu",
-		"locationCode": ""
+		"locationCode": "CHTN"
 	},
 	{
 		"locationName": "Chiplun",
-		"locationCode": ""
+		"locationCode": "CHPL"
 	},
 	{
 		"locationName": "Chiraiyakot",
-		"locationCode": ""
+		"locationCode": "TKOT"
 	},
 	{
 		"locationName": "Chirala",
-		"locationCode": ""
+		"locationCode": "CHIR"
 	},
 	{
 		"locationName": "Chirawa",
-		"locationCode": ""
+		"locationCode": "CWRJ"
 	},
 	{
 		"locationName": "Chitradurga",
-		"locationCode": ""
+		"locationCode": "CHIT"
 	},
 	{
 		"locationName": "Chittoor",
-		"locationCode": ""
+		"locationCode": "CHTT"
 	},
 	{
 		"locationName": "Chittorgarh",
-		"locationCode": ""
+		"locationCode": "COTT"
 	},
 	{
 		"locationName": "Chodavaram",
-		"locationCode": ""
+		"locationCode": "CDVM"
 	},
 	{
 		"locationName": "Chon Buri",
-		"locationCode": ""
+		"locationCode": "CHBR"
 	},
 	{
 		"locationName": "Chotila",
-		"locationCode": ""
+		"locationCode": "CHOT"
 	},
 	{
 		"locationName": "Choutuppal",
-		"locationCode": ""
+		"locationCode": "CHOU"
 	},
 	{
 		"locationName": "Churachandpur",
-		"locationCode": ""
+		"locationCode": "CHUC"
 	},
 	{
 		"locationName": "Churu",
-		"locationCode": ""
+		"locationCode": "CHRU"
 	},
 	{
 		"locationName": "Coimbatore",
-		"locationCode": ""
+		"locationCode": "COIM"
 	},
 	{
 		"locationName": "Colombo",
-		"locationCode": ""
+		"locationCode": "COLO"
 	},
 	{
 		"locationName": "Cooch Behar",
-		"locationCode": ""
+		"locationCode": "COBE"
 	},
 	{
 		"locationName": "Coonoor",
-		"locationCode": ""
+		"locationCode": "CUNR"
 	},
 	{
 		"locationName": "Cuddalore",
-		"locationCode": ""
+		"locationCode": "CUDD"
 	},
 	{
 		"locationName": "Cumbum",
-		"locationCode": ""
+		"locationCode": "CMBM"
 	},
 	{
 		"locationName": "Cumbum (AP)",
-		"locationCode": ""
+		"locationCode": "CMBM"
 	},
 	{
 		"locationName": "Cuttack",
-		"locationCode": ""
+		"locationCode": "CUTT"
 	},
 	{
 		"locationName": "Dabra",
-		"locationCode": ""
+		"locationCode": "DABR"
 	},
 	{
 		"locationName": "Dahanu",
-		"locationCode": ""
+		"locationCode": "DHAU"
 	},
 	{
 		"locationName": "Dahegam",
-		"locationCode": ""
+		"locationCode": "DHGM"
 	},
 	{
 		"locationName": "Dahod",
-		"locationCode": ""
+		"locationCode": "DAHO"
 	},
 	{
 		"locationName": "Dakshin Barasat",
-		"locationCode": ""
+		"locationCode": "BSRT"
 	},
 	{
 		"locationName": "Dalli Rajhara",
-		"locationCode": ""
+		"locationCode": "DALL"
 	},
 	{
 		"locationName": "Dalmianagar",
-		"locationCode": ""
+		"locationCode": "DAAL"
 	},
 	{
 		"locationName": "Daman",
-		"locationCode": ""
+		"locationCode": "DAMA"
 	},
 	{
 		"locationName": "Damarcherla",
-		"locationCode": ""
+		"locationCode": "CHRL"
 	},
 	{
 		"locationName": "Dammapeta",
-		"locationCode": ""
+		"locationCode": "DMPT"
 	},
 	{
 		"locationName": "Damoh",
-		"locationCode": ""
+		"locationCode": "DAMO"
 	},
 	{
 		"locationName": "Danapur",
-		"locationCode": ""
+		"locationCode": "DANA"
 	},
 	{
 		"locationName": "Dandeli",
-		"locationCode": ""
+		"locationCode": "DAND"
 	},
 	{
 		"locationName": "Dang",
-		"locationCode": ""
+		"locationCode": "DANG"
 	},
 	{
 		"locationName": "Dankaur",
-		"locationCode": ""
+		"locationCode": "DAUK"
 	},
 	{
 		"locationName": "Dantewada",
-		"locationCode": ""
+		"locationCode": "DTWD"
 	},
 	{
 		"locationName": "Daporijo",
-		"locationCode": ""
+		"locationCode": "DAPO"
 	},
 	{
 		"locationName": "Darbhanga",
-		"locationCode": ""
+		"locationCode": "DARB"
 	},
 	{
 		"locationName": "Darjeeling",
-		"locationCode": ""
+		"locationCode": "DARJ"
 	},
 	{
 		"locationName": "Darlapudi",
-		"locationCode": ""
+		"locationCode": "DRLA"
 	},
 	{
 		"locationName": "Darsi",
-		"locationCode": ""
+		"locationCode": "DARS"
 	},
 	{
 		"locationName": "Darwha",
-		"locationCode": ""
+		"locationCode": "DARA"
 	},
 	{
 		"locationName": "Dasuya",
-		"locationCode": ""
+		"locationCode": "DASU"
 	},
 	{
 		"locationName": "Datia",
-		"locationCode": ""
+		"locationCode": "DATI"
 	},
 	{
 		"locationName": "Daund",
-		"locationCode": ""
+		"locationCode": "DAUN"
 	},
 	{
 		"locationName": "Dausa",
-		"locationCode": ""
+		"locationCode": "DAUS"
 	},
 	{
 		"locationName": "Davanagere",
-		"locationCode": ""
+		"locationCode": "DAVA"
 	},
 	{
 		"locationName": "Davuluru",
-		"locationCode": ""
+		"locationCode": "DVLR"
 	},
 	{
 		"locationName": "Deesa",
-		"locationCode": ""
+		"locationCode": "DEES"
 	},
 	{
 		"locationName": "Dehradun",
-		"locationCode": ""
+		"locationCode": "DEH"
 	},
 	{
 		"locationName": "Deogadh",
-		"locationCode": ""
+		"locationCode": "DEOD"
 	},
 	{
 		"locationName": "Deoghar",
-		"locationCode": ""
+		"locationCode": "DOGH"
 	},
 	{
 		"locationName": "Deoli",
-		"locationCode": ""
+		"locationCode": "DEOL"
 	},
 	{
 		"locationName": "Deoli (Rajasthan)",
-		"locationCode": ""
+		"locationCode": "DEOL"
 	},
 	{
 		"locationName": "Deoli(Rajasthan)",
-		"locationCode": ""
+		"locationCode": "DEOL"
 	},
 	{
 		"locationName": "Deoria",
-		"locationCode": ""
+		"locationCode": "DEEO"
 	},
 	{
 		"locationName": "Deralakatte",
-		"locationCode": ""
+		"locationCode": "DERA"
 	},
 	{
 		"locationName": "Devadurga",
-		"locationCode": ""
+		"locationCode": "DEVD"
 	},
 	{
 		"locationName": "Devakottai",
-		"locationCode": ""
+		"locationCode": "TKOT"
 	},
 	{
 		"locationName": "Devarakadra",
-		"locationCode": ""
+		"locationCode": "DEVR"
 	},
 	{
 		"locationName": "Devarakonda",
-		"locationCode": ""
+		"locationCode": "DEVK"
 	},
 	{
 		"locationName": "Devarapalle",
-		"locationCode": ""
+		"locationCode": "DVRL"
 	},
 	{
 		"locationName": "Devarapalli",
-		"locationCode": ""
+		"locationCode": "DVRP"
 	},
 	{
 		"locationName": "Devgad",
-		"locationCode": ""
+		"locationCode": "DEGA"
 	},
 	{
 		"locationName": "Dewas",
-		"locationCode": ""
+		"locationCode": "DEWAS"
 	},
 	{
 		"locationName": "Dhamnod",
-		"locationCode": ""
+		"locationCode": "DMND"
 	},
 	{
 		"locationName": "Dhampur",
-		"locationCode": ""
+		"locationCode": "DHPR"
 	},
 	{
 		"locationName": "Dhamtari",
-		"locationCode": ""
+		"locationCode": "DHMT"
 	},
 	{
 		"locationName": "Dhanaura",
-		"locationCode": ""
+		"locationCode": "CFFG"
 	},
 	{
 		"locationName": "Dhanbad",
-		"locationCode": ""
+		"locationCode": "DHAN"
 	},
 	{
 		"locationName": "Dhanera",
-		"locationCode": ""
+		"locationCode": "DHAC"
 	},
 	{
 		"locationName": "Dhar",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dharamjaigarh",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dharampur",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dharamsala",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dharamshala",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dharapuram",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dharashiv (Osmanabad)",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dharmanagar",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dharmapuri",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dharmavaram",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dharpally",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dharpur",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dharuhera",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dharwad",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Dhaulana",
-		"locationCode": ""
+		"locationCode": "DHAL"
 	},
 	{
 		"locationName": "Dhekiajuli",
-		"locationCode": ""
+		"locationCode": "DEKJ"
 	},
 	{
 		"locationName": "Dhemaji",
-		"locationCode": ""
+		"locationCode": "DHEM"
 	},
 	{
 		"locationName": "Dhenkanal",
-		"locationCode": ""
+		"locationCode": "DNAL"
 	},
 	{
 		"locationName": "Dholka",
-		"locationCode": ""
+		"locationCode": "DHOL"
 	},
 	{
 		"locationName": "Dholpur",
-		"locationCode": ""
+		"locationCode": "DHUR"
 	},
 	{
 		"locationName": "Dhone",
-		"locationCode": ""
+		"locationCode": "DHON"
 	},
 	{
 		"locationName": "Dhoraji",
-		"locationCode": ""
+		"locationCode": "DHOR"
 	},
 	{
 		"locationName": "Dhrangadhra",
-		"locationCode": ""
+		"locationCode": "DHRN"
 	},
 	{
 		"locationName": "Dhubri",
-		"locationCode": ""
+		"locationCode": "DHBR"
 	},
 	{
 		"locationName": "Dhule",
-		"locationCode": ""
+		"locationCode": "DHLE"
 	},
 	{
 		"locationName": "Dhulian",
-		"locationCode": ""
+		"locationCode": "DHAA"
 	},
 	{
 		"locationName": "Dhuliyan",
-		"locationCode": ""
+		"locationCode": "DHUI"
 	},
 	{
 		"locationName": "Dhuri",
-		"locationCode": ""
+		"locationCode": "DHRI"
 	},
 	{
 		"locationName": "Diamond Harbour",
-		"locationCode": ""
+		"locationCode": "MNHR"
 	},
 	{
 		"locationName": "Dibrugarh",
-		"locationCode": ""
+		"locationCode": "DIB"
 	},
 	{
 		"locationName": "Digras",
-		"locationCode": ""
+		"locationCode": "DIGR"
 	},
 	{
 		"locationName": "Dildar Nagar",
-		"locationCode": ""
+		"locationCode": "DLDR"
 	},
 	{
 		"locationName": "Dima Hasao",
-		"locationCode": ""
+		"locationCode": "DMHO"
 	},
 	{
 		"locationName": "Dimapur",
-		"locationCode": ""
+		"locationCode": "DMPR"
 	},
 	{
 		"locationName": "Dinanagar",
-		"locationCode": ""
+		"locationCode": "DINA"
 	},
 	{
 		"locationName": "Dindigul",
-		"locationCode": ""
+		"locationCode": "DIND"
 	},
 	{
 		"locationName": "Diphu",
-		"locationCode": ""
+		"locationCode": "DIPH"
 	},
 	{
 		"locationName": "Dirang",
-		"locationCode": ""
+		"locationCode": "DGGD"
 	},
 	{
 		"locationName": "Doddaballapura",
-		"locationCode": ""
+		"locationCode": "DDBP"
 	},
 	{
 		"locationName": "Doimukh",
-		"locationCode": ""
+		"locationCode": "MDHK"
 	},
 	{
 		"locationName": "Domkal",
-		"locationCode": ""
+		"locationCode": "DMKL"
 	},
 	{
 		"locationName": "Dongargarh",
-		"locationCode": ""
+		"locationCode": "DONG"
 	},
 	{
 		"locationName": "Doolahat Bazar",
-		"locationCode": ""
+		"locationCode": "DLBZ"
 	},
 	{
 		"locationName": "Doraha",
-		"locationCode": ""
+		"locationCode": "DORH"
 	},
 	{
 		"locationName": "Dornakal",
-		"locationCode": ""
+		"locationCode": "DORN"
 	},
 	{
 		"locationName": "Dowlaiswaram",
-		"locationCode": ""
+		"locationCode": "DOWL"
 	},
 	{
 		"locationName": "Draksharamam",
-		"locationCode": ""
+		"locationCode": "DAKR"
 	},
 	{
 		"locationName": "Dubbaka",
-		"locationCode": ""
+		"locationCode": "DBBK"
 	},
 	{
 		"locationName": "Dubrajpur",
-		"locationCode": ""
+		"locationCode": "DUBR"
 	},
 	{
 		"locationName": "Dudhi",
-		"locationCode": ""
+		"locationCode": "DUDH"
 	},
 	{
 		"locationName": "Dumka",
-		"locationCode": ""
+		"locationCode": "DUMKA"
 	},
 	{
 		"locationName": "Dungarpur",
-		"locationCode": ""
+		"locationCode": "DUNG"
 	},
 	{
 		"locationName": "Durg",
-		"locationCode": ""
+		"locationCode": "DURG"
 	},
 	{
 		"locationName": "Durgapur",
-		"locationCode": ""
+		"locationCode": "DURG"
 	},
 	{
 		"locationName": "Dwarka",
-		"locationCode": ""
+		"locationCode": "DWAR"
 	},
 	{
 		"locationName": "East Godavari",
-		"locationCode": ""
+		"locationCode": "ESTG"
 	},
 	{
 		"locationName": "Edappal",
-		"locationCode": ""
+		"locationCode": "EDPL"
 	},
 	{
 		"locationName": "Edlapadu",
-		"locationCode": ""
+		"locationCode": "EDLP"
 	},
 	{
 		"locationName": "Ekma",
-		"locationCode": ""
+		"locationCode": "EKMA"
 	},
 	{
 		"locationName": "Elesvaram",
-		"locationCode": ""
+		"locationCode": "ELES"
 	},
 	{
 		"locationName": "Eluru",
-		"locationCode": ""
+		"locationCode": "ELRU"
 	},
 	{
 		"locationName": "Enkoor",
-		"locationCode": ""
+		"locationCode": "ENKR"
 	},
 	{
 		"locationName": "Eramalloor",
-		"locationCode": ""
+		"locationCode": "ERMR"
 	},
 	{
 		"locationName": "Erandol",
-		"locationCode": ""
+		"locationCode": "ERAN"
 	},
 	{
 		"locationName": "Erattupetta",
-		"locationCode": ""
+		"locationCode": "ERAT"
 	},
 	{
 		"locationName": "Ernakulam",
-		"locationCode": ""
+		"locationCode": "ERNK"
 	},
 	{
 		"locationName": "Erode",
-		"locationCode": ""
+		"locationCode": "EROD"
 	},
 	{
 		"locationName": "Etah",
-		"locationCode": ""
+		"locationCode": "ETAH"
 	},
 	{
 		"locationName": "Etawah",
-		"locationCode": ""
+		"locationCode": "ETWH"
 	},
 	{
 		"locationName": "Ettumanoor",
-		"locationCode": ""
+		"locationCode": "ETTU"
 	},
 	{
 		"locationName": "Eturnagaram",
-		"locationCode": ""
+		"locationCode": "ETNR"
 	},
 	{
 		"locationName": "Faizabad",
-		"locationCode": ""
+		"locationCode": "FAZA"
 	},
 	{
 		"locationName": "Falakata",
-		"locationCode": ""
+		"locationCode": "FALA"
 	},
 	{
 		"locationName": "Falna",
-		"locationCode": ""
+		"locationCode": "FALN"
 	},
 	{
 		"locationName": "Faridkot",
-		"locationCode": ""
+		"locationCode": "DKOT"
 	},
 	{
 		"locationName": "Farrukhabad",
-		"locationCode": ""
+		"locationCode": "FARU"
 	},
 	{
 		"locationName": "Fatehabad",
-		"locationCode": ""
+		"locationCode": "FATD"
 	},
 	{
 		"locationName": "Fatehgarh Sahib",
-		"locationCode": ""
+		"locationCode": "FASA"
 	},
 	{
 		"locationName": "Fatehpur",
-		"locationCode": ""
+		"locationCode": "FATE"
 	},
 	{
 		"locationName": "Fatehpur(Rajasthan)",
-		"locationCode": ""
+		"locationCode": "FATE"
 	},
 	{
 		"locationName": "Fazilka",
-		"locationCode": ""
+		"locationCode": "FAKA"
 	},
 	{
 		"locationName": "Firozabad",
-		"locationCode": ""
+		"locationCode": "FRZD"
 	},
 	{
 		"locationName": "Firozpur",
-		"locationCode": ""
+		"locationCode": "FRZR"
 	},
 	{
 		"locationName": "Forbesganj",
-		"locationCode": ""
+		"locationCode": "FORB"
 	},
 	{
 		"locationName": "France",
-		"locationCode": ""
+		"locationCode": "FCR"
 	},
 	{
 		"locationName": "Fulkusma",
-		"locationCode": ""
+		"locationCode": "FULK"
 	},
 	{
 		"locationName": "G.Mamidada",
@@ -2143,595 +2145,595 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Gadag",
-		"locationCode": ""
+		"locationCode": "GADG"
 	},
 	{
 		"locationName": "Gadarwara",
-		"locationCode": ""
+		"locationCode": "GDWR"
 	},
 	{
 		"locationName": "Gadchiroli",
-		"locationCode": ""
+		"locationCode": "GDRO"
 	},
 	{
 		"locationName": "Gadwal",
-		"locationCode": ""
+		"locationCode": "GADW"
 	},
 	{
 		"locationName": "Gajapathinagaram",
-		"locationCode": ""
+		"locationCode": "GJPT"
 	},
 	{
 		"locationName": "Gajendragarh",
-		"locationCode": ""
+		"locationCode": "GJGH"
 	},
 	{
 		"locationName": "Gajwel",
-		"locationCode": ""
+		"locationCode": "GAJW"
 	},
 	{
 		"locationName": "Gampalagudem",
-		"locationCode": ""
+		"locationCode": "GMPL"
 	},
 	{
 		"locationName": "Ganapavaram",
-		"locationCode": ""
+		"locationCode": "GANP"
 	},
 	{
 		"locationName": "Gandhidham",
-		"locationCode": ""
+		"locationCode": "GDHAM"
 	},
 	{
 		"locationName": "Gandhinagar",
-		"locationCode": ""
+		"locationCode": "GNAGAR"
 	},
 	{
 		"locationName": "Gangarampur",
-		"locationCode": ""
+		"locationCode": "ANGR"
 	},
 	{
 		"locationName": "Gangavati",
-		"locationCode": ""
+		"locationCode": "GAVT"
 	},
 	{
 		"locationName": "Gangoh",
-		"locationCode": ""
+		"locationCode": "GANZ"
 	},
 	{
 		"locationName": "Gangtok",
-		"locationCode": ""
+		"locationCode": "GANG"
 	},
 	{
 		"locationName": "Ganjam",
-		"locationCode": ""
+		"locationCode": "GHZA"
 	},
 	{
 		"locationName": "Ganjbasoda",
-		"locationCode": ""
+		"locationCode": "GANJ"
 	},
 	{
 		"locationName": "Gannavaram",
-		"locationCode": ""
+		"locationCode": "ANVR"
 	},
 	{
 		"locationName": "Garhwal",
-		"locationCode": ""
+		"locationCode": "GRAH"
 	},
 	{
 		"locationName": "Garla",
-		"locationCode": ""
+		"locationCode": "GALA"
 	},
 	{
 		"locationName": "Gauribidanur",
-		"locationCode": ""
+		"locationCode": "GAUR"
 	},
 	{
 		"locationName": "Gauriganj",
-		"locationCode": ""
+		"locationCode": "GNGJ"
 	},
 	{
 		"locationName": "Gaya",
-		"locationCode": ""
+		"locationCode": "GAYA"
 	},
 	{
 		"locationName": "Gazole",
-		"locationCode": ""
+		"locationCode": "GAZP"
 	},
 	{
 		"locationName": "Georai",
-		"locationCode": ""
+		"locationCode": "GEOR"
 	},
 	{
 		"locationName": "Ghatanji",
-		"locationCode": ""
+		"locationCode": "GHAT"
 	},
 	{
 		"locationName": "Ghazipur",
-		"locationCode": ""
+		"locationCode": "GHAR"
 	},
 	{
 		"locationName": "Ghorasahan",
-		"locationCode": ""
+		"locationCode": "GHOR"
 	},
 	{
 		"locationName": "Ghumarwin",
-		"locationCode": ""
+		"locationCode": "GHUM"
 	},
 	{
 		"locationName": "Giddalur",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Gingee",
-		"locationCode": ""
+		"locationCode": "GING"
 	},
 	{
 		"locationName": "Giridih",
-		"locationCode": ""
+		"locationCode": "GIRI"
 	},
 	{
 		"locationName": "Goa",
-		"locationCode": ""
+		"locationCode": "GOA"
 	},
 	{
 		"locationName": "Goalpara",
-		"locationCode": ""
+		"locationCode": "GOA"
 	},
 	{
 		"locationName": "Gobichettipalayam",
-		"locationCode": ""
+		"locationCode": "GOBI"
 	},
 	{
 		"locationName": "Godavarikhani",
-		"locationCode": ""
+		"locationCode": "GDVK"
 	},
 	{
 		"locationName": "Godda",
-		"locationCode": ""
+		"locationCode": "GDDA"
 	},
 	{
 		"locationName": "Godhra",
-		"locationCode": ""
+		"locationCode": "GODH"
 	},
 	{
 		"locationName": "Gogawa",
-		"locationCode": ""
+		"locationCode": "GOGA"
 	},
 	{
 		"locationName": "Gohana",
-		"locationCode": ""
+		"locationCode": "GOHA"
 	},
 	{
 		"locationName": "Gokak",
-		"locationCode": ""
+		"locationCode": "GKGK"
 	},
 	{
 		"locationName": "Gokarna",
-		"locationCode": ""
+		"locationCode": "GOKA"
 	},
 	{
 		"locationName": "Gokavaram",
-		"locationCode": ""
+		"locationCode": "GOKM"
 	},
 	{
 		"locationName": "Gola Bazar",
-		"locationCode": ""
+		"locationCode": "GABR"
 	},
 	{
 		"locationName": "Golaghat",
-		"locationCode": ""
+		"locationCode": "GHT"
 	},
 	{
 		"locationName": "Gollaprolu",
-		"locationCode": ""
+		"locationCode": "GOLL"
 	},
 	{
 		"locationName": "Gonda",
-		"locationCode": ""
+		"locationCode": "GOND"
 	},
 	{
 		"locationName": "Gondal",
-		"locationCode": ""
+		"locationCode": "GOND"
 	},
 	{
 		"locationName": "Gondia",
-		"locationCode": ""
+		"locationCode": "GNDA"
 	},
 	{
 		"locationName": "Goolikkadavu",
-		"locationCode": ""
+		"locationCode": "GOOL"
 	},
 	{
 		"locationName": "Gooty",
-		"locationCode": ""
+		"locationCode": "GOOT"
 	},
 	{
 		"locationName": "Gopalganj",
-		"locationCode": ""
+		"locationCode": "GOPG"
 	},
 	{
 		"locationName": "Gopalpet",
-		"locationCode": ""
+		"locationCode": "GOPA"
 	},
 	{
 		"locationName": "Gopiganj",
-		"locationCode": ""
+		"locationCode": "GOPI"
 	},
 	{
 		"locationName": "Gorakhpur",
-		"locationCode": ""
+		"locationCode": "GRKP"
 	},
 	{
 		"locationName": "Goramadagu",
-		"locationCode": ""
+		"locationCode": "GMDU"
 	},
 	{
 		"locationName": "Gorantla",
-		"locationCode": ""
+		"locationCode": "GORA"
 	},
 	{
 		"locationName": "Gotegaon",
-		"locationCode": ""
+		"locationCode": "GTGN"
 	},
 	{
 		"locationName": "Gownipalli",
-		"locationCode": ""
+		"locationCode": "GOWP"
 	},
 	{
 		"locationName": "Gudivada",
-		"locationCode": ""
+		"locationCode": "GUDI"
 	},
 	{
 		"locationName": "Gudiyatham",
-		"locationCode": ""
+		"locationCode": "GDTM"
 	},
 	{
 		"locationName": "Gudlavalleru",
-		"locationCode": ""
+		"locationCode": "GULU"
 	},
 	{
 		"locationName": "Gudur",
-		"locationCode": ""
+		"locationCode": "GUDR"
 	},
 	{
 		"locationName": "Guhagar",
-		"locationCode": ""
+		"locationCode": "GUHA"
 	},
 	{
 		"locationName": "Gulaothi",
-		"locationCode": ""
+		"locationCode": "GULL"
 	},
 	{
 		"locationName": "Guledgudda",
-		"locationCode": ""
+		"locationCode": "GULD"
 	},
 	{
 		"locationName": "Gummadidala",
-		"locationCode": ""
+		"locationCode": "GUMM"
 	},
 	{
 		"locationName": "Guna",
-		"locationCode": ""
+		"locationCode": "GUNA"
 	},
 	{
 		"locationName": "Gundlupet",
-		"locationCode": ""
+		"locationCode": "GUND"
 	},
 	{
 		"locationName": "Guntakal",
-		"locationCode": ""
+		"locationCode": "GUNL"
 	},
 	{
 		"locationName": "Guntur",
-		"locationCode": ""
+		"locationCode": "GUNT"
 	},
 	{
 		"locationName": "Gurap",
-		"locationCode": ""
+		"locationCode": "GRAP"
 	},
 	{
 		"locationName": "Gurazala",
-		"locationCode": ""
+		"locationCode": "GURZ"
 	},
 	{
 		"locationName": "Gurdaspur",
-		"locationCode": ""
+		"locationCode": "GSPR"
 	},
 	{
 		"locationName": "Guruvayur",
-		"locationCode": ""
+		"locationCode": "GUVY"
 	},
 	{
 		"locationName": "Guwahati",
-		"locationCode": ""
+		"locationCode": "GUW"
 	},
 	{
 		"locationName": "Gwalior",
-		"locationCode": ""
+		"locationCode": "GWAL"
 	},
 	{
 		"locationName": "Habra",
-		"locationCode": ""
+		"locationCode": "HARR"
 	},
 	{
 		"locationName": "Haflong",
-		"locationCode": ""
+		"locationCode": "HALG"
 	},
 	{
 		"locationName": "Hagaribommanahalli",
-		"locationCode": ""
+		"locationCode": "HHGG"
 	},
 	{
 		"locationName": "Hajipur",
-		"locationCode": ""
+		"locationCode": "HAJI"
 	},
 	{
 		"locationName": "Haldia",
-		"locationCode": ""
+		"locationCode": "HLDI"
 	},
 	{
 		"locationName": "Halduchaur",
-		"locationCode": ""
+		"locationCode": "HUCR"
 	},
 	{
 		"locationName": "Haldwani",
-		"locationCode": ""
+		"locationCode": "HALD"
 	},
 	{
 		"locationName": "Haliya",
-		"locationCode": ""
+		"locationCode": "HALI"
 	},
 	{
 		"locationName": "Halol",
-		"locationCode": ""
+		"locationCode": "HALO"
 	},
 	{
 		"locationName": "Hamirpur (HP)",
-		"locationCode": ""
+		"locationCode": "HAMI"
 	},
 	{
 		"locationName": "Hampi",
-		"locationCode": ""
+		"locationCode": "HMPI"
 	},
 	{
 		"locationName": "Handwara",
-		"locationCode": ""
+		"locationCode": "HNDW"
 	},
 	{
 		"locationName": "Hanuman Junction",
-		"locationCode": ""
+		"locationCode": "HANU"
 	},
 	{
 		"locationName": "Hanumangarh",
-		"locationCode": ""
+		"locationCode": "HNMG"
 	},
 	{
 		"locationName": "Hapur",
-		"locationCode": ""
+		"locationCode": "HAPR"
 	},
 	{
 		"locationName": "Harda",
-		"locationCode": ""
+		"locationCode": "HRDA"
 	},
 	{
 		"locationName": "Hardoi",
-		"locationCode": ""
+		"locationCode": "HRDI"
 	},
 	{
 		"locationName": "Haria",
-		"locationCode": ""
+		"locationCode": "HARI"
 	},
 	{
 		"locationName": "Haridwar",
-		"locationCode": ""
+		"locationCode": "HRDR"
 	},
 	{
 		"locationName": "Harihar",
-		"locationCode": ""
+		"locationCode": "HRRR"
 	},
 	{
 		"locationName": "Haripad",
-		"locationCode": ""
+		"locationCode": "HRPD"
 	},
 	{
 		"locationName": "Harugeri",
-		"locationCode": ""
+		"locationCode": "HARU"
 	},
 	{
 		"locationName": "Harur",
-		"locationCode": ""
+		"locationCode": "HRUR"
 	},
 	{
 		"locationName": "Hasanparthy",
-		"locationCode": ""
+		"locationCode": "HASZ"
 	},
 	{
 		"locationName": "Hasanparthy",
-		"locationCode": ""
+		"locationCode": "HASZ"
 	},
 	{
 		"locationName": "Hasanpur",
-		"locationCode": ""
+		"locationCode": "HANS"
 	},
 	{
 		"locationName": "Hasnabad",
-		"locationCode": ""
+		"locationCode": "HSNA"
 	},
 	{
 		"locationName": "Hassan",
-		"locationCode": ""
+		"locationCode": "HASN"
 	},
 	{
 		"locationName": "Hathras",
-		"locationCode": ""
+		"locationCode": "HATH"
 	},
 	{
 		"locationName": "Haveri",
-		"locationCode": ""
+		"locationCode": "HRE"
 	},
 	{
 		"locationName": "Hazaribagh",
-		"locationCode": ""
+		"locationCode": "HAZA"
 	},
 	{
 		"locationName": "Himmatnagar",
-		"locationCode": ""
+		"locationCode": "HIMM"
 	},
 	{
 		"locationName": "Hindaun City",
-		"locationCode": ""
+		"locationCode": "HIND"
 	},
 	{
 		"locationName": "Hindupur",
-		"locationCode": ""
+		"locationCode": "HNDP"
 	},
 	{
 		"locationName": "Hinganghat",
-		"locationCode": ""
+		"locationCode": "HINA"
 	},
 	{
 		"locationName": "Hingoli",
-		"locationCode": ""
+		"locationCode": "HING"
 	},
 	{
 		"locationName": "Hiramandalam",
-		"locationCode": ""
+		"locationCode": "HIRA"
 	},
 	{
 		"locationName": "Hirekerur",
-		"locationCode": ""
+		"locationCode": "HIRE"
 	},
 	{
 		"locationName": "Hiriyur",
-		"locationCode": ""
+		"locationCode": "HIRI"
 	},
 	{
 		"locationName": "Hisar",
-		"locationCode": ""
+		"locationCode": "HISR"
 	},
 	{
 		"locationName": "Holenarasipura",
-		"locationCode": ""
+		"locationCode": "HOLE"
 	},
 	{
 		"locationName": "Honnali",
-		"locationCode": ""
+		"locationCode": "HONV"
 	},
 	{
 		"locationName": "Honnavara",
-		"locationCode": ""
+		"locationCode": "HNVR"
 	},
 	{
 		"locationName": "Hooghly",
-		"locationCode": ""
+		"locationCode": "HOOG"
 	},
 	{
 		"locationName": "Hoshangabad",
-		"locationCode": ""
+		"locationCode": "HSGB"
 	},
 	{
 		"locationName": "Hoshiarpur",
-		"locationCode": ""
+		"locationCode": "HOSH"
 	},
 	{
 		"locationName": "Hoskote",
-		"locationCode": ""
+		"locationCode": "HOKT"
 	},
 	{
 		"locationName": "Hospet",
-		"locationCode": ""
+		"locationCode": "HOSP"
 	},
 	{
 		"locationName": "Hosur",
-		"locationCode": ""
+		"locationCode": "HSUR"
 	},
 	{
 		"locationName": "Howrah",
-		"locationCode": ""
+		"locationCode": "HWRH"
 	},
 	{
 		"locationName": "Hubballi (Hubli)",
-		"locationCode": ""
+		"locationCode": "HUBL"
 	},
 	{
 		"locationName": "Hunagunda",
-		"locationCode": ""
+		"locationCode": "HNGN"
 	},
 	{
 		"locationName": "Hunsur",
-		"locationCode": ""
+		"locationCode": "HUSR"
 	},
 	{
 		"locationName": "Husnabad",
-		"locationCode": ""
+		"locationCode": "HSBD"
 	},
 	{
 		"locationName": "Huvinahadagali",
-		"locationCode": ""
+		"locationCode": "HULI"
 	},
 	{
 		"locationName": "Huzurabad",
-		"locationCode": ""
+		"locationCode": "HZUB"
 	},
 	{
 		"locationName": "Huzurnagar",
-		"locationCode": ""
+		"locationCode": "HUZU"
 	},
 	{
 		"locationName": "Ichalkaranji",
-		"locationCode": ""
+		"locationCode": "ICHL"
 	},
 	{
 		"locationName": "Ichchapuram",
-		"locationCode": ""
+		"locationCode": "HAPR"
 	},
 	{
 		"locationName": "Idappadi",
-		"locationCode": ""
+		"locationCode": "IDPI"
 	},
 	{
 		"locationName": "Idar",
-		"locationCode": ""
+		"locationCode": "IDAR"
 	},
 	{
 		"locationName": "Idukki",
-		"locationCode": ""
+		"locationCode": "IDKI"
 	},
 	{
 		"locationName": "Ieeja",
-		"locationCode": ""
+		"locationCode": "IEEJ"
 	},
 	{
 		"locationName": "Imphal",
-		"locationCode": ""
+		"locationCode": "IMPH"
 	},
 	{
 		"locationName": "Indapur",
-		"locationCode": ""
+		"locationCode": "INDA"
 	},
 	{
 		"locationName": "Indi",
-		"locationCode": ""
+		"locationCode": "IIND"
 	},
 	{
 		"locationName": "Indore",
-		"locationCode": ""
+		"locationCode": "IND"
 	},
 	{
 		"locationName": "Indukurpeta",
-		"locationCode": ""
+		"locationCode": "IDPA"
 	},
 	{
 		"locationName": "Irinjalakuda",
-		"locationCode": ""
+		"locationCode": "IRNK"
 	},
 	{
 		"locationName": "Itanagar",
-		"locationCode": ""
+		"locationCode": "ITNG"
 	},
 	{
 		"locationName": "Itarsi",
-		"locationCode": ""
+		"locationCode": "ITAR"
 	},
 	{
 		"locationName": "Jabalpur",
@@ -2739,11 +2741,11 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Jadcherla",
-		"locationCode": ""
+		"locationCode": "CHRL"
 	},
 	{
 		"locationName": "Jagalur",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Jagatdal",
@@ -2763,7 +2765,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Jagraon",
-		"locationCode": ""
+		"locationCode": "AGRA"
 	},
 	{
 		"locationName": "Jagtial",
@@ -2795,7 +2797,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Jalandhar",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Jalaun",
@@ -2931,7 +2933,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Jhansi",
-		"locationCode": ""
+		"locationCode": "JNSI"
 	},
 	{
 		"locationName": "Jhargram",
@@ -3019,7 +3021,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Kaikaluru",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Kaithal",
@@ -3079,7 +3081,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Kalol (Gandhinagar)",
-		"locationCode": ""
+		"locationCode": "GNAGAR"
 	},
 	{
 		"locationName": "Kalol (Panchmahal)",
@@ -3135,7 +3137,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Kanchikacherla",
-		"locationCode": ""
+		"locationCode": "CHRL"
 	},
 	{
 		"locationName": "Kanchipuram",
@@ -3143,7 +3145,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Kandamangalam",
-		"locationCode": ""
+		"locationCode": "AMAN"
 	},
 	{
 		"locationName": "Kandukur",
@@ -3151,7 +3153,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Kangayam",
-		"locationCode": ""
+		"locationCode": "GAYA"
 	},
 	{
 		"locationName": "Kangra",
@@ -3451,7 +3453,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Khamgaon",
-		"locationCode": ""
+		"locationCode": "AMGN"
 	},
 	{
 		"locationName": "Khammam",
@@ -3487,7 +3489,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Khariar Road",
-		"locationCode": ""
+		"locationCode": "HARI"
 	},
 	{
 		"locationName": "Kharsia",
@@ -3615,7 +3617,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Kolhapur",
-		"locationCode": ""
+		"locationCode": "HAPR"
 	},
 	{
 		"locationName": "Kollam",
@@ -3703,7 +3705,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Kotananduru",
-		"locationCode": ""
+		"locationCode": "AND"
 	},
 	{
 		"locationName": "Kotdwara",
@@ -3719,11 +3721,11 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Kothakota",
-		"locationCode": ""
+		"locationCode": "TKOT"
 	},
 	{
 		"locationName": "Kothamangalam",
-		"locationCode": ""
+		"locationCode": "AMAN"
 	},
 	{
 		"locationName": "Kothapalli",
@@ -3943,7 +3945,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Lakhisarai",
-		"locationCode": ""
+		"locationCode": "HISR"
 	},
 	{
 		"locationName": "Lakkavaram",
@@ -3991,7 +3993,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Lohardaga",
-		"locationCode": ""
+		"locationCode": "HRDA"
 	},
 	{
 		"locationName": "Lonand",
@@ -4031,11 +4033,11 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Macherla",
-		"locationCode": ""
+		"locationCode": "CHRL"
 	},
 	{
 		"locationName": "Machilipatnam",
-		"locationCode": ""
+		"locationCode": "PATN"
 	},
 	{
 		"locationName": "Madalu",
@@ -4183,7 +4185,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Malur",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Mamallapuram",
@@ -4211,7 +4213,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Mancherial",
-		"locationCode": ""
+		"locationCode": "CHRY"
 	},
 	{
 		"locationName": "Mandapeta",
@@ -4279,7 +4281,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Mangaluru (Mangalore)",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Mangar",
@@ -4431,7 +4433,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Melattur",
-		"locationCode": ""
+		"locationCode": "ATTR"
 	},
 	{
 		"locationName": "Melli",
@@ -4667,7 +4669,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Nabarangpur",
-		"locationCode": ""
+		"locationCode": "BARN"
 	},
 	{
 		"locationName": "Nabha",
@@ -4683,7 +4685,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Nagamangala",
-		"locationCode": ""
+		"locationCode": "AMAN"
 	},
 	{
 		"locationName": "Nagaon",
@@ -4707,7 +4709,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Nagayalanka",
-		"locationCode": ""
+		"locationCode": "GAYA"
 	},
 	{
 		"locationName": "Nagda",
@@ -4767,7 +4769,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Nalgonda",
-		"locationCode": ""
+		"locationCode": "GOND"
 	},
 	{
 		"locationName": "Nallajerla",
@@ -4875,7 +4877,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Narsipatnam",
-		"locationCode": ""
+		"locationCode": "PATN"
 	},
 	{
 		"locationName": "Narwana",
@@ -4935,7 +4937,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Nedumkandam",
-		"locationCode": ""
+		"locationCode": "DUMKA"
 	},
 	{
 		"locationName": "Neelapalli",
@@ -4955,7 +4957,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Nelamangala",
-		"locationCode": ""
+		"locationCode": "AMAN"
 	},
 	{
 		"locationName": "Nellimarla",
@@ -5015,7 +5017,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Nilakottai",
-		"locationCode": ""
+		"locationCode": "TKOT"
 	},
 	{
 		"locationName": "Nilanga",
@@ -5103,11 +5105,11 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "P. Dharmavaram",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "P.Gannavaram",
-		"locationCode": ""
+		"locationCode": "ANVR"
 	},
 	{
 		"locationName": "Padampur",
@@ -5239,7 +5241,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Panchkula",
-		"locationCode": ""
+		"locationCode": "PNCH"
 	},
 	{
 		"locationName": "Pandalam",
@@ -5255,11 +5257,11 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Pandharkawada",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Pandharpur",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Pandua",
@@ -5367,7 +5369,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Pathapatnam",
-		"locationCode": ""
+		"locationCode": "PATN"
 	},
 	{
 		"locationName": "Pathsala",
@@ -5379,7 +5381,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Patna",
-		"locationCode": ""
+		"locationCode": "PATN"
 	},
 	{
 		"locationName": "Patran",
@@ -5427,7 +5429,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Pedanandipadu",
-		"locationCode": ""
+		"locationCode": "AND"
 	},
 	{
 		"locationName": "Pedapadu",
@@ -5459,7 +5461,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Penugonda",
-		"locationCode": ""
+		"locationCode": "GOND"
 	},
 	{
 		"locationName": "Peralam",
@@ -5467,7 +5469,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Perambalur",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Peravoor",
@@ -5487,7 +5489,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Periyapatna",
-		"locationCode": ""
+		"locationCode": "PATN"
 	},
 	{
 		"locationName": "Pernambut",
@@ -5559,7 +5561,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Pithapuram",
-		"locationCode": ""
+		"locationCode": "HAPR"
 	},
 	{
 		"locationName": "Pithora",
@@ -5575,7 +5577,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Pochampally",
-		"locationCode": ""
+		"locationCode": "CHAM"
 	},
 	{
 		"locationName": "Podalakur",
@@ -5607,7 +5609,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Ponnamaravathi",
-		"locationCode": ""
+		"locationCode": "AVTI"
 	},
 	{
 		"locationName": "Ponnani",
@@ -5643,7 +5645,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Prayagraj (Allahabad)",
-		"locationCode": ""
+		"locationCode": "AGRA"
 	},
 	{
 		"locationName": "Proddatur",
@@ -5683,7 +5685,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Punalur",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Punganur",
@@ -5883,7 +5885,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Ramachandrapuram",
-		"locationCode": ""
+		"locationCode": "CHAN"
 	},
 	{
 		"locationName": "Ramanagara",
@@ -5891,7 +5893,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Ramanathapuram",
-		"locationCode": ""
+		"locationCode": "HAPR"
 	},
 	{
 		"locationName": "Ramayampet",
@@ -5899,7 +5901,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Ramdurg",
-		"locationCode": ""
+		"locationCode": "DURG"
 	},
 	{
 		"locationName": "Rameswarpur",
@@ -5923,7 +5925,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Rampachodavaram",
-		"locationCode": ""
+		"locationCode": "CDVM"
 	},
 	{
 		"locationName": "Rampur",
@@ -6147,7 +6149,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Salur",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Samalkota",
@@ -6175,7 +6177,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Sanand",
-		"locationCode": ""
+		"locationCode": "AND"
 	},
 	{
 		"locationName": "Sanawad",
@@ -6263,7 +6265,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Sarni",
-		"locationCode": ""
+		"locationCode": "ARNI"
 	},
 	{
 		"locationName": "Sarsiwa",
@@ -6291,7 +6293,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Sathyamangalam",
-		"locationCode": ""
+		"locationCode": "AMAN"
 	},
 	{
 		"locationName": "Satmile",
@@ -6383,7 +6385,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Shahapur",
-		"locationCode": ""
+		"locationCode": "HAPR"
 	},
 	{
 		"locationName": "Shahdol",
@@ -6451,7 +6453,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Shimla",
-		"locationCode": ""
+		"locationCode": "SMLA"
 	},
 	{
 		"locationName": "Shindkheda",
@@ -6491,7 +6493,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Shrigonda",
-		"locationCode": ""
+		"locationCode": "GOND"
 	},
 	{
 		"locationName": "Shrirampur",
@@ -6507,7 +6509,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Siddharthnagar",
-		"locationCode": ""
+		"locationCode": "DARH"
 	},
 	{
 		"locationName": "Siddhpur",
@@ -6547,7 +6549,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Sindhudurg",
-		"locationCode": ""
+		"locationCode": "DURG"
 	},
 	{
 		"locationName": "Singapore",
@@ -6675,7 +6677,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Srirangapatna",
-		"locationCode": ""
+		"locationCode": "PATN"
 	},
 	{
 		"locationName": "Srivaikuntam",
@@ -6963,7 +6965,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Tindivanam",
-		"locationCode": ""
+		"locationCode": "IIND"
 	},
 	{
 		"locationName": "Tinsukia",
@@ -6995,7 +6997,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Tirupattur",
-		"locationCode": ""
+		"locationCode": "ATTR"
 	},
 	{
 		"locationName": "Tirupur",
@@ -7083,7 +7085,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Udhampur",
-		"locationCode": ""
+		"locationCode": "DHPR"
 	},
 	{
 		"locationName": "Udumalpet",
@@ -7159,7 +7161,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Uthangarai",
-		"locationCode": ""
+		"locationCode": "ANGR"
 	},
 	{
 		"locationName": "Uthiramerur",
@@ -7191,7 +7193,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Vadalur",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Vadanappally",
@@ -7215,7 +7217,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Valigonda",
-		"locationCode": ""
+		"locationCode": "GOND"
 	},
 	{
 		"locationName": "Valluru",
@@ -7339,7 +7341,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Vijayapura (Bengaluru Rural)",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Vijayapura (Bijapur)",
@@ -7403,7 +7405,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Vizag (Visakhapatnam)",
-		"locationCode": ""
+		"locationCode": "PATN"
 	},
 	{
 		"locationName": "Vizianagaram",
@@ -7527,7 +7529,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Yerragondapalem",
-		"locationCode": ""
+		"locationCode": "GOND"
 	},
 	{
 		"locationName": "Yerraguntla",
@@ -7555,7 +7557,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Mumbai",
-		"locationCode": ""
+		"locationCode": "MUMBAI"
 	},
 	{
 		"locationName": "Delhi-NCR",
@@ -7563,7 +7565,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Bengaluru",
-		"locationCode": ""
+		"locationCode": "ALUR"
 	},
 	{
 		"locationName": "Hyderabad",
@@ -7571,7 +7573,7 @@ const indianCitiesPageData = [
 	},
 	{
 		"locationName": "Chandigarh",
-		"locationCode": ""
+		"locationCode": "CHD"
 	},
 	{
 		"locationName": "Ahmedabad",
@@ -7626,7 +7628,7 @@ const findClosestCity = (city, indianCities) => {
 
 
 };
-function LocationBlock({ fetchEvents, indianCities }) {
+function GetLocationBlock({ fetchEvents, indianCities }) {
 	const [location, setLocation] = useState("Fetching location...");
 	const [customLocation, setCustomLocation] = useState("");
 	const [suggestions, setSuggestions] = useState([]);
@@ -7726,35 +7728,35 @@ const FestivalsEvents = () => {
 	const [indianCities, setIndianCities] = useState(indianCitiesPageData);
 
 
-	useEffect(() => {
-		const fetchCities = async () => {
-			try {
-				const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/events/getLocationNamesWithCode`); // Replace with your API endpoint
-				const data = await response.json();
-				// var arrayOfLocationName = data.map((item) => item.locationName);
-				// for indiancitites each add correcponsign locationCode to lcoationName 
-				const updatedCities = indianCities.map((city) => {
-					const matchedData = data.find((d) =>
-						city.locationName.toLowerCase().includes(d.locationName.toLowerCase())
-					);
+	// useEffect(() => {
+	// 	const fetchCities = async () => {
+	// 		try {
+	// 			const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/events/getLocationNamesWithCode`); // Replace with your API endpoint
+	// 			const data = await response.json();
+	// 			// var arrayOfLocationName = data.map((item) => item.locationName);
+	// 			// for indiancitites each add correcponsign locationCode to lcoationName 
+	// 			const updatedCities = indianCities.map((city) => {
+	// 				const matchedData = data.find((d) =>
+	// 					city.locationName.toLowerCase().includes(d.locationName.toLowerCase())
+	// 				);
 
-					if (matchedData) {
-						return {
-							...city,
-							locationCode: matchedData.locationCode,
-						};
-					}
-					return city;
-				});
-				console.log("Updated cities:", updatedCities);
+	// 				if (matchedData) {
+	// 					return {
+	// 						...city,
+	// 						locationCode: matchedData.locationCode,
+	// 					};
+	// 				}
+	// 				return city;
+	// 			});
+	// 			console.log("Updated cities:", updatedCities);
 
-				setIndianCities(updatedCities);
-			} catch (error) {
-				console.error('Error fetching cities:', error);
-			}
-		};
-		fetchCities();
-	}, []);
+	// 			setIndianCities(updatedCities);
+	// 		} catch (error) {
+	// 			console.error('Error fetching cities:', error);
+	// 		}
+	// 	};
+	// 	fetchCities();
+	// }, []);
 	const fetchEvents = async (city) => {
 		// const encodedCity = encodeURIComponent(city);
 		console.log("Fetching events for city:", city);
@@ -7803,7 +7805,7 @@ const FestivalsEvents = () => {
 
 				<div className='col-lg-4 col-sm-12 col-md-4'>
 					{indianCities.length > 0 && (
-						<LocationBlock fetchEvents={fetchEvents} indianCities={indianCities} />
+						<GetLocationBlock fetchEvents={fetchEvents} indianCities={indianCities} />
 					)}
 					{/* <LocationBlock fetchEvents={fetchEvents} indianCities={indianCities} /> */}
 				</div>

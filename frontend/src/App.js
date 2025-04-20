@@ -10,7 +10,8 @@ import TripsDetialsPage from './pages/Trips/TripsDetails';
 import PreRegisterPopup from './components/Popups/preRegisterPopup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import loader from './assets/images/loader.gif';
+// import loader from './assets/images/loader.gif';
+import Loader from './components/Loader/loader.js';
 import LoginPopup from './components/Popups/LoginPopup';
 import FullProfilePopup from './components/Popups/FullProfilePopup';
 import PhoneNumberPopup from './components/Popups/PhoneNumberPopup';
@@ -18,8 +19,10 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import EnrolledTripDetails from './pages/Trips/TripEnrolledDetails.js';
 // import pageTypeEnum from './utils/pageType';
 import { Toaster } from 'react-hot-toast';
+import { useLocation } from 'react-router-dom';
 
 import { encryptData, decryptData } from './utils/securityStorage.js';
+import { fetchLocations, mergeLocationsIntoCache, getLimitByDevice } from './utils/CommonServices.js';
 
 // import FullProfilePopup from './components/Popups/FullProfilePopup';
 // import WeatherComponent from './data/getWeather';
@@ -36,10 +39,12 @@ const App = () => {
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
   const [user, setUser] = useState(null);
   const [locations, setLocations] = useState([]);
-  const [error, setError] = useState(null);
   const [locationsForPreMadeItinerary, setLocationsForPreMadeItinerary] = useState([]);
+  const [skip, setSkip] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const limit = getLimitByDevice();
+  // const { pathname } = useLocation(); // ⬅️ gets current path
   // const [pageType, setPageType] = useState(PageTypeEnum?.HOME); // Added for page type
-
 
   useEffect(() => {
     if (localStorage.getItem('user')) {
@@ -51,69 +56,114 @@ const App = () => {
     setIsLoading(value);
   }, []);
   // Fetch Locations Only Once
+  // if /home page only then run this code
   useEffect(() => {
-    const fetchInitialLocations = async () => {
-      const cacheKey = "cached_locations";
-      const cacheExpiryKey = "cached_locations_expiry";
+    // if (pathname !== '/home' && pathname !== '/') return; // ⬅️ only run on /home or /
 
-      const encryptedData = localStorage.getItem(cacheKey);
-      const encryptedExpiry = localStorage.getItem(cacheExpiryKey);
+    const loadInitial = async () => {
       const now = new Date();
+      const encrypted = localStorage.getItem(process.env.REACT_APP_CACHE_KEY || 'cached_locations');
+      const expiryEncrypted = localStorage.getItem(process.env.REACT_APP_CACHE_EXPIRY_KEY || 'cached_locations_expiry');
 
-      if (encryptedData && encryptedExpiry) {
-        const expiryDate = decryptData(encryptedExpiry);
-        const parsedLocations = decryptData(encryptedData);
-
-        if (expiryDate && new Date(expiryDate) > now && parsedLocations) {
-          console.log("Using encrypted cached locations");
-          setLocations(parsedLocations);
-          setLocationsForPreMadeItinerary(parsedLocations);
-          return;
+      if (encrypted && expiryEncrypted) {
+        const expiry = decryptData(expiryEncrypted);
+        if (expiry && new Date(expiry) > now) {
+          const cached = decryptData(encrypted);
+          if (cached?.length) {
+            setLocations(cached.slice(0, limit));
+            setLocationsForPreMadeItinerary(cached);
+            setSkip(limit);
+            return;
+          }
         }
       }
 
-      if (hasFetchedLocations.current) {
-        console.log("Locations already fetched, skipping API call");
-        return;
-      }
-
-      hasFetchedLocations.current = true;
-      console.log("Fetching locations...");
-
-      handleIsLoading(true);
-
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/getalllocations`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ limit: 100 }),
-          }
-        );
-
-        if (!response.ok) throw new Error("Failed to fetch locations");
-
-        const data = await response.json();
-        const locations = data.locations || data;
-
-        setLocations(locations);
-        setLocationsForPreMadeItinerary(locations);
-
-        // Encrypt and store data with expiry (7 days)
-        const expiryDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-        localStorage.setItem(cacheKey, encryptData(locations));
-        localStorage.setItem(cacheExpiryKey, encryptData(expiryDate.toISOString()));
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        handleIsLoading(false);
-        console.log("Fetch complete");
-      }
+      const data = await fetchLocations(0, limit);
+      const updatedCache = mergeLocationsIntoCache(data.locations || data);
+      setLocations(updatedCache.slice(0, limit));
+      setLocationsForPreMadeItinerary(updatedCache.slice(0, limit));
+      setSkip(limit);
     };
 
-    fetchInitialLocations();
-  }, [handleIsLoading, hasFetchedLocations]);
+    loadInitial();
+  }, []);
+  const handleShowMoreHome = async () => {
+    try {
+      const result = await fetchLocations(skip, limit);
+
+      const updatedCache = mergeLocationsIntoCache(result.locations); // updates localStorage uniquely
+
+      const nextSlice = updatedCache.slice(0, skip + limit);
+      setLocations(nextSlice);
+      setSkip(skip + limit);
+      setHasMore(result.hasMore); // only used when API is hit, but still safe to assign
+    } catch (err) {
+      console.error("Error loading more:", err);
+    }
+  };
+  // useEffect(() => {
+  //   const fetchInitialLocations = async () => {
+  //     const cacheKey = "cached_locations";
+  //     const cacheExpiryKey = "cached_locations_expiry";
+
+  //     const encryptedData = localStorage.getItem(cacheKey);
+  //     const encryptedExpiry = localStorage.getItem(cacheExpiryKey);
+  //     const now = new Date();
+
+  //     if (encryptedData && encryptedExpiry) {
+  //       const expiryDate = decryptData(encryptedExpiry);
+  //       const parsedLocations = decryptData(encryptedData);
+
+  //       if (expiryDate && new Date(expiryDate) > now && parsedLocations) {
+  //         console.log("Using encrypted cached locations");
+  //         setLocations(parsedLocations);
+  //         setLocationsForPreMadeItinerary(parsedLocations);
+  //         return;
+  //       }
+  //     }
+
+  //     if (hasFetchedLocations.current) {
+  //       console.log("Locations already fetched, skipping API call");
+  //       return;
+  //     }
+
+  //     hasFetchedLocations.current = true;
+  //     console.log("Fetching locations...");
+
+  //     handleIsLoading(true);
+
+  //     try {
+  //       const response = await fetch(
+  //         `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/getalllocations`,
+  //         {
+  //           method: "POST",
+  //           headers: { "Content-Type": "application/json" },
+  //           body: JSON.stringify({ limit: 100 }),
+  //         }
+  //       );
+
+  //       if (!response.ok) throw new Error("Failed to fetch locations");
+
+  //       const data = await response.json();
+  //       const locations = data.locations || data;
+
+  //       setLocations(locations);
+  //       setLocationsForPreMadeItinerary(locations);
+
+  //       // Encrypt and store data with expiry (7 days)
+  //       const expiryDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+  //       localStorage.setItem(cacheKey, encryptData(locations));
+  //       localStorage.setItem(cacheExpiryKey, encryptData(expiryDate.toISOString()));
+  //     } catch (err) {
+  //       setError(err.message);
+  //     } finally {
+  //       handleIsLoading(false);
+  //       console.log("Fetch complete");
+  //     }
+  //   };
+
+  //   fetchInitialLocations();
+  // }, [handleIsLoading, hasFetchedLocations]);
 
   // useEffect(() => {
   //   const path = window.location.pathname;
@@ -190,7 +240,7 @@ const App = () => {
           {showFullProfile && (
             <FullProfilePopup
               user={user}
-              locations={locations}
+              // locations={locations}
               onClose={() => setShowFullProfile(false)}
               onProfileComplete={(updatedUser) => {
                 setUser(updatedUser);
@@ -229,8 +279,9 @@ const App = () => {
                   zIndex: 9999,
                 }}
               >
-                <div><img src={loader}
-                  alt='Loading Please Wait!!'></img></div>
+                <Loader setLoadingState={isLoading} />
+                {/* <div><img src={loader}
+                  alt='Loading Please Wait!!'></img></div> */}
               </div>
             )}
 
@@ -247,8 +298,10 @@ const App = () => {
                     locations={locations}
                     locationsForPreMadeItinerary={locationsForPreMadeItinerary}
                     ctaAction={() => setAnyCtaPopup(true)}
-                    handleIsLoading={handleIsLoading}
-                    hasFetchedLocations={hasFetchedLocations}
+                    // handleIsLoading={handleIsLoading}
+                    // hasFetchedLocations={hasFetchedLocations}
+                    handleShowMoreHome={handleShowMoreHome}
+                    setLocations={setLocations}
                   />
                 }
               />

@@ -118,7 +118,7 @@ const TripCard = ({ trip, activeTab }) => {
           <p className='dayNights-font'>{duration}</p>
           <p className='otherDetails-font'>Dates: {formatDate(fromDate)} - {formatDate(tillDate)}</p>
           <p className='otherDetails-font'>Price: {price}</p>
-          <p className='otherDetails-font'>Available Spots: <span style={{ color: '#dc3545', fontWeight: 'bold' }}>{availableSpots} Left</span></p>
+          {activeTab != 'history' && <p className='otherDetails-font'>Available Spots: <span style={{ color: '#dc3545', fontWeight: 'bold' }}>{availableSpots} Left</span></p>}
           <p className='otherDetails-font'>Includes: <span style={{ color: '#28a745' }}>{include} included</span></p>
           <p className='otherDetails-font'>Age: <span >{age}+</span></p>
         </div>

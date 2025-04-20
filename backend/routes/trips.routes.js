@@ -9,37 +9,69 @@ const authenticateToken = require('../middleware/middleware.js').authenticateTok
 // User Registration
 router.post('/getAllTrips', async (req, res) => {
     try {
-
         const trips = await Trip.find({
             peopleApplied: { $exists: true, $ne: [] }
         }).populate({
             path: 'peopleApplied',
             select: 'name profile_picture'
         });
-        if (!trips) {
+
+        if (!trips || trips.length === 0) {
             return res.status(404).json({ message: 'No trips found' });
         }
-        const appliedUsers = trips.map(trip => {
-            return trip.peopleApplied.map(user => {
-                return {
-                    name: user.name,
-                    profilePicture: user.profile_picture?.[0] || 'https://via.placeholder.com/40',
-                };
-            });
-        });
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Normalize to start of the day
+
+        // Update statuses based on date
+        for (let trip of trips) {
+            const fromDate = new Date(trip.essentials.timeline.fromDate);
+            const tillDate = new Date(trip.essentials.timeline.tillDate);
+
+            fromDate.setHours(0, 0, 0, 0);
+            tillDate.setHours(0, 0, 0, 0);
+
+            let newStatus = trip.requirements?.status;
+
+            if (fromDate > today) {
+                newStatus = 'scheduled';
+            } else if (fromDate <= today && today <= tillDate) {
+                newStatus = 'active';
+            } else {
+                newStatus = 'completed';
+            }
+
+            // Only update if status has changed
+            if (trip.requirements.status !== newStatus) {
+                trip.requirements.status = newStatus;
+                await trip.save(); // Save updated status to DB
+            }
+        }
+
+        // Construct response
+        const appliedUsers = trips.map(trip =>
+            trip.peopleApplied.map(user => ({
+                name: user.name,
+                profilePicture: user.profile_picture?.[0] || 'https://via.placeholder.com/40',
+            }))
+        );
+
         const response = {
             trips: trips.map((trip, index) => ({
                 ...trip._doc,
-                peopleApplied: appliedUsers[index], // Assign the filtered users to the trip
+                peopleApplied: appliedUsers[index],
             })),
             totalTrips: trips.length,
-        }
+        };
+
         res.json(response);
 
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error });
     }
 });
+
 
 // User Login
 router.post('/addNewTrip', async (req, res) => {
@@ -213,7 +245,7 @@ router.get('/en/enrolled', authenticateToken, async (req, res) => {
         const userId = req.user.id;
         const user = await User.findById(userId).populate({
             path: 'trips.tripId',
-            select: 'title essentials itinerary requirements include MainImageUrl',
+            select: 'title essentials itinerary requirements include MainImageUrl ',
         });
 
         if (!user) {
@@ -221,7 +253,7 @@ router.get('/en/enrolled', authenticateToken, async (req, res) => {
         }
 
         const enrolledTrips = user.trips
-            .filter((trip) => trip.tripId)
+            .filter((trip) => trip.tripId && trip.tripId.essentials.timeline.tillDate > new Date())
             .map((trip) => trip.tripId);
 
         res.json(enrolledTrips);

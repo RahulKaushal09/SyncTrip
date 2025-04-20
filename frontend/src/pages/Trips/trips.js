@@ -11,7 +11,6 @@ const Trips = () => {
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const [token, setToken] = useState(localStorage.getItem('userToken') || ''); // Default to empty string
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('userToken')); // True if token exists
-
     // Handle window resize for mobile detection
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -133,12 +132,13 @@ const Trips = () => {
                 </button>
             </div>
 
-            {isLoading ? (
-                <p className="status-message">Loading trips...</p>
-            ) : error ? (
+            {/* {isLoading ? ( */}
+
+            {/* // <p className="status-message">Loading trips...</p> */}
+            {error ? (
                 <p className="status-message error">{error}</p>
             ) : (
-                <TripSection activeTab={activeTab} trips={filteredTrips} />
+                <TripSection activeTab={activeTab} trips={filteredTrips} isLoading={isLoading} />
             )}
         </div>
     );

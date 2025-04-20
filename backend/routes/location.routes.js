@@ -20,10 +20,18 @@ router.post('/', async (req, res) => {
 router.post('/getAllLocations', async (req, res) => {
     try {
         const limit = parseInt(req.body.limit) || 12;
-        const locations = await Location.find().limit(limit);
-        res.json(locations);
+        const skip = parseInt(req.body.skip) || 0;
+
+        const locations = await Location.find().skip(skip).limit(limit);
+        const totalCount = await Location.countDocuments();
+
+        res.json({
+            locations,
+            totalCount,
+            hasMore: skip + limit < totalCount
+        });
     } catch (error) {
-        res.status(500).json({ error });
+        res.status(500).json({ error: error.message });
     }
 });
 

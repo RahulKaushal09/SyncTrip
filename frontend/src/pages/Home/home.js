@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import MainSearchBar from '../../components/SearchPanel/MainSeachBar';
 import ExploreSection from '../../components/Explore/ExploreSection';
 import PreMadeItinerary from '../../components/preItinearies/PreMadeItinerary';
@@ -6,59 +6,82 @@ import FestivalsEvents from '../../components/FestivalEventSection/festivalsEven
 import TrendingSection from '../../components/TrendingSection/TrendingSection';
 import TopDestitnations from '../../components/TopDestitnations/TopDestitnations';
 import SyncTripAppPushingSection from '../../components/AppPushingSection/AppPushingSection';
+import { AllfetchLocations } from '../../utils/CommonServices';
 
-const Home = ({ ctaAction, locations, locationsForPreMadeItinerary, handleIsLoading, hasFetchedLocations }) => {
+const Home = ({ ctaAction, locations, locationsForPreMadeItinerary, setLocations, handleShowMoreHome }) => {
     const [searchTerm, setSearchTerm] = useState('');
+    // const [searchResults, setSearchResults] = useState([]);
+    const [hasFetchedAll, setHasFetchedAll] = useState(false);
+    const [searching, setSearching] = useState(false);
     const [mobileView, setMobileView] = useState(window.innerWidth < 550);
-    // const [locations, setLocations] = useState([]);
-    // const [locationsForPreMadeItinerary, setLocationsForPreMadeItinerary] = useState([]);
 
     // Handle Search Input
     const handleSearchChange = (value) => {
         setSearchTerm(value);
     };
 
-    // Fetch Locations Only Once
-    // useEffect(() => {
-    //     const fetchInitialLocations = async () => {
-    //         if (hasFetchedLocations.current) {
-    //             console.log('Locations already fetched, skipping API call');
-    //             return;
-    //         }
-    //         hasFetchedLocations.current = true;
-    //         console.log('Fetching locations...');
-
-    //         handleIsLoading(true); // Show loader
-
-    //         try {
-    //             const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/getalllocations`, {
-    //                 method: 'POST',
-    //                 headers: { 'Content-Type': 'application/json' },
-    //                 body: JSON.stringify({ limit: 100 }),
-    //             });
-
-    //             if (!response.ok) throw new Error('Failed to fetch locations');
-
-    //             const data = await response.json();
-    //             setLocations(data.locations || data);
-    //             setLocationsForPreMadeItinerary(data.locations || data); // Set locations for Pre-Made Itinerary
-    //         } catch (err) {
-    //             setError(err.message);
-    //         } finally {
-    //             handleIsLoading(false); // Hide loader
-    //             console.log('Fetch complete');
-    //         }
-    //     };
-
-    //     fetchInitialLocations();
-    // }, [handleIsLoading, hasFetchedLocations]); // Dependencies added for clarity
-
+    // Effect to handle search
     // Memoized Filtered Locations
     const filteredLocations = useMemo(() => {
-        return locations.filter((location) =>
-            location.title?.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    }, [locations, searchTerm]);
+        if (locations !== undefined) {
+            const localFiltered = locations.filter((location) =>
+                location.title?.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            // If we found matches or search is empty, return immediately
+            if (searchTerm === "" || localFiltered.length > 0 || hasFetchedAll) {
+                return localFiltered;
+            }
+
+            // Fetch all locations if not already done (but async!)
+            if (!searching) {
+                (async () => {
+                    try {
+                        setSearching(true);
+                        const result = await AllfetchLocations(); // Returns { locations: [...] }
+                        const all = Array.isArray(result?.locations) ? result.locations : Array.isArray(result) ? result : [];
+                        // Merge only new locations (by _id)
+                        const merged = [...locations];
+                        all.forEach(loc => {
+                            if (!merged.some(existing => existing._id === loc._id)) {
+                                merged.push(loc);
+                            }
+                        });
+                        console.log("Fetched all locations:", merged.length);
+                        console.log("Merged locations:", merged);
+
+                        setLocations(merged);
+                        setHasFetchedAll(true);
+                        setSearching(false);
+                    } catch (error) {
+                        console.error("Error fetching all locations:", error);
+                    }
+                })();
+
+                // Temporarily show what we have until async fetch completes
+            }
+            return localFiltered;
+        }
+        return [];
+    }, [searchTerm, locations]);
+
+    // // Memoized Filtered Locations
+    // const filteredLocations = useMemo(() => {
+    //     const filterLoc = locations.filter((location) =>
+    //         location.title?.toLowerCase().includes(searchTerm.toLowerCase())
+    //     );
+    //     if (searchTerm != "" && filterLoc && filterLoc.length > 0 && searchTerm.length > 0) {
+    //         return filterLoc;
+    //     }
+    //     else {
+    //         const locationsAll = AllfetchLocations();
+    //         setLocations(locationsAll.locations);
+    //         const filterLoc = locations.filter((location) =>
+    //             location.title?.toLowerCase().includes(searchTerm.toLowerCase())
+    //         );
+    //         return filterLoc;
+    //     }
+    // }, [locations, searchTerm]);
     // get random 12 lcoations form locaiton variable 
     let randomLocations = useMemo(() => {
         const shuffled = [...locations].sort(() => 0.5 - Math.random());
@@ -67,8 +90,18 @@ const Home = ({ ctaAction, locations, locationsForPreMadeItinerary, handleIsLoad
         , [locations]);
     return (
         <div className="HomePage">
-            <MainSearchBar searchTerm={searchTerm} setSearchTerm={handleSearchChange} searchBarPlaceHolder={"Search destinations, hotels"} />
-            <ExploreSection locations={filteredLocations} />
+            <MainSearchBar
+                searchTerm={searchTerm}
+                setSearchTerm={handleSearchChange}
+                searchBarPlaceHolder={"Search destinations, hotels"}
+            />
+            <ExploreSection
+                locations={filteredLocations}
+                handleShowMoreClick={handleShowMoreHome}
+                searching={searching}
+                showMoreButtonToShow={searchTerm.length === 0 ? true : false}
+            />
+
             {/* {error && <div>Error: {error}</div>} */}
             <PreMadeItinerary locations={locationsForPreMadeItinerary} />
             <FestivalsEvents />

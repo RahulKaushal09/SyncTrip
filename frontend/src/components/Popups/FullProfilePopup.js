@@ -3,7 +3,8 @@ import '../../styles/popups/FullProfilePopup.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import toast from 'react-hot-toast';
-export default function FullProfilePopup({ user, locations, onClose, onProfileComplete }) {
+import { fetchLocations } from '../../utils/CommonServices';
+export default function FullProfilePopup({ user, onClose, onProfileComplete }) {
     const [form, setForm] = useState({
         travelStyles: [],
         travelerType: [],
@@ -22,6 +23,7 @@ export default function FullProfilePopup({ user, locations, onClose, onProfileCo
     const [searchTerm, setSearchTerm] = useState('');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [selectedLocationIds, setSelectedLocationIds] = useState([]);
+    const [locations, setLocations] = useState(fetchLocations(0, 100).locations);
 
     // Modified handleChange to support button toggles
     const handleChange = (e, field, value) => {

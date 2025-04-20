@@ -1,22 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LocationCard from '../LocationCard/LocationCard';
-import loader from '../../assets/images/loader.gif';
+// import loader from '../../assets/images/loader.gif';
+import { fetchLocations, mergeLocationsIntoCache } from '../../utils/CommonServices';
+import Loader from '../Loader/loader';
 
-const ExploreSection = ({ locations, isLoading }) => {
+const ExploreSection = ({ locations, isLoading, handleShowMoreClick, searching, showMoreButtonToShow }) => {
     const [visibleCount, setVisibleCount] = useState(window.innerWidth < 550 ? 10 : 16);
-    const [isAllLoaded, setIsAllLoaded] = useState(false);
 
-    const handleShowMoreClick = () => {
-        if (!isAllLoaded) {
-            // onShowMore(); // Fetch up to 1000 locations
-            setVisibleCount(100); // Set to max limit
-            setIsAllLoaded(true); // Hide button after fetching all
-        }
-    };
+    useEffect(() => {
+        setVisibleCount(locations.length);
+    }, [locations.length]);
+    // const handleShowMoreClick = () => {
+    //     if (!isAllLoaded) {
+    //         // onShowMore(); // Fetch up to 1000 locations
+    //         setVisibleCount(100); // Set to max limit
+    //         setIsAllLoaded(true); // Hide button after fetching all
+    //     }
+    // };
 
-    if (!locations.length) {
-        return <div><img src={loader} alt='Loading Locations'></img></div>;
+    console.log("Locations in ExploreSection:", locations);
+    console.log("Searching:", searching);
+
+    if (!locations.length && searching) {
+        return <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}><Loader setLoadingState={true} /></div>
+        // return <div><img src={loader} alt='Loading Locations'></img></div>;
     }
+    if (!locations.length && !searching) {
+        return <div style={{ textAlign: 'center', margin: '20px 0' }}>
+            <h2>No locations found</h2>
+            <p>Try searching for something else.</p>
+        </div>;
+    }
+
     const convertLongBestTimeNameToShortNotations = (bestTime) => {
         const bestTimeMap = {
             'January': 'Jan',
@@ -80,7 +95,7 @@ const ExploreSection = ({ locations, isLoading }) => {
                     />
                 ))}
             </div>
-            {locations.length > 12 && !isAllLoaded && (
+            {locations.length != 100 && showMoreButtonToShow && (
                 <div style={{ textAlign: 'center', margin: '20px 0' }}>
                     <button
                         className="btn btn-black"

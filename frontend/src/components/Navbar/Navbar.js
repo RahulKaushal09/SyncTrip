@@ -10,6 +10,7 @@ const Navbar = ({ ctaAction, onLoginClick, user }) => {
     const [pageType, setPageType] = useState(null);
     const location = useLocation(); // Get the current location from react-router
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
     const closeDrawer = () => {
         setMobileNavOpen(false);
     };
@@ -111,10 +112,37 @@ const Navbar = ({ ctaAction, onLoginClick, user }) => {
             {/* Mobile Drawer */}
             <div className={`mobile-drawer ${mobileNavOpen ? "open" : ""}`}>
                 <div className='' style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem" }}>
-                    <div><a className="navbar-brand" href="/" style={{ display: 'inline-block', color: '#65CAD3', fontSize: "30px", fontWeight: "700", width: "100px" }}>
+                    {/* <div><a className="navbar-brand" href="/" style={{ display: 'inline-block', color: '#65CAD3', fontSize: "30px", fontWeight: "700", width: "100px" }}>
                         <img src={SyncTripLogo} alt="SyncTrip" style={{ width: "100%", }} />
                     </a>
-                    </div>
+                    </div> */}
+                    {user ? (
+                        <>
+                            <div
+                                style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+                            >
+                                <img
+                                    src={user?.profile_picture[0] || "https://via.placeholder.com/40"}
+                                    alt="Profile"
+                                    style={{
+                                        width: "40px",
+                                        height: "40px",
+                                        borderRadius: "50%",
+                                        objectFit: "cover",
+                                    }}
+                                />
+                                <span className="ms-2 mt-2">{user?.name || "User"}</span>
+
+                            </div>
+
+
+                        </>
+                    ) : (
+                        <div><a className="navbar-brand" href="/" style={{ display: 'inline-block', color: '#65CAD3', fontSize: "30px", fontWeight: "700", width: "100px" }}>
+                            <img src={SyncTripLogo} alt="SyncTrip" style={{ width: "100%", }} />
+                        </a>
+                        </div>
+                    )}
                     <div className="drawer-header">
                         <span className="drawer-close" onClick={closeDrawer}>&times;</span>
                     </div>
@@ -130,31 +158,22 @@ const Navbar = ({ ctaAction, onLoginClick, user }) => {
                         </li>
                     )}
 
-                    <li className="nav-item dropdown">
-                        {user ? (
-                            <>
-                                <img
-                                    src={user?.profile_picture[0] || "https://via.placeholder.com/40"}
-                                    alt="Profile"
-                                    style={{
-                                        width: "40px",
-                                        height: "40px",
-                                        borderRadius: "50%",
-                                        objectFit: "cover",
-                                    }}
-                                />
-                                <span className="ms-2 mt-2">{user?.name || "User"}</span>
-                                <div className="mt-2">
-                                    <a href="/profile" className="dropdown-item" onClick={closeDrawer}>Profile</a>
-                                    <span className="dropdown-item" onClick={() => { handleLogout(); closeDrawer(); }}>Logout</span>
-                                </div>
-                            </>
-                        ) : (
-                            <button className="btn btn-black mt-2" onClick={() => { onLoginClick(); closeDrawer(); }}>
+                    {user ? (
+                        // <li className="nav-item" onClick={() => { window.location.href = "/profile"; closeDrawer(); }}>
+                        //     <span className="nav-link">Profile</span>
+                        // </li>
+                        <li className="nav-item" onClick={() => { handleLogout(); closeDrawer(); }}>
+                            <span className="nav-link">Logout</span>
+                        </li>
+                    ) : (
+                        <li className="nav-item" onClick={() => { onLoginClick(); closeDrawer(); }}>
+                            <button className="btn btn-black mt-2" style={{ width: "100%" }}>
                                 Login / Register
                             </button>
-                        )}
-                    </li>
+                        </li>
+                    )}
+
+
                 </ul>
             </div>
         </nav >
