@@ -16,7 +16,7 @@ const LocationImageGallery = ({ locationImages }) => {
 
     // Auto-scroll logic
     useEffect(() => {
-        if (!isMobile || isUserInteracting || !carouselRef.current) return;
+        if (!isMobile || !carouselRef.current) return;
 
         const carousel = carouselRef.current;
         const imageWidth = carousel.offsetWidth; // Width of one image (100% of container)
