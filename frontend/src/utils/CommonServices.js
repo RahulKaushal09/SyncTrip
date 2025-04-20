@@ -27,10 +27,10 @@ export const getLocationById = async (locationId) => {
     const found = locations.find(loc => loc._id === locationId);
     if (found) return found;
 
-    const res = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/getById`, {
-        method: 'POST',
+    const res = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/${locationId}`, {
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: locationId }),
+        // body: JSON.stringify({ id: locationId }),
     });
 
     if (!res.ok) throw new Error("Failed to fetch location");
