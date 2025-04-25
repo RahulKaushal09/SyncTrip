@@ -82,6 +82,16 @@ router.post('/google-complete', async (req, res) => {
     const { userId, phone } = req.body;
 
     try {
+        // check if no user have same phone number
+        const existingUser = await User
+            .findOne({
+
+                phone,
+            });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Phone number already in use' });
+        }
+
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });

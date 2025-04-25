@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../styles/popups/FullProfilePopup.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -23,8 +23,19 @@ export default function FullProfilePopup({ user, onClose, onProfileComplete }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [selectedLocationIds, setSelectedLocationIds] = useState([]);
-    const [locations, setLocations] = useState(fetchLocations(0, 100).locations);
-
+    const [locations, setLocations] = useState([]);
+    useEffect(() => {
+        const getLocations = async () => {
+            try {
+                const res = await fetchLocations(0, 100);
+                setLocations(res.locations || []);
+            } catch (err) {
+                console.error("Failed to fetch locations", err);
+                setLocations([]); // fallback to empty array
+            }
+        };
+        getLocations();
+    }, []);
     // Modified handleChange to support button toggles
     const handleChange = (e, field, value) => {
         if (e) {
