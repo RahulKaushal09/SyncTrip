@@ -9,7 +9,7 @@ export default function LoginPopup({ onClose, onLogin }) {
         email: '',
         phone: '',
         password: '',
-        sex: 'Male',
+        sex: '',
     });
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -31,6 +31,14 @@ export default function LoginPopup({ onClose, onLogin }) {
             }
             if (!form.phone) {
                 setError('Phone number is required for registration');
+                return false;
+            }
+            if (form.phone.length < 10) {
+                setError('Phone number must be at least 10 digits long');
+                return false;
+            }
+            else if (form.phone.length > 10) {
+                setError('Phone number must be at most 10 digits long');
                 return false;
             }
         }
@@ -146,6 +154,7 @@ export default function LoginPopup({ onClose, onLogin }) {
                                 value={form.sex}
                                 disabled={isLoading}
                             >
+                                <option value="" disabled>Please select your gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                                 <option value="Other">Other</option>
@@ -222,7 +231,7 @@ export default function LoginPopup({ onClose, onLogin }) {
                                 email: '',
                                 phone: '',
                                 password: '',
-                                sex: 'Male',
+                                sex: '',
                             });
                         }}
                         className="login-popup-toggle-btn"

@@ -156,7 +156,6 @@ const HotelsAndStaysSection = ({ hotelIds }) => {
                     onClick={() => setActiveHotelShow(10)}
                 >
                     Load More
-
                 </button>
             )}
             <hr></hr>

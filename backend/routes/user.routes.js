@@ -21,17 +21,23 @@ router.get("/", authenticateToken, async (req, res) => {
 // User Registration
 router.post('/basicRegistration', async (req, res) => {
     try {
-        const { name, email, phone, password, sex } = req.body;
+        var { name, email, phone, password, sex } = req.body;
         email = email.toLowerCase(); // Normalize email to lowercase
+        var userProfilePicture = "https://cdn-icons-png.flaticon.com/512/5951/5951752.png";
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ name, email, phone, password: hashedPassword, sex });
+        const existingUser = await User
+            .findOne({ $or: [{ email }, { phone }] })
+            .select('-password'); // Exclude password from the response
+        if (existingUser) {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+        const user = new User({ name, email, phone, password: hashedPassword, sex, profile_picture: userProfilePicture });
         await user.save();
-        const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-            // expiresIn: '100d',
-        });
+        const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
         res.status(200).json({ user, token: accessToken, message: 'User BasicEnrollment successfully' });
     } catch (error) {
+        console.error('Error in /basicRegistration:', error); // Debugging line
         res.status(500).json({ error });
     }
 });
