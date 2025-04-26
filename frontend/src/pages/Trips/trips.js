@@ -53,7 +53,12 @@ const Trips = () => {
                     body: JSON.stringify({ limit: 100 }),
                 });
 
-                if (!allTripsResponse.ok) throw new Error('Failed to fetch all trips');
+                if (
+                    allTripsResponse.status === 404
+                ) {
+                    setError('No trips found. Please check back later.');
+                    return;
+                } //throw new Error('Failed to fetch all trips');
                 const allTripsData = await allTripsResponse.json();
                 setTrips(allTripsData.trips);
 
@@ -135,11 +140,11 @@ const Trips = () => {
             {/* {isLoading ? ( */}
 
             {/* // <p className="status-message">Loading trips...</p> */}
-            {error ? (
+            {/* {error ? (
                 <p className="status-message error">{error}</p>
-            ) : (
-                <TripSection activeTab={activeTab} trips={filteredTrips} isLoading={isLoading} />
-            )}
+            ) : ( */}
+            <TripSection activeTab={activeTab} trips={filteredTrips} isLoading={isLoading} error={error} />
+            {/* )} */}
         </div>
     );
 };

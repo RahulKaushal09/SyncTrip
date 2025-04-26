@@ -53,6 +53,7 @@
     align-items: center;
     border: 2px solid black;
     border-radius: 50%;
+    color: black !important;
 }
 
 .preRegister-popup-body {

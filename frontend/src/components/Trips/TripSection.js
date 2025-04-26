@@ -3,7 +3,7 @@ import TripCard from './TripCard.js'; // Import the TripCard component from the 
 import "../../styles/trips/tripSection.css";
 import MainSearchBar from '../SearchPanel/MainSeachBar.js';
 import Loader from '../Loader/loader.js';
-const TripSection = ({ trips, activeTab, isLoading }) => {
+const TripSection = ({ trips, activeTab, isLoading, error }) => {
     const [searchTerm, setSearchTerm] = useState('');
     // Handle Search Input
 
@@ -20,27 +20,35 @@ const TripSection = ({ trips, activeTab, isLoading }) => {
                     Ready for your next adventure? Explore upcoming trips, sign up, and connect with fellow travelers before the journey begins!
                 </p>
             </div>
+
             <MainSearchBar searchTerm={searchTerm} setSearchTerm={handleSearchChange} searchBarPlaceHolder={"Search Trips"} />
-            {isLoading ? (
-                <div className="loader-container">
-                    <Loader setLoadingState={isLoading} TextToShow={"Loading trips"} />
-                </div>
+            {error ? (
+                <p className="status-message error">{error}</p>
             ) : (
-                <div>
-                    {/* Search Bar */}
+                <>
+                    {isLoading ? (
+                        <div className="loader-container">
+                            <Loader setLoadingState={isLoading} TextToShow={"Loading trips"} />
+                        </div>
+                    ) : (
+                        <div>
+                            {/* Search Bar */}
 
 
-                    {/* Trip Cards Grid */}
-                    <div className="tripSection-cards">
-                        {trips.length > 0 && trips
-                            .filter((trip) => new Date(trip.essentials.timeline.tillDate) > new Date())
-                            .map((trip, index) => (
-                                <TripCard key={index} trip={trip} activeTab={activeTab} />
-                            ))}
+                            {/* Trip Cards Grid */}
+                            <div className="tripSection-cards">
+                                {trips.length > 0 && trips
+                                    .filter((trip) => new Date(trip.essentials.timeline.tillDate) > new Date())
+                                    .map((trip, index) => (
+                                        <TripCard key={index} trip={trip} activeTab={activeTab} />
+                                    ))}
 
-                    </div>
-                    {trips.length === 0 && <p className="status-message">No trips available for this category.</p>}
-                </div>
+                            </div>
+                            {trips.length === 0 && <p className="status-message">No trips available for this category.</p>}
+                        </div>
+
+                    )}
+                </>
             )}
         </div>
     );
