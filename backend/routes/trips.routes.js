@@ -9,9 +9,7 @@ const authenticateToken = require('../middleware/middleware.js').authenticateTok
 // User Registration
 router.post('/getAllTrips', async (req, res) => {
     try {
-        const trips = await Trip.find({
-            peopleApplied: { $exists: true, $ne: [] }
-        }).populate({
+        const trips = await Trip.find({}).populate({
             path: 'peopleApplied',
             select: 'name profile_picture'
         });
@@ -24,6 +22,7 @@ router.post('/getAllTrips', async (req, res) => {
         today.setHours(0, 0, 0, 0); // Normalize to start of the day
 
         // Update statuses based on date
+
         for (let trip of trips) {
             const fromDate = new Date(trip.essentials.timeline.fromDate);
             const tillDate = new Date(trip.essentials.timeline.tillDate);
@@ -49,11 +48,14 @@ router.post('/getAllTrips', async (req, res) => {
         }
 
         // Construct response
-        const appliedUsers = trips.map(trip =>
-            trip.peopleApplied.map(user => ({
-                name: user.name,
-                profilePicture: user.profile_picture?.[0] || 'https://via.placeholder.com/40',
-            }))
+        const appliedUsers = trips.map(trip => {
+            if (trip.peopleApplied && trip.peopleApplied.length > 0) {
+                trip.peopleApplied.map(user => ({
+                    name: user.name,
+                    profilePicture: user.profile_picture?.[0] || 'https://via.placeholder.com/40',
+                }))
+            }
+        }
         );
 
         const response = {
