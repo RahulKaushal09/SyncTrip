@@ -150,13 +150,15 @@ const HotelsAndStaysSection = ({ hotelIds }) => {
                 )}
 
             </div>
-            <button
-                className='view-more-btn mt-5'
-                onClick={() => setActiveHotelShow(10)}
-            >
-                Load More
+            {hotels.length > 10 && (
+                <button
+                    className='view-more-btn mt-5'
+                    onClick={() => setActiveHotelShow(10)}
+                >
+                    Load More
 
-            </button>
+                </button>
+            )}
             <hr></hr>
         </div>
     );

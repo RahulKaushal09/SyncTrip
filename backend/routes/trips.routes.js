@@ -79,7 +79,7 @@ router.post('/getAllTrips', async (req, res) => {
 router.post('/addNewTrip', async (req, res) => {
     try {
 
-        const { title, locationId, MainImageUrl, itinerary, tripRating, requirements, essentials } = req.body;
+        const { title, locationId, MainImageUrl, itinerary, tripRating, requirements, essentials, selectedHotelId } = req.body;
         const trip = new Trip({
             title,
             locationId,
@@ -93,7 +93,8 @@ router.post('/addNewTrip', async (req, res) => {
             itinerary,
             tripRating,
             requirements,
-            essentials
+            essentials,
+            selectedHotelId
         });
         await trip.save();
         res.status(201).json({ message: 'Trip added successfully' });

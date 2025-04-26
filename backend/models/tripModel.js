@@ -64,7 +64,12 @@ const tripSchema = new mongoose.Schema({
         food: Boolean,
         hotel: Boolean
     },
-    peopleApplied: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+    peopleApplied: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    selectedHotelId: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Hotel'
+    }],
+
 });
 
 const Trip = mongoose.model('Trip', tripSchema);

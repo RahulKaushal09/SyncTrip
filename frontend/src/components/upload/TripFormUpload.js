@@ -4,13 +4,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+import HotelFormModal from './HotelFormModel'; // Assuming this is the correct path to your modal component
 // Define libraries for Google Maps API
 const libraries = ['places'];
 
 // Default map center (e.g., a fallback location like New York City)
 const DEFAULT_CENTER = { lat: 40.7128, long: -74.0060 };
 
-const SearchDropdown = ({ locations, setSelectedLocation }) => {
+const SearchDropdownLocation = ({ locations, setSelectedLocation }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [showLocationDropDowns, setShowLocationDropDowns] = useState(false);
 
@@ -58,6 +59,127 @@ const SearchDropdown = ({ locations, setSelectedLocation }) => {
                         <li className="dropdown-item text-muted">No results found</li>
                     )}
                 </ul>
+            )}
+        </div>
+    );
+};
+const SearchDropdownHotel = ({ locationId, selectedHotelId, setSelectedHotelId }) => {
+    const [hotels, setHotels] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedHotels, setSelectedHotels] = useState([]);
+
+    useEffect(() => {
+        console.log('Location ID:', locationId); // Log the locationId to check if it's being set correctly
+
+        const fetchHotels = async () => {
+            if (locationId) {
+                // /getallhotelsFromLocationId/:locationId
+                const res = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/hotels/getallhotelsFromLocationId/${locationId}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                if (!res.ok) {
+                    console.error('Failed to fetch hotels:', res.statusText);
+                    return;
+                }
+                const data = await res.json();
+                setHotels(data);
+            }
+        };
+        fetchHotels();
+    }, [locationId]);
+    useEffect(() => {
+        console.log('Selected Hotel IDs:', selectedHotelId); // Log the selected hotel IDs
+
+    }, [selectedHotelId]);
+
+    const filteredHotels = hotels.filter((hotel) =>
+        hotel.hotel_name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const handleSelect = (hotel) => {
+        setSelectedHotelId(hotel._id); // Set the selected hotel ID
+        setSelectedHotels((prevSelected) => {
+            if (!prevSelected.includes(hotel)) {
+                return [...prevSelected, hotel];
+            }
+            return prevSelected; // if already selected, don't add again
+        });
+        setSearchQuery(''); // Clear search box
+        setShowDropdown(false); // Hide dropdown
+    };
+
+    return (
+        <div className="mb-3 position-relative">
+            <label className="form-label">Hotels:</label>
+            <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setShowDropdown(true);
+                }}
+                className="form-control"
+                placeholder="Search for hotels"
+            />
+            {searchQuery && showDropdown && (
+                <ul className="dropdown-menu show w-100" style={{ position: 'absolute', zIndex: 1000 }}>
+                    {filteredHotels.length > 0 ? (
+                        filteredHotels.map((hotel) => (
+                            <li id={hotel._id} key={hotel._id} className="dropdown-item" onClick={() => handleSelect(hotel)}>
+                                {hotel.hotel_name}
+                            </li>
+                        ))
+                    ) : (
+                        <>
+                            <li className="dropdown-item text-muted">No hotels found</li>
+                            <li
+                                className="dropdown-item text-primary"
+                                onClick={() => {
+                                    setShowModal(true);
+                                    setShowDropdown(false);
+                                }}
+                            >
+                                + Create New Hotel
+                            </li>
+                        </>
+                    )}
+                </ul>
+            )}
+
+            {showModal && (
+                <HotelFormModal
+                    locationId={locationId}
+                    onClose={() => setShowModal(false)}
+                    onHotelAdded={(newHotelId) => {
+                        setSelectedHotelId([...selectedHotelId, newHotelId]);
+                        setShowModal(false);
+                    }}
+                />
+            )}
+            {selectedHotels.length > 0 && (
+                <div className="mt-2">
+                    <h5>Selected Hotels:</h5>
+                    <ul className="list-group">
+                        {selectedHotels.map((hotel) => (
+                            <li id={hotel._id} key={hotel._id} className="list-group-item d-flex justify-content-between align-items-center">
+                                {hotel.hotel_name}
+                                <button
+                                    className="btn btn-danger btn-sm"
+                                    onClick={() => {
+                                        setSelectedHotelId((prev) => prev.filter((id) => id !== hotel._id));
+                                        setSelectedHotels((prev) => prev.filter((h) => h._id !== hotel._id));
+                                    }}
+                                >
+                                    Remove
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+
+                </div>
             )}
         </div>
     );
@@ -127,6 +249,7 @@ const TripForm = () => {
             pickup: { name: '', mapLocation: DEFAULT_CENTER },
             dropPoint: { name: '', mapLocation: DEFAULT_CENTER },
         },
+        selectedHotelId: [], // Assuming this is an array of selected hotel IDs
     });
 
     const pickupRef = useRef(null);
@@ -225,6 +348,10 @@ const TripForm = () => {
             },
         }));
     };
+    useEffect(() => {
+        console.log("selectedHotelId", formData.selectedHotelId);
+    }, [formData.selectedHotelId]);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -282,6 +409,9 @@ const TripForm = () => {
                         pickup: { name: '', mapLocation: DEFAULT_CENTER },
                         dropPoint: { name: '', mapLocation: DEFAULT_CENTER },
                     },
+                    selectedHotelId: [
+                        // Assuming this is an array of selected hotel IDs
+                    ],
                 });
                 setPickupPosition(DEFAULT_CENTER);
                 setDropPosition(DEFAULT_CENTER);
@@ -294,7 +424,24 @@ const TripForm = () => {
             toast.error(`Failed to add trip: ${error.message}`);
         }
     };
+    const setSelectedHotelId = (id) => {
+        const prevSelected = formData.selectedHotelId;
 
+        if (prevSelected) {
+            if (!prevSelected.includes(id)) {
+                setFormData((prev) => ({
+                    ...prev,
+                    selectedHotelId: [...prev.selectedHotelId, id],
+                }));
+            }
+            else {
+                setFormData((prev) => ({
+                    ...prev,
+                    selectedHotelId: prev.selectedHotelId.filter((hotelId) => hotelId !== id),
+                }));
+            }
+        }
+    };
     // Memoize the map center to prevent unnecessary re-renders
     const pickupMapCenter = useMemo(() => pickupPosition, [pickupPosition]);
     const dropMapCenter = useMemo(() => dropPosition, [dropPosition]);
@@ -334,7 +481,7 @@ const TripForm = () => {
                         />
                     </div>
 
-                    <SearchDropdown
+                    <SearchDropdownLocation
                         locations={locations}
                         setSelectedLocation={(id) => setFormData({ ...formData, locationId: id })}
                     />
@@ -391,7 +538,7 @@ const TripForm = () => {
                             rows="3"
                         ></textarea>
                     </div>
-
+                    <SearchDropdownHotel locationId={formData.locationId} selectedHotelId={formData.selectedHotelId} setSelectedHotelId={setSelectedHotelId} />
                     <div className="mb-3">
                         <h3 className="text-start">Requirements</h3>
                         <label className="form-label">Age:</label>
