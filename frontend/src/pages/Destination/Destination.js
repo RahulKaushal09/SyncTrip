@@ -71,7 +71,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                             const cachedLocation = cachedLocations.find(loc => loc._id === locationId);
                             if (cachedLocation) {
                                 cachedLocation.title = extractTextFromHTML(
-                                    cachedLocation?.title?.replace(/[0-9. ]/g, '')
+                                    cachedLocation?.title?.replace(/[0-9.]/g, '')
                                 );
                                 setHotelids(cachedLocation?.hotels || []);
                                 setLocationData(cachedLocation);
@@ -91,7 +91,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                 if (!response.ok) throw new Error(`Failed to fetch location: ${response.statusText}`);
 
                 const location = await response.json();
-                location.title = extractTextFromHTML(location?.title?.replace(/[0-9. ]/g, ''));
+                location.title = extractTextFromHTML(location?.title?.replace(/[0-9.]/g, ''));
                 setHotelids(location?.hotels || []);
                 setLocationData(location);
 

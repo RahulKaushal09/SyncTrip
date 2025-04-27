@@ -28,7 +28,7 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
             setBtn2CTA(() => ctaAction);
         } else if (pageType == PageTypeEnum.TRIP) {
             var user = JSON.parse(localStorage.getItem("user"));
-            if (user && user?.profileCompleted != undefined && user?.profileCompleted == true) {
+            if (user && user?.profileCompleted !== undefined && user?.profileCompleted == true) {
                 setBtn2CTA(() => EnrollInTrip);
             }
             else {

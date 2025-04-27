@@ -56,7 +56,7 @@ const Navbar = ({ ctaAction, onLoginClick, user }) => {
                         {pageType == PageTypeEnum.TRIP && <li className="nav-item" style={{ cursor: "pointer" }} onClick={ctaAction}>
                             <span className="nav-link">Create Trip</span>
                         </li>}
-                        {pageType != PageTypeEnum.TRIP && <li className="nav-item" style={{ cursor: "pointer" }} onClick={() => window.location.href = "/trips"}>
+                        {pageType !== PageTypeEnum.TRIP && <li className="nav-item" style={{ cursor: "pointer" }} onClick={() => window.location.href = "/trips"}>
                             <span className="nav-link">Trips</span>
                         </li>
                         }

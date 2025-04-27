@@ -118,6 +118,7 @@ const HotelsAndStaysSection = ({ hotelIds }) => {
     // Sample image URLs (replace with actual hotel images)
     const [hotels, setHotels] = useState([]); // State to store fetched hotels
     const [activeHotelShow, setActiveHotelShow] = useState(4);
+    const [previousShowMore, setPreviousShowMore] = useState(4); // State to track the number of hotels shown
     useEffect(() => {
         const fetchHotels = async () => {
             if (!hotelIds || hotelIds.length === 0) return; // Avoid making a request if no hotelIds are available
@@ -150,10 +151,17 @@ const HotelsAndStaysSection = ({ hotelIds }) => {
                 )}
 
             </div>
-            {hotels.length > 10 && (
+            {hotels.length > 10 && previousShowMore < hotels.length && (
                 <button
                     className='view-more-btn mt-5'
-                    onClick={() => setActiveHotelShow(10)}
+                    onClick={() => {
+                        setActiveHotelShow(prev => prev + 6);
+                        setPreviousShowMore(activeHotelShow + 6);
+                        if (previousShowMore >= hotels.length) {
+                            setActiveHotelShow(hotels.length);
+                            setPreviousShowMore(hotels.length);
+                        }
+                    }}
                 >
                     Load More
                 </button>

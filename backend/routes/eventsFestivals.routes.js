@@ -62,7 +62,7 @@ router.post('/getEventsForLocation', async (req, res) => {
 
     try {
         // Fetch the location with its last update date from MongoDB
-        if (locationCode != "") {
+        if (locationCode !== "") {
 
             const locationDetails = await LocationWithEventsModel.findOne({ locationCode });
             if (locationDetails) {

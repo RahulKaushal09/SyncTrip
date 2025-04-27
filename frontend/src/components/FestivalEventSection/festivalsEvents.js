@@ -7673,8 +7673,23 @@ function GetLocationBlock({ fetchEvents, indianCities }) {
 	}, []);
 
 	const fetchLocations = (query) => {
-		if (query.length > 2) {
-			const filteredCities = indianCities.filter(city => city.locationName.toLowerCase().includes(query.toLowerCase()));
+		if (query.length > 1) {
+			const lowerQuery = query.toLowerCase();
+
+			const startsWith = [];
+			const includes = [];
+
+			indianCities.forEach(city => {
+				const name = city.locationName.toLowerCase();
+				if (name.startsWith(lowerQuery)) {
+					startsWith.push(city);
+				} else if (name.includes(lowerQuery)) {
+					includes.push(city);
+				}
+			});
+
+			const filteredCities = [...startsWith, ...includes];
+
 			setSuggestions(filteredCities);
 		} else {
 			setSuggestions([]);
@@ -7759,22 +7774,25 @@ const FestivalsEvents = () => {
 	// }, []);
 	const fetchEvents = async (city) => {
 		// const encodedCity = encodeURIComponent(city);
-		console.log("Fetching events for city:", city);
+		if (city !== undefined && city !== null) {
+			console.log("Fetching events for city:", city);
 
-		const res = await fetch(
-			`${process.env.REACT_APP_BACKEND_BASE_URL}/api/events/getEventsForLocation`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ locationName: city.locationName.split("-")[0], locationCode: city.locationCode ? city.locationCode : "" }),
-			}
-		);
-		const data = await res.json();
-		console.log("Events data:", data.events);
+			const res = await fetch(
+				`${process.env.REACT_APP_BACKEND_BASE_URL}/api/events/getEventsForLocation`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ locationName: city.locationName.split("-")[0], locationCode: city.locationCode ? city.locationCode : "" }),
+				}
+			);
+			const data = await res.json();
+			console.log("Events data:", data.events);
 
-		setEvents(data.events || []);
+			setEvents(data.events || []);
+		}
+
 	};
 
 

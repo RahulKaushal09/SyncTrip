@@ -51,6 +51,11 @@
     font-size: 1rem;
     color: #666;
     margin: 5px 0;
+    min-width: 67px;
+    max-width: 90px;
+    /* width: 90px; */
+    padding-left: 5px;
+    text-align: right;
 }
 
 .trip-info {

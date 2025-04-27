@@ -78,7 +78,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
             const location = await getLocationById(locationId);
 
             if (location) {
-                location.title = location?.title?.replace(/[0-9. ]/g, '');
+                location.title = location?.title?.replace(/[0-9.]/g, '');
                 location.title = extractTextFromHTML(location.title);
                 setHotelids(location?.hotels);
                 if (!location) {
@@ -138,7 +138,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                 const fromDate = new Date(Trip.essentials.timeline.fromDate);
                 setTripStatus(fromDate < today || Trip.requirements.status === 'completed' ? 'completed' : Trip.requirements.status);
                 // console.log('Raw API response:', Trip);
-                Trip.title = Trip?.title?.replace(/[0-9. ]/g, '');
+                Trip.title = Trip?.title?.replace(/[0-9.]/g, '');
                 Trip.title = extractTextFromHTML(Trip.title);
                 setTripsData(Trip);
                 setotherGoing(TripRes.appliedUsers);
@@ -229,7 +229,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                     ) : ("")}
                     <Discription pageType={pageType} shortDescription={TripsData?.itinerary || ""} fullDescription={TripsData?.itinerary || ""} bestTime={TripsData?.essentials.bestTime} />
                     <PlacesToVisitSection title={TripsData.title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
-                    {TripStatus && TripStatus != "completed" && <PlanTripDates onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} pageType={pageType} ctaAction={ctaAction} startDatePreTrip={TripsData?.essentials?.timeline?.fromDate} endDatePreTrip={TripsData?.essentials?.timeline?.tillDate} />}
+                    {TripStatus && TripStatus !== "completed" && <PlanTripDates onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} pageType={pageType} ctaAction={ctaAction} startDatePreTrip={TripsData?.essentials?.timeline?.fromDate} endDatePreTrip={TripsData?.essentials?.timeline?.tillDate} />}
                     <LocationMapSection latitude={locationData?.fullDetails?.coordinates?.lat} longitude={locationData?.fullDetails?.coordinates?.long} />
                     <HotelsAndStaysSection hotelIds={TripsData.selectedHotelId ? TripsData.selectedHotelId : hotelIds} />
                 </div>

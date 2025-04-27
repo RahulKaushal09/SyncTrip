@@ -15,7 +15,7 @@ const Discription = ({ pageType, shortDescription, fullDescription, bestTime }) 
 
     return (
         <div className="travel-info-container">
-            {pageType != PageTypeEnum.TRIP && <div className="info-grid" >
+            {pageType !== PageTypeEnum.TRIP && <div className="info-grid" >
                 <div className="essentials-section">
                     <h2 className='DescriptionHeading'>Essentials</h2>
                     <div className="essentials-item">

@@ -3,14 +3,14 @@ import '../../styles/LocationCard.css'; // Optional: You can create a CSS file f
 import { CiHeart } from "react-icons/ci";
 import { Carousel } from 'react-bootstrap';
 
-const LocationCard = ({ name, rating, places, bestTime, images, onClickFunction, Highlights }) => {
+const LocationCard = ({ name, rating, places, bestTime, images, onClickFunction, Highlights, inlineStyle, imageInlineStyle }) => {
     return (
-        <div className="location-card" >
+        <div className="location-card" style={inlineStyle}>
             <div className="card-image" >
                 <Carousel
                     interval={null} // Disable auto-play (no automatic scrolling)
-                    controls={true} // Show navigation arrows (manual scrolling via arrows)
-                    indicators={true} // Show indicators (dots by default)
+                    controls={images.length > 1 ? true : false} // Show navigation arrows (manual scrolling via arrows)
+                    indicators={images.length > 1 ? true : false} // Show indicators (dots by default)
                     wrap={true} // Allow wrapping around to the first slide after the last
 
                 >
@@ -21,7 +21,7 @@ const LocationCard = ({ name, rating, places, bestTime, images, onClickFunction,
                                     className="d-block" // Ensure the image takes full width
                                     src={image}
                                     alt={`${name} Landscape ${index + 1}`}
-                                    style={{ objectFit: 'cover' }} // Maintain aspect ratio and height
+                                    style={{ objectFit: 'cover', ...imageInlineStyle }}
                                 />
                             </Carousel.Item>
                         ))

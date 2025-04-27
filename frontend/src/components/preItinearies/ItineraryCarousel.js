@@ -150,7 +150,7 @@ const ItineraryCarousel = ({ locations }) => {
                         <div className="card-itinearyShow" style={cardStyles}>
                             <Link to={`/location/${itinerary._id}`} className="card-link">
                                 <ItineraryCard
-                                    name={itinerary.title.replace(/[0-9. ]/g, "")}
+                                    name={itinerary.title.replace(/[0-9.]/g, "")}
                                     imgSrc={itinerary.images?.length > 0
                                         ? itinerary.images[0] : ""}
                                     days={itinerary.days ? itinerary.days : "3 Days"}

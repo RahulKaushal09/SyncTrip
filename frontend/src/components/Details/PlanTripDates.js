@@ -20,7 +20,7 @@ const TripPlanner = ({ pageType, onLoginClick, EnrollInTrip, ctaAction, startDat
             setBtn2CTA(() => ctaAction);
         } else if (pageType == PageTypeEnum.TRIP) {
             var user = JSON.parse(localStorage.getItem("user"));
-            if (user && user?.profileCompleted != undefined && user?.profileCompleted == true) {
+            if (user && user?.profileCompleted !== undefined && user?.profileCompleted == true) {
                 setBtn2CTA(() => EnrollInTrip);
             }
             else {
@@ -66,7 +66,7 @@ const TripPlanner = ({ pageType, onLoginClick, EnrollInTrip, ctaAction, startDat
                     <strong>Let's plan your trip{' '}</strong>
 
                 </h2>
-                {pageType != PageTypeEnum.TRIP &&
+                {pageType !== PageTypeEnum.TRIP &&
                     <button className="clear-dates" onClick={clearDates}>
                         Clear Dates
                     </button>}

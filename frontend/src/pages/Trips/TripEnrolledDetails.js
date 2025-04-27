@@ -37,7 +37,7 @@ const EnrolledTripDetails = () => {
       const location = await getLocationById(locationId);
 
       if (location) {
-        location.title = location?.title?.replace(/[0-9. ]/g, '');
+        location.title = location?.title?.replace(/[0-9.]/g, '');
         location.title = extractTextFromHTML(location.title);
         setLocationData(location);
       } else {

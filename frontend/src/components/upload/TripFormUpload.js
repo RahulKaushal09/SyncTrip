@@ -28,7 +28,7 @@ const SearchDropdownLocation = ({ locations, setSelectedLocation }) => {
     );
 
     const handleSelectChange = (location) => {
-        setSearchQuery(location.title.replace(/[0-9. ]/g, '') || 'Unknown');
+        setSearchQuery(location.title.replace(/[0-9.]/g, '') || 'Unknown');
         setShowLocationDropDowns(false);
         setSelectedLocation(location._id);
     };
@@ -52,7 +52,7 @@ const SearchDropdownLocation = ({ locations, setSelectedLocation }) => {
                                 className="dropdown-item"
                                 onClick={() => handleSelectChange(location)}
                             >
-                                {location.title.replace(/[0-9. ]/g, '') || 'Unknown'}
+                                {location.title.replace(/[0-9.]/g, '') || 'Unknown'}
                             </li>
                         ))
                     ) : (

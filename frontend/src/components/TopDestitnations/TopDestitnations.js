@@ -25,7 +25,7 @@ const TopDestitnations = ({ locations }) => {
                 {locations.slice(0, visibleCount).map((location, index) => (
                     <LocationCard
                         key={index}
-                        name={location.title?.replace(/[0-9. ]/g, '') || 'Unknown'} // Safely handle null/undefined title
+                        name={location.title?.replace(/[0-9.]/g, '') || 'Unknown'} // Safely handle null/undefined title
                         rating={location.rating || 'N/A'} // Safely handle null/undefined rating
                         places={location.placesNumberToVisit || "0"} // Safely extract places
                         bestTime={location.best_time || 'N/A'} // Safely handle null/undefined best_time

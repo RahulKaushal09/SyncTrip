@@ -24,29 +24,40 @@ const Home = ({ ctaAction, locations, locationsForPreMadeItinerary, setLocations
     // Memoized Filtered Locations
     const filteredLocations = useMemo(() => {
         if (locations !== undefined) {
-            const localFiltered = locations.filter((location) =>
-                location.title?.toLowerCase().includes(searchTerm.toLowerCase())
-            );
+            const lowerSearch = searchTerm.toLowerCase();
 
-            // If we found matches or search is empty, return immediately
+            const startsWith = [];
+            const includes = [];
+
+            locations.forEach((location) => {
+                const title = location.title?.toLowerCase() || "";
+                if (title.startsWith(lowerSearch)) {
+                    startsWith.push(location);
+                } else if (title.includes(lowerSearch)) {
+                    includes.push(location);
+                }
+            });
+
+            const localFiltered = [...startsWith, ...includes];
+
             if (searchTerm === "" || localFiltered.length > 0 || hasFetchedAll) {
                 return localFiltered;
             }
 
-            // Fetch all locations if not already done (but async!)
             if (!searching) {
                 (async () => {
                     try {
                         setSearching(true);
-                        const result = await AllfetchLocations(); // Returns { locations: [...] }
+                        const result = await AllfetchLocations();
                         const all = Array.isArray(result?.locations) ? result.locations : Array.isArray(result) ? result : [];
-                        // Merge only new locations (by _id)
+
                         const merged = [...locations];
                         all.forEach(loc => {
                             if (!merged.some(existing => existing._id === loc._id)) {
                                 merged.push(loc);
                             }
                         });
+
                         console.log("Fetched all locations:", merged.length);
                         console.log("Merged locations:", merged);
 
@@ -57,9 +68,8 @@ const Home = ({ ctaAction, locations, locationsForPreMadeItinerary, setLocations
                         console.error("Error fetching all locations:", error);
                     }
                 })();
-
-                // Temporarily show what we have until async fetch completes
             }
+
             return localFiltered;
         }
         return [];

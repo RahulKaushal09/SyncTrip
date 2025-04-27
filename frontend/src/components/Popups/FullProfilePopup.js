@@ -218,7 +218,7 @@ export default function FullProfilePopup({ user, onClose, onProfileComplete }) {
                                                     }`}
                                                 onClick={() => handleDestinationSelect(dest)}
                                             >
-                                                {dest.title.replace(/[0-9. ]/g, "")}
+                                                {dest.title.replace(/[0-9.]/g, "")}
                                             </div>)
                                         ))
                                     ) : (
@@ -229,7 +229,7 @@ export default function FullProfilePopup({ user, onClose, onProfileComplete }) {
                             <div className="full-profile-selected-destinations">
                                 {selectedTitles.map((title) => (
                                     <span key={title} className="full-profile-selected-tag">
-                                        {title.replace(/[0-9. ]/g, "")}
+                                        {title.replace(/[0-9.]/g, "")}
                                         <button
                                             type="button"
                                             className="full-profile-remove-tag"

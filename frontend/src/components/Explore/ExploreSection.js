@@ -80,7 +80,7 @@ const ExploreSection = ({ locations, isLoading, handleShowMoreClick, searching, 
                     <LocationCard
 
                         key={location._id || index}
-                        name={location.title?.replace(/[0-9. ]/g, '') || 'Unknown'}
+                        name={location.title?.replace(/[0-9.]/g, '') || 'Unknown'}
                         rating={location.rating || 'N/A'}
                         places={location.placesNumberToVisit}
                         bestTime={convertLongBestTimeNameToShortNotations(location.best_time) || 'N/A'}
@@ -95,7 +95,7 @@ const ExploreSection = ({ locations, isLoading, handleShowMoreClick, searching, 
                     />
                 ))}
             </div>
-            {locations.length != 100 && showMoreButtonToShow && (
+            {locations.length !== 100 && showMoreButtonToShow && (
                 <div style={{ textAlign: 'center', margin: '20px 0' }}>
                     <button
                         className="btn btn-black"
