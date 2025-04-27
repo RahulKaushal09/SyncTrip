@@ -14,8 +14,8 @@ const LocationEventsDetails = ({ type, location, name, rating, country, title, a
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: `Trip to ${title}`,      // dynamic trip title
-                    text: `Check out this amazing trip: ${title}` + type !== "Explore" ? ` in ${location}!` : ``, // custom text for the share
+                    title: type !== "Explore" ? `Trip to ${title}` : `Explore this Destination`,      // dynamic trip title
+                    text: type !== "Explore" ? `Check out this amazing trip: ${title}` : `Check out this amazing Destination`, // custom text for the share
                     url: window.location.href,  // current page URL
                 });
             } catch (error) {
