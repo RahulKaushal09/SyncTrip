@@ -173,8 +173,8 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     return (
         <div className="DestinationPage">
             <LocationEventsDetails
-                type="Explore"
-                location={TripsData.title || 'Unknown Location'}
+                type="Trip"
+                location={locationData?.title || 'Unknown Location'}
                 title={TripsData.title || 'Destination'}
                 rating={locationData?.rating || 'N/A'}
                 country={locationData?.country || 'India'}

@@ -106,7 +106,7 @@ router.post('/addNewTrip', async (req, res) => {
 // Get User Profile
 router.get('/:id', async (req, res) => {
     try {
-        console.log("Fetching trip with ID:", req.params.id);  // Log the trip ID for debugging
+        // console.log("Fetching trip with ID:", req.params.id);  // Log the trip ID for debugging
         const trip = await Trip.findById(req.params.id).populate({
             path: 'peopleApplied',
             select: 'name profile_picture dateOfBirth rating persona', // Select fields to return

@@ -194,9 +194,9 @@ const EnrolledTripDetails = () => {
 
       <section className="location-section">
         <LocationEventsDetails
-          type="Explore"
-          location={locationData?.title || trip.title || 'Unknown Location'}
-          title={locationData?.title || trip.title || 'Destination'}
+          type="TripEnrolled"
+          location={locationData?.title || 'Unknown Location'}
+          title={trip?.title || 'Destination'}
           rating={locationData?.rating || 'N/A'}
           country={locationData?.country || 'India'}
         />

@@ -83,7 +83,13 @@ const TripCard = ({ trip, activeTab }) => {
   }
 
   // Format dates for display
-  const formatDate = (date) => date ? new Date(date).toLocaleDateString() : 'N/A';
+  // const formatDate = (date) => date ? new Date(date).toLocaleDateString(). : 'N/A';
+  // formate date in decryptData/mm/yyy
+  const formatDate = (date) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDate = new Date(date).toLocaleDateString('en-GB', options);
+    return formattedDate;//.split('/').reverse().join('/'); // Convert to dd/mm/yyyy format
+  };
 
   const availableSpots = 5;
 

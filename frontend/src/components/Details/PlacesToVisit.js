@@ -10,6 +10,7 @@ const PlacesToVisitSection = ({ title, placesIds }) => {
     const [activeHotelShow, setActiveHotelShow] = useState(6);
     const [previousShowMore, setPreviousShowMore] = useState(6); // State to track the number of hotels shown
     const [places, setPlaces] = useState([]); // State to store fetched places
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768); // State to track if the screen is mobile
     useEffect(() => {
         const fetchPlaces = async () => {
             if (!placesIds || placesIds.length === 0) return; // Avoid making a request if no placesIds are available
@@ -40,7 +41,7 @@ const PlacesToVisitSection = ({ title, placesIds }) => {
             <h2 className='DescriptionHeading'><strong>Other Places To Visit  in {title?.replace(/[0-9.]/g, '')}</strong></h2>
             <div className="placesToVisitGrid">
                 {places.slice(0, activeHotelShow).map((placesToVisit, index) => (
-                    <LocationCard name={placesToVisit.title} rating={placesToVisit.rating} images={placesToVisit.image} inlineStyle={{ width: '260px ' }} imageInlineStyle={{ width: '260px ', height: '260px' }} />
+                    <LocationCard name={placesToVisit.title} rating={placesToVisit.rating} images={placesToVisit.image} inlineStyle={{ width: isMobile ? "350px" : "260px" }} imageInlineStyle={{ width: isMobile ? "350px" : "260px" }} />
                 )
                     // <HotelCard key={index} imageUrl={image} />
                 )}
