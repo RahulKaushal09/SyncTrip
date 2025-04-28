@@ -27,7 +27,8 @@ const UserSchema = new mongoose.Schema({
             {
                 userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
                 status: { type: Number, enum: [-1, 0, 1], required: true },// considering -1 => incoming request 0 => matched 1 => requested to the user
-                chatHistoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'ChatHistory' },
+                // chatHistoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'ChatHistory' },
+                chatHistoryId: { type: mongoose.Schema.Types.ObjectId, ref: "Chat" }, // References Chat model
             }
         ]
     }],
