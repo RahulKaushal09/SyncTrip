@@ -106,6 +106,8 @@ const eventsLocationRoutes = require('./routes/eventsFestivals.routes');
 const authRoutes = require('./routes/auth.routes');
 const chatRoutes = require('./routes/chats.routes');
 const messageRoutes = require('./routes/message.routes');
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // Route setup
 app.use('/api/locations', locationRoutes);
