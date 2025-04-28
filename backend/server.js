@@ -13,7 +13,7 @@ const server = http.createServer(app);
 
 // Load environment variables
 dotenv.config();
-const environment = process.env.NODE_ENV || 'development';
+const environment = process.env.NODE_ENV || 'production';
 console.log({ environment });
 
 // Database configuration
@@ -73,27 +73,27 @@ app.use((req, res, next) => {
 });
 
 // Socket.IO events
-io.on('connection', (socket) => {
-    console.log('User connected:', socket.id);
+// io.on('connection', (socket) => {
+//     console.log('User connected:', socket.id);
 
-    // Join a chat room
-    socket.on('join_chat', (chatId) => {
-        socket.join(chatId);
-        console.log(`User ${socket.id} joined chat ${chatId}`);
-    });
+//     // Join a chat room
+//     socket.on('join_chat', (chatId) => {
+//         socket.join(chatId);
+//         console.log(`User ${socket.id} joined chat ${chatId}`);
+//     });
 
-    socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
-    });
-});
+//     socket.on('disconnect', () => {
+//         console.log('User disconnected:', socket.id);
+//     });
+// });
 
 // -----------------> Routes <-----------------------------------//
 // Request timestamp logging for /api/locations (kept as is)
-app.use('/api/locations', (req, res, next) => {
-    req.requestStartTime = Date.now();
-    console.log(`➡️ Request started at: ${new Date(req.requestStartTime).toISOString()}`);
-    next();
-});
+// app.use('/api/locations', (req, res, next) => {
+//     req.requestStartTime = Date.now();
+//     console.log(`➡️ Request started at: ${new Date(req.requestStartTime).toISOString()}`);
+//     next();
+// });
 
 // Route imports
 const locationRoutes = require('./routes/location.routes');

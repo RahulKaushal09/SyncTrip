@@ -10,7 +10,7 @@ const Loader = ({ setLoadingState, TextToShow }) => {
     }
         , [setLoadingState]);
     return (
-        <div>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             {isLoading &&
                 <div id="wifi-loader">
                     <svg class="circle-outer" viewBox="0 0 86 86">

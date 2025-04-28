@@ -6,7 +6,7 @@ import '../../styles/AddLocationCard.css';
 import { FaLeaf, FaBars, FaPlane } from "react-icons/fa";
 // improt enum class 
 import { PageTypeEnum } from '../../utils/pageType';  // adjust path as needed
-const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage }) => {
+const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage, alreadyEnrolled }) => {
     const [activeIcon, setActiveIcon] = useState(0);
     const [btn2Text, setBtn2Text] = useState("");
     const [btn2CTA, setBtn2CTA] = useState(() => ctaAction);
@@ -50,7 +50,12 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
         if (pageType == PageTypeEnum.LOCATION) {
             setBtn2Text("Create a Trip →");
         } else if (pageType == PageTypeEnum.TRIP) {
-            setBtn2Text("Join Trip");
+            if (alreadyEnrolled) {
+                setBtn2Text("Trip Updates");
+            }
+            else {
+                setBtn2Text("Join Trip");
+            }
         } else {
             setBtn2Text("Create a Trip →");
         }

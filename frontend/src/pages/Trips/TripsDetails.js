@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { getLocationById } from '../../utils/CommonServices.js';
 import { ProfileCardEnum } from '../../utils/EnumClasses.js';
 import toast from 'react-hot-toast';
+import Loader from '../../components/Loader/loader.js';
 const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
     const [locationData, setLocationData] = useState(null);
@@ -26,14 +27,22 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [pageType, setPageType] = useState(null);
     const [tripData, setTripData] = useState(null);
     const [TripStatus, setTripStatus] = useState(null);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+    const [alreadyEnrolled, setAlreadyEnrolled] = useState(false);
     const navigate = useNavigate();
 
     const EnrollInTrip = async () => {
 
         // Check if user is logged in and profile is complete
-        const user = JSON.parse(localStorage.getItem("user"));
+        // const user = JSON.parse(localStorage.getItem("user"));
+        setUser(JSON.parse(localStorage.getItem("user")));
         const userToken = localStorage.getItem("userToken"); // Assuming this is where the token is stored
-
+        console.log('User token:', user);
+        if (alreadyEnrolled) {
+            toast.success("You are already enrolled in this trip.");
+            navigate(`/trips/en/${tripId}`); // Redirect to the trip details page
+            return;
+        }
         if (user && user?.profileCompleted !== undefined && user.profileCompleted === true && userToken) {
             const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/enroll/${tripId}`;
             // console.log('Fetching from:', url);
@@ -66,6 +75,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
         } else {
             // console.log('User not logged in or profile incomplete');
             onLoginClick(); // Trigger login popup
+
         }
     };
 
@@ -142,6 +152,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                 Trip.title = extractTextFromHTML(Trip.title);
                 setTripsData(Trip);
                 setotherGoing(TripRes.appliedUsers);
+                setAlreadyEnrolled(TripRes.appliedUsers.map(user => user._id).includes(user._id));
                 fetchLocationDetails(Trip.locationId);
             } catch (err) {
                 console.error('Fetch error:', err.message);
@@ -163,7 +174,8 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
 
 
     if (!locationData) {
-        return <p>Loading...</p>; // Or any placeholder UI
+        return <Loader setLoadingState={handleIsLoading} TextToShow={"Loading Trip Details"} />;
+
     }
     else {
         // console.log("locationData:", locationData);
@@ -181,7 +193,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
             />
             <LocationImageGallery locationImages={locationData?.photos} />
 
-            {isMobile && <AddLocationCard showBtns={TripStatus && TripStatus === "completed" ? false : true} pageType={pageType} onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} btnsStyle={{ width: "100%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} title={TripsData.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={TripsData?.essentials.bestTime} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} />}
+            {isMobile && <AddLocationCard showBtns={TripStatus && TripStatus === "completed" ? false : true} pageType={pageType} onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} btnsStyle={{ width: "100%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} title={TripsData.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={TripsData?.essentials.bestTime} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} alreadyEnrolled={alreadyEnrolled} />}
 
             <div className="row" style={{ position: 'relative' }}>
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
@@ -244,6 +256,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                             }}
                         >
                             <AddLocationCard
+                                alreadyEnrolled={alreadyEnrolled}
                                 showBtns={TripStatus && TripStatus === "completed" ? false : true}
                                 pageType={pageType}
                                 EnrollInTrip={EnrollInTrip}

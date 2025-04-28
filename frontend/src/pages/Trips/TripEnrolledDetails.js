@@ -11,6 +11,7 @@ import { ProfileCardEnum } from '../../utils/EnumClasses.js';
 import { getLocationById } from '../../utils/CommonServices.js';
 import { extractTextFromHTML } from '../../utils/htmlRelatedServices.js'; // Adjust the import path as needed
 import toast from 'react-hot-toast';
+import Loader from '../../components/Loader/loader.js';
 const EnrolledTripDetails = () => {
   const { tripId } = useParams();
   const navigate = useNavigate();
@@ -71,9 +72,24 @@ const EnrolledTripDetails = () => {
         });
 
         if (!response.ok) {
-          if (response.status === 404) throw new Error('Trip not found');
-          if (response.status === 401) throw new Error('Unauthorized access');
-          throw new Error('Failed to fetch trip details');
+          if (response.status === 404) {
+            toast.error('Trip not found.');
+            navigate('/trips');
+            return;
+          }
+          if (response.status === 401) {
+            toast.error('Unauthorized access. Please log in again.');
+            navigate('/home');
+            return;
+          }
+          if (response.status === 403) {
+            toast.error('Please Enroll in the trip to view details');
+            navigate(`/trips/${tripId}`);
+            return;
+          }
+          toast.error('Failed to fetch trip details. Please try again later.');
+          navigate(`/trips/${tripId}`);
+          return;
         }
 
         const data = await response.json();
@@ -173,7 +189,7 @@ const EnrolledTripDetails = () => {
     console.log(`View chat with user ${userId} for trip ${tripId}`);
     // Implement navigation or chat opening logic here
   };
-  if (isLoading) return <div className="status-message loading">Loading trip details...</div>;
+  if (isLoading) return <Loader setLoadingState={isLoading} TextToShow="Loading Trip Details..." />;
   if (error) return <div className="status-message error">{error}</div>;
   if (!trip) return <div className="status-message">Trip not found</div>;
 
@@ -414,7 +430,7 @@ const EnrolledTripDetails = () => {
         </div>
       </section>
       <PlacesToVisitSection title={trip?.title} placesIds={locationData?.placesToVisit} />
-      <HotelsAndStaysSection hotelIds={locationData?.hotels} />
+      <HotelsAndStaysSection hotelIds={trip.selectedHotelId ? trip.selectedHotelId : locationData?.hotels} />
     </div>
   );
 };

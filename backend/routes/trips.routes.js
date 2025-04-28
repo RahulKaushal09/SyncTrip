@@ -154,7 +154,10 @@ router.get('/enrolled/:id', authenticateToken, async (req, res) => {
         if (!trip) {
             return res.status(404).json({ error: 'Trip not found' });
         }
-
+        // if peopleApplied doesnot have current user then send 403 
+        if (!trip.peopleApplied.some(user => user._id.toString() === userId)) {
+            return res.status(403).json({ error: 'User not enrolled in this trip' });
+        }
         // Find the current user's friendship list for this trip
         const userTripFriends = currentUser.friends.find(
             f => f.tripId.toString() === tripId
@@ -202,6 +205,7 @@ router.get('/enrolled/:id', authenticateToken, async (req, res) => {
             include: trip.include,
             locationId: trip.locationId,
             peopleApplied: appliedUsers,
+            selectedHotelId: trip.selectedHotelId,
         };
 
         res.json(response);
