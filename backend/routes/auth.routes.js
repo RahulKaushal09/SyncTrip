@@ -3,31 +3,51 @@ const router = express.Router();
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel.js'); // Adjust the path as necessary
+const supabase = require('../config/supabaseClient.js'); // Import supabase client
+
 const multer = require('multer'); // For handling file uploads
-const path = require('path');
-const fs = require('fs'); // Add fs module for file system operations
+// const path = require('path');
+// const fs = require('fs'); // Add fs module for file system operations
+// const { log } = require('console');
 // Google OAuth Client
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-const uploadDir = path.join(__dirname, '../uploads'); // Adjust path based on your project structure
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true }); // Create folder if it doesn't exist
-}
-// Multer setup for file uploads
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDir); // Use absolute path
+// const uploadDir = path.join(__dirname, '../uploads'); // Adjust path based on your project structure
+
+// if (!fs.existsSync(uploadDir)) {
+//     fs.mkdirSync(uploadDir, { recursive: true }); // Create folder if it doesn't exist
+// }
+// // Multer setup for file uploads
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, uploadDir); // Use absolute path
+//     },
+//     filename: (req, file, cb) => {
+//         const userId = req.user.id; // From authenticateToken middleware
+//         const timestamp = Date.now();
+//         const ext = path.extname(file.originalname); // Get file extension
+//         cb(null, `${userId}_${timestamp}${ext}`); // Format: userId_time.ext
+//     },
+// });
+const upload = multer({
+    storage: multer.memoryStorage(), // Store files in memory
+    limits: {
+        fileSize: 5 * 1024 * 1024, // Limit file size to 5MB
+        files: 1, // Limit to 1 file
+        fields: 20, // Limit number of non-file fields
     },
-    filename: (req, file, cb) => {
-        const userId = req.user.id; // From authenticateToken middleware
-        const timestamp = Date.now();
-        const ext = path.extname(file.originalname); // Get file extension
-        cb(null, `${userId}_${timestamp}${ext}`); // Format: userId_time.ext
+    fileFilter: (req, file, cb) => {
+        // Ensure only images are allowed
+        if (!file.mimetype.startsWith('image/')) {
+            return cb(new Error('Only image files are allowed'), false);
+        }
+        cb(null, true);
     },
-});
-const upload = multer({ storage });
+}).fields([{ name: 'profilePicture', maxCount: 1 }]); // Expect 'profilePicture' field
+// const upload = multer({ storage });
 
 // Middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
+
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
     if (!token) return res.status(401).json({ message: 'No token provided' });
@@ -66,9 +86,7 @@ router.post('/google-login', async (req, res) => {
             await user.save();
         }
 
-        const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-            expiresIn: '7d',
-        });
+        const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
         res.status(200).json({ user, token: accessToken });
     } catch (err) {
@@ -78,7 +96,7 @@ router.post('/google-login', async (req, res) => {
 });
 
 // Google Complete Route (Phone Number)
-router.post('/google-complete', async (req, res) => {
+router.post('/google-complete', authenticateToken, async (req, res) => {
     const { userId, phone } = req.body;
 
     try {
@@ -108,7 +126,7 @@ router.post('/google-complete', async (req, res) => {
 });
 
 // Complete Profile Route
-router.post('/complete-profile', authenticateToken, upload.single('profilePicture'), async (req, res) => {
+router.post('/complete-profile', authenticateToken, upload, async (req, res) => {
     const userId = req.user.id;
     const {
         travelStyles,
@@ -124,7 +142,6 @@ router.post('/complete-profile', authenticateToken, upload.single('profilePictur
         languages,
         dateOfBirth, // New field
     } = req.body;
-
     try {
         const user = await User.findById(userId);
         if (!user) {
@@ -137,10 +154,47 @@ router.post('/complete-profile', authenticateToken, upload.single('profilePictur
             ...(travelerType ? JSON.parse(travelerType) : []),
         ];
         user.preferred_destinations = preferredDestinations ? JSON.parse(preferredDestinations) : [];
-        if (req.file) {
-            const BACKEND_URL = process.env.BACKEND_URL || 'https://synctrip-backend.vercel.app/';
-            const pictureURL = `${BACKEND_URL}uploads/${req.file.filename}`;
-            user.profile_picture.unshift(pictureURL);
+
+        // If file is uploaded, save it to Supabase
+        if (req.files && req.files.profilePicture) {
+            // Check if the file is an image
+            const fileType = req.files.profilePicture[0].mimetype.split('/')[0];
+            if (fileType !== 'image') {
+                return res.status(400).json({ message: 'Only image files are allowed' });
+            }
+            // Check if the file size is less than 5MB
+            const fileSize = req.files.profilePicture[0].size; // Size in bytes
+            if (fileSize > 5 * 1024 * 1024) { // 5MB in bytes
+                return res.status(400).json({ message: 'File size exceeds 5MB' });
+            }
+
+            const file = req.files.profilePicture[0];  // Assuming file is in the `profilePicture` field
+            const ext = file.originalname.split('.').pop();
+            const fileName = `${userId}_${Date.now()}.${ext}`;
+
+            const { data, error } = await supabase.storage
+                .from('profile-pictures')
+                .upload(fileName, file.buffer, {
+                    contentType: file.mimetype,
+                    upsert: true,
+                });
+            console.log('File uploaded:', data, 'Error:', error); // Debugging line
+
+            if (error) {
+                console.error('Error uploading to Supabase:', error);
+                return res.status(500).json({ error: 'Error uploading file to Supabase' });
+            }
+
+            // Get the public URL
+            const { data: publicUrlData } = supabase.storage
+                .from('profile-pictures')
+                .getPublicUrl(fileName);
+            console.log('Public URL:', publicUrlData); // Debugging line
+            if (!publicUrlData) {
+                return res.status(500).json({ error: 'Error getting public URL' });
+            }
+            // Save the public URL
+            user.profile_picture.unshift(publicUrlData.publicUrl);
         }
         user.showProfile = showProfile === 'true';
         user.socialMedias.instagram = instagram || '';
@@ -152,7 +206,7 @@ router.post('/complete-profile', authenticateToken, upload.single('profilePictur
 
         // Mark profile as completed
         user.profileCompleted = true;
-
+        // console.log(user);
         await user.save();
 
         // Return user with calculated age

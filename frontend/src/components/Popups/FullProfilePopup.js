@@ -64,6 +64,8 @@ export default function FullProfilePopup({ user, onClose, onProfileComplete }) {
     };
 
     const handleDestinationSelect = (dest) => {
+        console.log(dest._id, selectedLocationIds);
+
         setSelectedLocationIds((prev) => {
             if (prev.includes(dest._id)) {
                 return prev.filter((id) => id !== dest._id);
@@ -182,7 +184,7 @@ export default function FullProfilePopup({ user, onClose, onProfileComplete }) {
                             id="dateOfBirth"
                             selected={form.dateOfBirth ? new Date(form.dateOfBirth) : null}
                             onChange={(date) =>
-                                setForm((prev) => ({ ...prev, dateOfBirth: date.toISOString().split('T')[0] }))
+                                setForm((prev) => ({ ...prev, dateOfBirth: date.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }) }))
                             }
                             className="full-profile-input dob-input"
                             dateFormat="dd-MM-yyyy"
@@ -210,17 +212,20 @@ export default function FullProfilePopup({ user, onClose, onProfileComplete }) {
                             />
                             {isDropdownOpen && (
                                 <div className="full-profile-dropdown">
-                                    {filteredLocations.length > 0 ? (
-                                        filteredLocations.map((dest) => (
-                                            (!selectedLocationIds.includes(dest._id) && <div
-                                                key={dest._id}
-                                                className={`full-profile-dropdown-item ${selectedLocationIds.includes(dest._id) ? 'selected' : ''
-                                                    }`}
-                                                onClick={() => handleDestinationSelect(dest)}
-                                            >
-                                                {dest.title.replace(/[0-9.]/g, "")}
-                                            </div>)
-                                        ))
+                                    {filteredLocations.filter(dest => !selectedLocationIds.includes(dest._id)).length > 0 ? (
+                                        filteredLocations.map((dest) =>
+                                            !selectedLocationIds.includes(dest._id) && (
+                                                <div
+                                                    key={dest._id}
+                                                    className="full-profile-dropdown-item"
+                                                    // onClick={() => handleDestinationSelect(dest)}
+                                                    onMouseDown={() => handleDestinationSelect(dest)} // <--- changed from onClick
+
+                                                >
+                                                    {dest.title.replace(/[0-9.]/g, "")}
+                                                </div>
+                                            )
+                                        )
                                     ) : (
                                         <div className="full-profile-dropdown-item disabled">No matches found</div>
                                     )}
@@ -237,6 +242,7 @@ export default function FullProfilePopup({ user, onClose, onProfileComplete }) {
                                                 const destId = locations.find((loc) => loc.title === title)._id;
                                                 setSelectedLocationIds((prev) => prev.filter((id) => id !== destId));
                                             }}
+
                                         >
                                             ×
                                         </button>

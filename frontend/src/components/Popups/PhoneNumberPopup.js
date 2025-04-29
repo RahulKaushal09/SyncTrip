@@ -9,7 +9,10 @@ export default function PhoneNumberPopup({ user, onClose, onPhoneSubmit }) {
         try {
             const res = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/auth/google-complete`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('userToken')}`,
+                },
                 body: JSON.stringify({ userId: user._id, phone }),
             });
             const data = await res.json();
