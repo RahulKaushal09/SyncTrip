@@ -94,7 +94,8 @@ router.post('/addNewTrip', async (req, res) => {
             tripRating,
             requirements,
             essentials,
-            selectedHotelId
+            selectedHotelId,
+            availableSeats: essentials.availableSeats,
         });
         await trip.save();
         res.status(201).json({ message: 'Trip added successfully' });
@@ -302,7 +303,7 @@ router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
         // Update Trip
         trip.peopleApplied.push(userId);
         trip.numberOfPeopleApplied = (trip.numberOfPeopleApplied || 0) + 1;
-
+        trip.essentials.availableSeats = (trip.essentials.availableSeats || 10) - 1; // Decrease available seats
         // Update User
         user.trips.push({
             status: 'ongoing', // Or 'scheduled' based on trip status

@@ -17,6 +17,7 @@ const tripSchema = new mongoose.Schema({
 
     essentials: {
         region: String,
+        availableSeats: Number,
         duration: String,
         bestTime: String,
         timeline: {

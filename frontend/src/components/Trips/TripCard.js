@@ -7,12 +7,15 @@ import { CiHeart } from "react-icons/ci";
 import { Carousel } from 'react-bootstrap';
 import { FaRupeeSign } from 'react-icons/fa';
 const TripCard = ({ trip, activeTab }) => {
+  var availableSpots = 5;
+
   const {
     _id,
     title,
     MainImageUrl,
     tripRating,
     essentials: {
+      availableSeats,
       duration,
       bestTime,
       timeline: {
@@ -86,12 +89,14 @@ const TripCard = ({ trip, activeTab }) => {
   // const formatDate = (date) => date ? new Date(date).toLocaleDateString(). : 'N/A';
   // formate date in decryptData/mm/yyy
   const formatDate = (date) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    const formattedDate = new Date(date).toLocaleDateString('en-GB', options);
-    return formattedDate;//.split('/').reverse().join('/'); // Convert to dd/mm/yyyy format
+    const d = new Date(date);
+    const day = d.getDate(); // 1-31
+    const year = d.getFullYear(); // 2025
+    const monthName = d.toLocaleString('en-GB', { month: 'long' }); // "April"
+
+    return `${day} ${monthName}, ${year}`;
   };
 
-  const availableSpots = 5;
 
   return (
     <div className="location-card">
@@ -124,7 +129,7 @@ const TripCard = ({ trip, activeTab }) => {
           <p className='dayNights-font'>{duration}</p>
           <p className='otherDetails-font'>Dates: {formatDate(fromDate)} - {formatDate(tillDate)}</p>
           <p className='otherDetails-font'>Price: {price}</p>
-          {activeTab !== 'history' && <p className='otherDetails-font'>Available Spots: <span style={{ color: '#dc3545', fontWeight: 'bold' }}>{availableSpots} Left</span></p>}
+          {activeTab !== 'history' && <p className='otherDetails-font'>Available Spots: <span style={{ color: '#dc3545', fontWeight: 'bold' }}>{availableSeats ? availableSeats : availableSpots} Left</span></p>}
           <p className='otherDetails-font'>Includes: <span style={{ color: '#28a745' }}>{include} included</span></p>
           <p className='otherDetails-font'>Age: <span >{age}+</span></p>
         </div>

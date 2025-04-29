@@ -239,6 +239,7 @@ const TripForm = () => {
         },
         essentials: {
             region: '',
+            availableSeats: 10,
             duration: '',
             bestTime: '',
             timeline: { fromDate: '', tillDate: '' },
@@ -399,6 +400,7 @@ const TripForm = () => {
                     },
                     essentials: {
                         region: '',
+                        availableSeats: 10,
                         duration: '',
                         bestTime: '',
                         timeline: { fromDate: '', tillDate: '' },
