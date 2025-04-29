@@ -152,7 +152,9 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                 Trip.title = extractTextFromHTML(Trip.title);
                 setTripsData(Trip);
                 setotherGoing(TripRes.appliedUsers);
-                setAlreadyEnrolled(TripRes.appliedUsers.map(user => user._id).includes(user._id));
+                if (user !== null && user !== undefined && user._id !== null && user._id !== undefined) {
+                    setAlreadyEnrolled(TripRes.appliedUsers.map(user => user._id).includes(user._id));
+                }
                 fetchLocationDetails(Trip.locationId);
             } catch (err) {
                 console.error('Fetch error:', err.message);
