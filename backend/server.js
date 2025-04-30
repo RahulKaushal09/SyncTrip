@@ -43,11 +43,20 @@ app.use(
         credentials: true,
     })
 );
+app.use((req, res, next) => {
 
-// Body parsing middleware
-app.use(express.json({ limit: '30mb', extended: true }));
+
+
+    if (req.is('application/json')) {
+
+        express.json({ limit: '30mb' })(req, res, next); // Removed extended:true
+    } else {
+        next();
+    }
+});
+
+// URL-encoded form parser (extended option valid here)
 app.use(express.urlencoded({ limit: '30mb', extended: true }));
-
 // Logging middleware (development only)
 if (environment === 'development') {
     app.use(morgan('combined'));

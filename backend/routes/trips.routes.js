@@ -5,8 +5,27 @@ const router = express.Router();
 const Trip = require('../models/tripModel');
 const User = require('../models/userModel'); // Adjust path
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const supabase = require('../config/supabaseClient.js'); // Adjust path
+
+
 const authenticateToken = require('../middleware/middleware.js').authenticateToken; // Adjust path
 // User Registration
+const upload = multer({
+    storage: multer.memoryStorage(), // Store file in memory
+    limits: {
+        fileSize: 5 * 1024 * 1024, // Limit file size to 5MB
+        files: 1, // Limit to 1 file
+        fields: 20, // Limit number of non-file fields
+    },
+    fileFilter: (req, file, cb) => {
+        // Ensure only images are allowed
+        if (!file.mimetype.startsWith('image/')) {
+            return cb(new Error('Only image files are allowed'), false);
+        }
+        cb(null, true);
+    },
+}).fields([{ name: 'MainImage', maxCount: 1 }]); // Expect 'MainImage' field
 router.post('/getAllTrips', async (req, res) => {
     try {
         const trips = await Trip.find({}).populate({
@@ -76,31 +95,89 @@ router.post('/getAllTrips', async (req, res) => {
 
 
 // User Login
-router.post('/addNewTrip', async (req, res) => {
+router.post('/addNewTrip', upload, async (req, res) => {
     try {
 
-        const { title, locationId, MainImageUrl, itinerary, tripRating, requirements, essentials, selectedHotelId } = req.body;
-        const trip = new Trip({
+        // const { title, locationId, MainImageUrl, itinerary, tripRating, requirements, essentials, selectedHotelId } = req.body;
+
+        const {
             title,
             locationId,
-            MainImageUrl,
-            numberOfPeopleApplied: 0,
-            include: {
-                travel: true,
-                food: true,
-                hotel: true
-            },
             itinerary,
             tripRating,
             requirements,
             essentials,
             selectedHotelId,
-            availableSeats: essentials.availableSeats,
+        } = req.body;
+
+
+        const parsedRequirements = requirements ? JSON.parse(requirements) : {};
+        const parsedEssentials = essentials ? JSON.parse(essentials) : {};
+        const parsedSelectedHotelId = selectedHotelId ? JSON.parse(selectedHotelId) : [];
+
+        let mainImageUrl = '';
+        let decodedItinerary = itinerary;
+        if (decodedItinerary && decodedItinerary.length > 0) {
+            decodedItinerary = decodeURIComponent(decodedItinerary);
+        }
+
+        // Handle file upload to Supabase
+        if (req.files && req.files.MainImage) {
+            const file = req.files.MainImage[0];
+            const ext = file.originalname.split('.').pop();
+            const fileName = `${title.trim()}_${Date.now()}.${ext}`;
+
+
+            // Upload to Supabase
+            const { data, error } = await supabase.storage
+                .from('trip-images')
+                .upload(fileName, file.buffer, {
+                    contentType: file.mimetype,
+                    upsert: true,
+                });
+
+            if (error) {
+                console.error('Supabase upload error:', error);
+                return res.status(500).json({ message: 'Error uploading file to Supabase' });
+            }
+
+            // Get public URL
+            const { data: publicUrlData } = supabase.storage
+                .from('trip-images')
+                .getPublicUrl(fileName);
+
+            if (!publicUrlData?.publicUrl) {
+                return res.status(500).json({ message: 'Error getting public URL' });
+            }
+
+            mainImageUrl = publicUrlData.publicUrl;
+
+            // Clear file buffer reference
+            file.buffer = null; // Ensure buffer is dereferenced
+        }
+        // Create new trip
+        const trip = new Trip({
+            title: title?.trim(),
+            locationId,
+            MainImageUrl: mainImageUrl,
+            numberOfPeopleApplied: 0,
+            include: {
+                travel: true,
+                food: true,
+                hotel: true,
+            },
+            itinerary: decodedItinerary,
+            tripRating: parseInt(tripRating) || 5,
+            requirements: parsedRequirements,
+            essentials: parsedEssentials,
+            selectedHotelId: parsedSelectedHotelId,
+            availableSeats: parsedEssentials.availableSeats || 10,
         });
         await trip.save();
         res.status(201).json({ message: 'Trip added successfully' });
     } catch (error) {
-        res.status(500).json({ error });
+        console.error('Error in /addNewTrip:', error);
+        res.status(500).json({ message: error.message || 'Internal server error' });
     }
 });
 

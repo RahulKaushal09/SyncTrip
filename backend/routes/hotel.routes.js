@@ -10,8 +10,8 @@ const upload = multer({
     storage: multer.memoryStorage(), // Store files in memory
     limits: {
         fileSize: 5 * 1024 * 1024, // Limit file size to 5MB per image
-        files: 10, // Limit to 10 images
-        fields: 10, // Limit number of non-file fields
+        files: 20, // Limit to 10 images
+        fields: 15, // Limit number of non-file fields
     },
     fileFilter: (req, file, cb) => {
         // Ensure only images are allowed
@@ -20,7 +20,7 @@ const upload = multer({
         }
         cb(null, true);
     },
-}).fields([{ name: 'hotel_images', maxCount: 10 }]); // Expect 'hotel_images' field, up to 10 images
+}).fields([{ name: 'hotel_images', maxCount: 20 }]); // Expect 'hotel_images' field, up to 10 images
 // CRUD operations for Hotel
 // router.post('/', async (req, res) => {
 //     try {
@@ -53,16 +53,16 @@ router.post('/addNewHotel', upload, async (req, res) => {
             hotel_link,
             hotel_location,
             price,
-            location
+            location // location ID from frontend
         } = req.body;
 
-        // Parse nested fields (sent as JSON strings)
         const parsedLocation = JSON.parse(hotel_location || '{}');
         const parsedPrice = JSON.parse(price || '{}');
 
-        // Check if hotel already exists
         let hotel = await Hotel.findOne({ hotel_name: hotel_name.trim() });
+
         if (!hotel) {
+            // Create new hotel
             hotel = new Hotel({
                 hotel_name,
                 hotel_description,
@@ -73,8 +73,8 @@ router.post('/addNewHotel', upload, async (req, res) => {
                 hotel_images: []
             });
 
-            // Process and upload hotel images to Supabase
-            const hotelImages = req.files['hotel_images'];  // Assuming the images are sent under the 'hotel_images' key
+            // Upload hotel images to Supabase
+            const hotelImages = req.files['hotel_images'];
             if (hotelImages && hotelImages.length > 0) {
                 const uploadedFiles = [];
                 for (let i = 0; i < hotelImages.length; i++) {
@@ -82,7 +82,6 @@ router.post('/addNewHotel', upload, async (req, res) => {
                     const ext = file.originalname.split('.').pop();
                     const fileName = `${hotel_name}_${Date.now()}_${i}.${ext}`;
 
-                    // Upload image to Supabase
                     const { data, error } = await supabase.storage
                         .from('hotel-images')
                         .upload(fileName, file.buffer, {
@@ -91,27 +90,34 @@ router.post('/addNewHotel', upload, async (req, res) => {
                         });
 
                     if (error) {
-                        console.error('Error uploading hotel image to Supabase:', error);
-                        return res.status(500).json({ error: 'Error uploading file to Supabase' });
+                        console.error('Supabase upload error:', error);
+                        return res.status(500).json({ error: 'Failed to upload image to Supabase' });
                     }
 
-                    // Get the public URL of the uploaded image
                     const { data: publicUrlData } = supabase.storage
                         .from('hotel-images')
                         .getPublicUrl(fileName);
 
-                    // Store the public URL of the image
                     uploadedFiles.push(publicUrlData.publicUrl);
                 }
-                // Assign uploaded image URLs to the hotel
                 hotel.hotel_images = uploadedFiles;
             }
 
-            // Save the hotel to the database
             await hotel.save();
         }
 
-        // Return the hotel ID in the response
+        // Add hotel ID to Location model (if not already added)
+        if (location) {
+            const loc = await Location.findById(location);
+            if (loc) {
+                const hotelExists = loc.hotels.includes(hotel._id);
+                if (!hotelExists) {
+                    loc.hotels.push(hotel._id);
+                    await loc.save();
+                }
+            }
+        }
+
         res.json({ hotelId: hotel._id });
     } catch (err) {
         console.error('Error in /addNewHotel:', err);

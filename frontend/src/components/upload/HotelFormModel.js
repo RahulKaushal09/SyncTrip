@@ -63,36 +63,53 @@ const HotelFormModal = ({ locationId, onClose, onHotelAdded }) => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData();
-
-        Object.keys(hotelData).forEach(key => {
-            if (key === 'hotel_images') {
-                hotelData.hotel_images.forEach(file => {
-                    formData.append('hotel_images', file);
-                });
-            } else if (typeof hotelData[key] === 'object') {
-                formData.append(key, JSON.stringify(hotelData[key]));
-            } else {
-                formData.append(key, hotelData[key]);
-            }
-        });
-
         try {
-            const res = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/hotels/addNewHotel`, {
-                method: 'POST',
-                body: formData,
+            console.log("submitting data", hotelData);
+
+            e.preventDefault();
+
+            const formData = new FormData();
+            if (!hotelData.hotel_name || !hotelData.hotel_description || !hotelData.hotel_link) {
+                alert("Please fill all the fields");
+                return;
+            }
+            if (hotelData.hotel_images.length === 0) {
+                alert("Please upload at least one image");
+                return;
+            }
+
+
+            Object.keys(hotelData).forEach(key => {
+                if (key === 'hotel_images') {
+                    hotelData.hotel_images.forEach(file => {
+                        formData.append('hotel_images', file);
+                    });
+                } else if (typeof hotelData[key] === 'object') {
+                    formData.append(key, JSON.stringify(hotelData[key]));
+                } else {
+                    formData.append(key, hotelData[key]);
+                }
             });
 
-            const data = await res.json();
-            if (data.hotelId) {
-                onHotelAdded(data.hotelId);
-                onClose(); // Close modal after adding
+            try {
+                const res = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/hotels/addNewHotel`, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await res.json();
+                if (data.hotelId) {
+                    onHotelAdded(data.hotelId);
+                    onClose(); // Close modal after adding
+                }
+            } catch (error) {
+                console.error('Error adding hotel:', error);
             }
-        } catch (error) {
-            console.error('Error adding hotel:', error);
         }
+        catch (error) {
+            console.error('Error:', error);
+        }
+
     };
 
     return (
@@ -100,7 +117,7 @@ const HotelFormModal = ({ locationId, onClose, onHotelAdded }) => {
             <div className="modal-dialog modal-lg">
                 <div className="modal-content p-4">
                     <h5>Add New Hotel</h5>
-                    <form onSubmit={handleSubmit}>
+                    <form >
                         <input type="text" placeholder="Hotel Name" className="form-control my-2"
                             value={hotelData.hotel_name} onChange={(e) => handleChange('hotel_name', e.target.value)} />
 
@@ -196,7 +213,7 @@ const HotelFormModal = ({ locationId, onClose, onHotelAdded }) => {
                             onChange={(e) => handleNestedChange('price', 'description', e.target.value)} />
 
                         <div className="d-flex justify-content-end">
-                            <button type="submit" className="btn btn-primary">Add Hotel</button>
+                            <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Add Hotel</button>
                             <button type="button" className="btn btn-secondary ms-2" onClick={onClose}>Cancel</button>
                         </div>
 

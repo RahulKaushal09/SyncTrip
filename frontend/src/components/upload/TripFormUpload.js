@@ -228,7 +228,7 @@ const TripForm = () => {
     const [formData, setFormData] = useState({
         title: '',
         locationId: '',
-        MainImageUrl: '',
+        MainImage: null, // Store file object instead of URL
         itinerary: '',
         tripRating: 5,
         requirements: {
@@ -250,28 +250,63 @@ const TripForm = () => {
             pickup: { name: '', mapLocation: DEFAULT_CENTER },
             dropPoint: { name: '', mapLocation: DEFAULT_CENTER },
         },
-        selectedHotelId: [], // Assuming this is an array of selected hotel IDs
+        selectedHotelId: [],
     });
 
     const pickupRef = useRef(null);
     const dropRef = useRef(null);
 
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     const keys = name.split('.');
+
+    //     setFormData((prev) => {
+    //         let newData = { ...prev };
+    //         let current = newData;
+    //         for (let i = 0; i < keys.length - 1; i++) {
+    //             current = current[keys[i]];
+    //         }
+    //         current[keys[keys.length - 1]] = value;
+    //         return { ...newData };
+    //     });
+
+    //     if (name === 'essentials.timeline.fromDate' || name === 'essentials.timeline.tillDate') {
+    //         calculateDuration(formData.essentials.timeline.fromDate, formData.essentials.timeline.tillDate);
+    //     }
+    // };
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        const keys = name.split('.');
+        const { name, value, files } = e.target;
 
-        setFormData((prev) => {
-            let newData = { ...prev };
-            let current = newData;
-            for (let i = 0; i < keys.length - 1; i++) {
-                current = current[keys[i]];
+        if (name === 'MainImage') {
+            // Handle file input
+            setFormData((prev) => ({
+                ...prev,
+                MainImage: files[0] || null, // Store the file object
+            }));
+        } else {
+            // Handle text inputs (including nested fields)
+            const keys = name.split('.');
+            setFormData((prev) => {
+                let newData = { ...prev };
+                let current = newData;
+                for (let i = 0; i < keys.length - 1; i++) {
+                    current = current[keys[i]];
+                }
+                current[keys[keys.length - 1]] = value;
+                return newData;
+            });
+
+            // Calculate duration for timeline changes
+            if (name === 'essentials.timeline.fromDate' || name === 'essentials.timeline.tillDate') {
+                calculateDuration(
+                    name === 'essentials.timeline.fromDate'
+                        ? value
+                        : formData.essentials.timeline.fromDate,
+                    name === 'essentials.timeline.tillDate'
+                        ? value
+                        : formData.essentials.timeline.tillDate
+                );
             }
-            current[keys[keys.length - 1]] = value;
-            return { ...newData };
-        });
-
-        if (name === 'essentials.timeline.fromDate' || name === 'essentials.timeline.tillDate') {
-            calculateDuration(formData.essentials.timeline.fromDate, formData.essentials.timeline.tillDate);
         }
     };
 
@@ -368,28 +403,41 @@ const TripForm = () => {
             toast.error('Please select valid pickup and drop locations.');
             return;
         }
+        // Prepare FormData for multipart/form-data
+        const formDataToSend = new FormData();
+        formDataToSend.append('title', formData.title);
+        formDataToSend.append('locationId', formData.locationId);
+        if (formData.MainImage) {
+            formDataToSend.append('MainImage', formData.MainImage);
+        }
+        formDataToSend.append('itinerary', encodeURI(formData.itinerary));
+        formDataToSend.append('tripRating', formData.tripRating.toString());
+        formDataToSend.append('requirements', JSON.stringify(formData.requirements));
+        formDataToSend.append('essentials', JSON.stringify(formData.essentials));
+        formDataToSend.append('selectedHotelId', JSON.stringify(formData.selectedHotelId));
 
-        // Log the payload for debugging
-        console.log('Submitting formData:', JSON.stringify(formData, null, 2));
+        // Log payload for debugging
+        console.log('Submitting formData:', Object.fromEntries(formDataToSend));
 
         try {
             const response = await fetch(
                 `${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/addNewTrip`,
                 {
                     method: 'POST',
-                    body: JSON.stringify(formData),
+                    body: formDataToSend,
                     headers: {
-                        'Content-Type': 'application/json',
+                        // 'Content-Type': 'application/json',
                     },
                 }
             );
 
             if (response.status === 201) {
                 toast.success('Trip added successfully!');
+                // Reset form
                 setFormData({
                     title: '',
                     locationId: '',
-                    MainImageUrl: '',
+                    MainImage: null,
                     itinerary: '',
                     tripRating: 5,
                     requirements: {
@@ -411,15 +459,13 @@ const TripForm = () => {
                         pickup: { name: '', mapLocation: DEFAULT_CENTER },
                         dropPoint: { name: '', mapLocation: DEFAULT_CENTER },
                     },
-                    selectedHotelId: [
-                        // Assuming this is an array of selected hotel IDs
-                    ],
+                    selectedHotelId: [],
                 });
                 setPickupPosition(DEFAULT_CENTER);
                 setDropPosition(DEFAULT_CENTER);
             } else {
                 const errorData = await response.json();
-                throw new toast.error(`Failed to add trip: ${errorData.message || response.statusText}`);
+                toast.error(`Failed to add trip: ${errorData.message || response.statusText}`);
             }
         } catch (error) {
             console.error('Error submitting trip:', error);
@@ -473,13 +519,13 @@ const TripForm = () => {
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Main Image URL:</label>
+                        <label className="form-label">Main Image:</label>
                         <input
-                            type="text"
-                            name="MainImageUrl"
-                            value={formData.MainImageUrl}
+                            type="file"
+                            name="MainImage"
                             onChange={handleChange}
                             className="form-control"
+                            accept="image/*"
                         />
                     </div>
 
