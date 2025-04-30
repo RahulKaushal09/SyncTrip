@@ -30,6 +30,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
     const [alreadyEnrolled, setAlreadyEnrolled] = useState(false);
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
 
     const EnrollInTrip = async () => {
 
@@ -124,7 +125,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     // Fetch location details
     useEffect(() => {
         const fetchTripDetails = async () => {
-
+            setIsLoading(true);
             try {
                 const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/${tripId}`;
                 // console.log('Fetching from:', url);
@@ -156,9 +157,12 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                     setAlreadyEnrolled(TripRes.appliedUsers.map(user => user._id).includes(user._id));
                 }
                 fetchLocationDetails(Trip.locationId);
+                setIsLoading(false);
             } catch (err) {
                 console.error('Fetch error:', err.message);
             } finally {
+                setIsLoading(false);
+
             }
         };
 
@@ -173,19 +177,24 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     //         console.log('locationData is still null');
     //     }
     // }, [locationData]);
-
-
-    if (!locationData) {
-        return <Loader setLoadingState={handleIsLoading} TextToShow={"Loading Trip Details"} />;
-
+    if (isLoading || !TripsData || !locationData) {
+        return (
+            <Loader
+                setLoadingState={isLoading}
+                TextToShow={"Loading Trip Details"}
+            />
+        );
     }
     else {
+
         // console.log("locationData:", locationData);
     }
 
     // Render when data is loaded
     return (
+
         <div className="DestinationPage">
+
             <LocationEventsDetails
                 type="Trip"
                 location={locationData?.title || 'Unknown Location'}

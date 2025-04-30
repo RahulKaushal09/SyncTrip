@@ -171,6 +171,7 @@ const App = () => {
                 setUser(updatedUser);
                 localStorage.setItem('user', JSON.stringify(updatedUser));
                 setShowFullProfile(false);
+                window.location.reload(); // Reload the page to reflect the changes
               }}
             />
           )}
