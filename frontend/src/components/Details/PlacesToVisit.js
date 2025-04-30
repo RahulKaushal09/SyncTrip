@@ -41,7 +41,7 @@ const PlacesToVisitSection = ({ title, placesIds }) => {
             <h2 className='DescriptionHeading'><strong>Other Places To Visit  in {title?.replace(/[0-9.]/g, '')}</strong></h2>
             <div className="placesToVisitGrid">
                 {places.slice(0, activeHotelShow).map((placesToVisit, index) => (
-                    <LocationCard name={placesToVisit.title} rating={placesToVisit.rating} images={placesToVisit.image} inlineStyle={{ width: isMobile ? "350px" : "260px" }} imageInlineStyle={{ width: isMobile ? "350px" : "260px" }} />
+                    <LocationCard name={placesToVisit.title} rating={placesToVisit.rating} images={placesToVisit.image} inlineStyle={{ width: isMobile ? "100%" : "260px" }} imageInlineStyle={{ width: isMobile ? "100%" : "260px" }} />
                 )
                     // <HotelCard key={index} imageUrl={image} />
                 )}
