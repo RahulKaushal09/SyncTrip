@@ -279,7 +279,9 @@ export const staticTripData = [
                     "persona": ""
                 }
             ]
-        }
+        },
+        TripName: "Manali",
+        TripDates: "9May 2025 - 12 May 2025"
     }
 
 
