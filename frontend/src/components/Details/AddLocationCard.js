@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faLeaf, faBars, faPlane } from '@fortawesome/free-solid-svg-icons';
 import '../../styles/AddLocationCard.css';
@@ -6,7 +6,7 @@ import '../../styles/AddLocationCard.css';
 import { FaLeaf, FaBars, FaPlane } from "react-icons/fa";
 // improt enum class 
 import { PageTypeEnum } from '../../utils/pageType';  // adjust path as needed
-const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage, alreadyEnrolled }) => {
+const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage, alreadyEnrolled, btnReference }) => {
     const [activeIcon, setActiveIcon] = useState(0);
     const [btn2Text, setBtn2Text] = useState("");
     const [btn2CTA, setBtn2CTA] = useState(() => ctaAction);
@@ -142,7 +142,7 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
                 <p>30+ Places to stay</p>
             </div> */}
             {showBtns &&
-                <div className="location-card-buttons">
+                <div className="location-card-buttons" ref={btnReference}>
                     {pageType == PageTypeEnum.LOCATION && <button className="btn btn-white" onClick={ctaAction} style={btnsStyle}>Explore itinerary</button>}
                     <button
                         className="btn btn-black"

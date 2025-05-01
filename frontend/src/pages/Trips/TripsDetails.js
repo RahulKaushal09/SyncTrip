@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import LocationEventsDetails from '../../components/Details/locationEventsDetials';
 import LocationImageGallery from '../../components/Details/locationImages';
@@ -33,7 +33,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [alreadyEnrolled, setAlreadyEnrolled] = useState(false);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
-
+    const joinTripButtonRef = useRef(null);
 
     const EnrollInTrip = async () => {
 
@@ -286,9 +286,25 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     }, []); // only run once when the component mounts
     // Fetch location details
     useEffect(() => {
-
         fetchTripDetails();
     }, [tripId]);
+    // Separate effect for scrolling
+    useEffect(() => {
+        if (!isLoading && joinTripButtonRef.current) {
+            joinTripButtonRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            console.log('Scrolled to join trip button');
+        } else if (!isLoading) {
+            console.warn('Join trip button not found');
+            // Optional retry with querySelector as fallback
+            const joinTripButton = document.querySelector('.location-card-buttons');
+            if (joinTripButton) {
+                joinTripButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                console.log('Scrolled to join trip button via querySelector');
+            } else {
+                console.error('Join trip button still not found in DOM');
+            }
+        }
+    }, [isLoading]);
     // Log locationData when it updates
     // useEffect(() => {
     //     console.log("useEffect triggered with locationData:", locationData);
@@ -325,7 +341,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
             />
             <LocationImageGallery locationImages={locationData?.photos} />
 
-            {isMobile && <AddLocationCard showBtns={TripStatus && TripStatus === "completed" ? false : true} pageType={pageType} onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} btnsStyle={{ width: "100%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} title={TripsData.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={TripsData?.essentials.bestTime} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} alreadyEnrolled={alreadyEnrolled} />}
+            {isMobile && <AddLocationCard btnReference={joinTripButtonRef} showBtns={TripStatus && TripStatus === "completed" ? false : true} pageType={pageType} onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} btnsStyle={{ width: "100%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} title={TripsData.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={TripsData?.essentials.bestTime} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} alreadyEnrolled={alreadyEnrolled} />}
 
             <div className="row" style={{ position: 'relative' }}>
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
