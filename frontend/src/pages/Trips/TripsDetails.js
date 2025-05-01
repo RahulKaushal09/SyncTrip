@@ -17,6 +17,7 @@ import { PageTypeEnum } from '../../utils/pageType'; // adjust path as needed
 import { useNavigate } from 'react-router-dom';
 import { getLocationById } from '../../utils/CommonServices.js';
 import { ProfileCardEnum } from '../../utils/EnumClasses.js';
+import { getFormattedStringFromDate } from '../../utils/CommonServices.js';
 import toast from 'react-hot-toast';
 import Loader from '../../components/Loader/loader.js';
 const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
@@ -341,7 +342,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
             />
             <LocationImageGallery locationImages={locationData?.photos} />
 
-            {isMobile && <AddLocationCard btnReference={joinTripButtonRef} showBtns={TripStatus && TripStatus === "completed" ? false : true} pageType={pageType} onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} btnsStyle={{ width: "100%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} title={TripsData.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={TripsData?.essentials.bestTime} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} alreadyEnrolled={alreadyEnrolled} />}
+            {isMobile && <AddLocationCard btnReference={joinTripButtonRef} showBtns={TripStatus && TripStatus === "completed" ? false : true} pageType={pageType} onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} btnsStyle={{ width: "100%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} title={TripsData.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={TripsData?.essentials?.timeline.fromDate ? (getFormattedStringFromDate(TripsData?.essentials?.timeline.fromDate) + " - " + getFormattedStringFromDate(TripsData?.essentials?.timeline.tillDate)) : TripsData?.essentials?.bestTime} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} alreadyEnrolled={alreadyEnrolled} />}
 
             <div className="row" style={{ position: 'relative' }}>
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>

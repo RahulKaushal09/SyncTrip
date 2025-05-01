@@ -88,7 +88,14 @@ export const getLocationById = async (locationId) => {
 //         return null;
 //     }
 // };
+export const getFormattedStringFromDate = (date) => {
+    const d = new Date(date);
+    const day = d.getDate(); // 1-31
+    const year = d.getFullYear(); // 2025
+    const monthName = d.toLocaleString('en-GB', { month: 'long' }); // "April"
 
+    return `${day} ${monthName}, ${year}`;
+};
 export const fetchLocations = async (skip = 0, limit = 12) => {
     const now = new Date();
     const encrypted = localStorage.getItem(process.env.REACT_APP_CACHE_KEY || 'cached_locations');
