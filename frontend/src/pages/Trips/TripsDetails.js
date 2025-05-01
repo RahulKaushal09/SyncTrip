@@ -105,6 +105,165 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
         } catch (err) {
         }
     };
+    const fetchTripDetails = async () => {
+        setIsLoading(true);
+
+        // Check for static trip data
+        const staticTrip = staticTripData.find(t => t.TripId === tripId);
+
+        if (staticTrip) {
+            try {
+                // Immediately render with static data
+                const TripRes = staticTrip.TripData;
+                const Trip = TripRes.trip;
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const fromDate = new Date(Trip.essentials.timeline.fromDate);
+
+                // Set trip status
+                setTripStatus(fromDate < today || Trip.requirements.status === 'completed'
+                    ? 'completed'
+                    : Trip.requirements.status
+                );
+
+                // Clean and set trip title
+                Trip.title = Trip?.title?.replace(/[0-9.]/g, '');
+                Trip.title = extractTextFromHTML(Trip.title);
+                setTripsData(Trip);
+
+                // Set applied users
+                setotherGoing(TripRes.appliedUsers);
+                if (user?._id) {
+                    setAlreadyEnrolled(TripRes.appliedUsers.map(u => u._id).includes(user._id));
+                }
+
+                // Set location data
+                const location = staticTrip.locationData;
+                if (location) {
+                    location.title = location?.title?.replace(/[0-9.]/g, '');
+                    location.title = extractTextFromHTML(location.title);
+                    setHotelids(location?.hotels);
+                    setLocationData(location);
+                } else {
+                    throw new Error('Location data is empty or null');
+                }
+
+                // Background backend fetch to update data
+                const updateBackendData = async () => {
+                    try {
+                        const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/${tripId}`;
+                        const TripResponse = await fetch(url, {
+                            method: 'GET',
+                            headers: { 'Content-Type': 'application/json' },
+                        });
+
+                        if (!TripResponse.ok) {
+                            throw new Error(`Failed to fetch trip: ${TripResponse.statusText}`);
+                        }
+
+                        const TripRes = await TripResponse.json();
+                        const UpdatedTrip = TripRes.trip;
+
+                        // Update staticTripData
+                        staticTrip.TripData = {
+                            trip: {
+                                ...staticTrip.TripData.trip,
+                                ...UpdatedTrip,
+                                title: extractTextFromHTML(
+                                    UpdatedTrip.title?.replace(/[0-9.]/g, '')
+                                )
+                            },
+                            appliedUsers: TripRes.appliedUsers
+                        };
+
+                        // Update UI with fresh data
+                        setTripsData(staticTrip.TripData.trip);
+                        setotherGoing(TripRes.appliedUsers);
+                        if (user?._id) {
+                            setAlreadyEnrolled(TripRes.appliedUsers.map(u => u._id).includes(user._id));
+                        }
+
+                        // Fetch and update location data
+                        if (UpdatedTrip.locationId) {
+                            const location = await getLocationById(UpdatedTrip.locationId);
+                            if (location) {
+                                location.title = location?.title?.replace(/[0-9.]/g, '');
+                                location.title = extractTextFromHTML(location.title);
+                                staticTrip.locationData = location;
+                                setLocationData(location);
+                                setHotelids(location?.hotels);
+                            }
+                        }
+
+                    } catch (err) {
+                        console.error('Background backend fetch failed:', err);
+                    }
+                };
+
+                // Run background update
+                updateBackendData();
+                setIsLoading(false);
+                return;
+
+            } catch (err) {
+                console.error('Error processing static trip data:', err);
+            }
+        }
+
+        // No static data found, fetch directly from backend
+        try {
+            const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/${tripId}`;
+            const TripResponse = await fetch(url, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            if (!TripResponse.ok) {
+                throw new Error(`Failed to fetch trip: ${TripResponse.statusText}`);
+            }
+
+            const TripRes = await TripResponse.json();
+            const Trip = TripRes.trip;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const fromDate = new Date(Trip.essentials.timeline.fromDate);
+
+            // Set trip status
+            setTripStatus(fromDate < today || Trip.requirements.status === 'completed'
+                ? 'completed'
+                : Trip.requirements.status
+            );
+
+            // Clean and set trip title
+            Trip.title = Trip?.title?.replace(/[0-9.]/g, '');
+            Trip.title = extractTextFromHTML(Trip.title);
+            setTripsData(Trip);
+
+            // Set applied users
+            setotherGoing(TripRes.appliedUsers);
+            if (user?._id) {
+                setAlreadyEnrolled(TripRes.appliedUsers.map(u => u._id).includes(user._id));
+            }
+
+            // Fetch location data
+            if (Trip.locationId) {
+                const location = await getLocationById(Trip.locationId);
+                if (location) {
+                    location.title = location?.title?.replace(/[0-9.]/g, '');
+                    location.title = extractTextFromHTML(location.title);
+                    setLocationData(location);
+                    setHotelids(location?.hotels);
+                } else {
+                    throw new Error('Location not found');
+                }
+            }
+
+        } catch (err) {
+            console.error('Backend fetch error:', err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     // Effect to detect screen size
     useEffect(() => {
@@ -127,75 +286,6 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     }, []); // only run once when the component mounts
     // Fetch location details
     useEffect(() => {
-        const fetchTripDetails = async () => {
-            setIsLoading(true);
-            const staticTrip = staticTripData.find(t => t.TripId === tripId);
-            if (staticTrip) {
-                try {
-                    const TripRes = staticTrip.TripData;
-                    const Trip = TripRes.trip;
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    const fromDate = new Date(Trip.essentials.timeline.fromDate);
-                    setTripStatus(fromDate < today || Trip.requirements.status === 'completed' ? 'completed' : Trip.requirements.status);
-                    // console.log('Raw API response:', Trip);
-                    Trip.title = Trip?.title?.replace(/[0-9.]/g, '');
-                    Trip.title = extractTextFromHTML(Trip.title);
-                    setTripsData(Trip);
-                    setotherGoing(TripRes.appliedUsers);
-                    if (user !== null && user !== undefined && user._id !== null && user._id !== undefined) {
-                        setAlreadyEnrolled(TripRes.appliedUsers.map(user => user._id).includes(user._id));
-                    }
-                    fetchLocationDetails(Trip.locationId);
-                    setIsLoading(false);
-
-                    return;
-                }
-                catch (err) {
-                    console.error('Error fetching static trip data:', err);
-                }
-
-            }
-
-            try {
-                const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/${tripId}`;
-                // console.log('Fetching from:', url);
-
-                const TripResponse = await fetch(url, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' },
-                });
-
-                // console.log('Response status:', TripResponse.status);
-                setTripData(TripResponse);
-
-                if (!TripResponse.ok) {
-                    throw new Error(`Failed to fetch location: ${TripResponse.statusText}`);
-                }
-
-                const TripRes = await TripResponse.json();
-                const Trip = TripRes.trip;
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const fromDate = new Date(Trip.essentials.timeline.fromDate);
-                setTripStatus(fromDate < today || Trip.requirements.status === 'completed' ? 'completed' : Trip.requirements.status);
-                // console.log('Raw API response:', Trip);
-                Trip.title = Trip?.title?.replace(/[0-9.]/g, '');
-                Trip.title = extractTextFromHTML(Trip.title);
-                setTripsData(Trip);
-                setotherGoing(TripRes.appliedUsers);
-                if (user !== null && user !== undefined && user._id !== null && user._id !== undefined) {
-                    setAlreadyEnrolled(TripRes.appliedUsers.map(user => user._id).includes(user._id));
-                }
-                fetchLocationDetails(Trip.locationId);
-                setIsLoading(false);
-            } catch (err) {
-                console.error('Fetch error:', err.message);
-            } finally {
-                setIsLoading(false);
-
-            }
-        };
 
         fetchTripDetails();
     }, [tripId]);
