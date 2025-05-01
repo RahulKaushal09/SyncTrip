@@ -9,6 +9,8 @@ import PlanTripDates from '../../components/Details/PlanTripDates';
 import LocationMapSection from '../../components/Details/MapSection';
 import PlacesToVisitSection from '../../components/Details/PlacesToVisit';
 import SyncTripAppPushingSection from '../../components/AppPushingSection/AppPushingSection';
+import { staticTripData } from "../../data/staticTripData.js"; // adjust the path accordingly
+
 import ProfileCardUi from '../../components/Profile/ProfileCard.js'; // Import the new component
 import { extractTextFromHTML } from '../../utils/htmlRelatedServices.js'; // adjust path as needed
 import { PageTypeEnum } from '../../utils/pageType'; // adjust path as needed
@@ -31,6 +33,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [alreadyEnrolled, setAlreadyEnrolled] = useState(false);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
+
 
     const EnrollInTrip = async () => {
 
@@ -126,6 +129,34 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     useEffect(() => {
         const fetchTripDetails = async () => {
             setIsLoading(true);
+            const staticTrip = staticTripData.find(t => t.TripId === tripId);
+            if (staticTrip) {
+                try {
+                    const TripRes = staticTrip.TripData;
+                    const Trip = TripRes.trip;
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    const fromDate = new Date(Trip.essentials.timeline.fromDate);
+                    setTripStatus(fromDate < today || Trip.requirements.status === 'completed' ? 'completed' : Trip.requirements.status);
+                    // console.log('Raw API response:', Trip);
+                    Trip.title = Trip?.title?.replace(/[0-9.]/g, '');
+                    Trip.title = extractTextFromHTML(Trip.title);
+                    setTripsData(Trip);
+                    setotherGoing(TripRes.appliedUsers);
+                    if (user !== null && user !== undefined && user._id !== null && user._id !== undefined) {
+                        setAlreadyEnrolled(TripRes.appliedUsers.map(user => user._id).includes(user._id));
+                    }
+                    fetchLocationDetails(Trip.locationId);
+                    setIsLoading(false);
+
+                    return;
+                }
+                catch (err) {
+                    console.error('Error fetching static trip data:', err);
+                }
+
+            }
+
             try {
                 const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/${tripId}`;
                 // console.log('Fetching from:', url);
