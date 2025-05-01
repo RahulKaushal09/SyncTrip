@@ -20,6 +20,8 @@ import EnrolledTripDetails from './pages/Trips/TripEnrolledDetails.js';
 // import pageTypeEnum from './utils/pageType';
 import { Toaster } from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
+import { Analytics } from "@vercel/analytics/react"
+import { inject, track } from '@vercel/analytics';
 
 import { encryptData, decryptData } from './utils/securityStorage.js';
 import { fetchLocations, mergeLocationsIntoCache, getLimitByDevice } from './utils/CommonServices.js';
@@ -45,6 +47,7 @@ const App = () => {
   const limit = getLimitByDevice();
   // const { pathname } = useLocation(); // ⬅️ gets current path
   // const [pageType, setPageType] = useState(PageTypeEnum?.HOME); // Added for page type
+  inject();
 
   useEffect(() => {
     if (localStorage.getItem('user')) {
@@ -105,15 +108,20 @@ const App = () => {
   const handleLogin = (user, requiresPhone = false) => {
     setUser(user);
     localStorage.setItem('user', JSON.stringify(user));
+    track('user_logged_in'); // ✅ Track login event
+
     if (!user.phone) {
       requiresPhone = true; // If phone is not set, we need to ask for it
+      track('phone_missing_on_login'); // ✅ Track missing phone scenario
     }
+
     if (requiresPhone) {
       setShowPhoneNumber(true); // Show phone number popup for Google login
+      track('show_phone_popup'); // ✅ Track popup shown
     } else if (!user.profileCompleted) {
       setShowFullProfile(true); // Show full profile popup for manual login
-    }
-    else {
+      track('show_profile_completion_popup'); // ✅ Track profile incomplete popup
+    } else {
       window.location.reload(); // Reload the page to reflect the changes
     }
   };
@@ -122,19 +130,26 @@ const App = () => {
     setUser(updatedUser);
     localStorage.setItem('user', JSON.stringify(updatedUser));
     setShowPhoneNumber(false);
+    track('phone_submitted'); // ✅ Track phone submission
+
     if (!updatedUser.profileCompleted) {
       setShowFullProfile(true);
+      track('show_profile_completion_popup'); // ✅ Track again if needed
     }
   };
+
   const decideLoginStatePopup = () => {
     if (user) {
       if (!user.phone) {
         setShowPhoneNumber(true);
+        track('show_phone_popup'); // ✅ Track again for safety
       } else if (!user.profileCompleted) {
         setShowFullProfile(true);
+        track('show_profile_completion_popup'); // ✅ Track again
       }
     } else {
       setShowLogin(true);
+      track('show_login_popup'); // ✅ Track login popup for not logged-in users
     }
   };
 
