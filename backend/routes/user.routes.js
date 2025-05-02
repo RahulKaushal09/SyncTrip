@@ -84,6 +84,7 @@ router.post('/sendRequest', authenticateToken, async (req, res) => {
             u => u.userId.toString() === senderId && u.status === 1
         );
         if (receiverHasRequestedSender) {
+
             return res.status(400).json({ message: 'This user has already sent you a request' });
         }
 
@@ -99,21 +100,20 @@ router.post('/sendRequest', authenticateToken, async (req, res) => {
             return res.status(400).json({ message: 'Request already sent' });
         }
 
-        // Add to sender
         senderTrip.users.push({ userId: receiverId, status: 1 });
 
         // Add to receiver
-        let receiverTripEntry = receiver.friends.find(f => f.tripId.toString() === tripId);
-        if (!receiverTripEntry) {
-            receiverTripEntry = { tripId, users: [] };
-            receiver.friends.push(receiverTripEntry);
+        let receiverTripIndex = receiver.friends.findIndex(f => f.tripId.toString() === tripId);
+        if (receiverTripIndex === -1) {
+            // If receiver has no entry for this trip, create one with the sender as a received request
+            receiver.friends.push({ tripId, users: [{ userId: senderId, status: -1 }] });
+        } else {
+            // Modify the existing entry directly in the array
+            receiver.friends[receiverTripIndex].users.push({ userId: senderId, status: -1 });
         }
-
-        receiverTripEntry.users.push({ userId: senderId, status: -1 });
 
         await sender.save();
         await receiver.save();
-
         res.status(200).json({ message: 'Request sent successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
