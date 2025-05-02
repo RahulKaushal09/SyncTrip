@@ -137,9 +137,9 @@ const EnrolledTripDetails = () => {
     });
 
     const result = await response.json();
-    if (!response.ok) {
-      throw new Error(result.message || 'API call failed');
-    }
+    // if (!response.ok) {
+    //   throw new Error(result.message || 'API call failed');
+    // }
 
     return result;
   };
