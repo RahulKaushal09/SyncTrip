@@ -69,6 +69,10 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
 
                     toast.success('You have successfully enrolled in the trip!');
                     navigate(`/trips/en/${tripId}`); // Redirect to the trip details page
+                    // Fire Meta Pixel conversion event
+                    if (window.fbq) {
+                        window.fbq('trackCustom', 'JoinTrip');
+                    }
                 } else {
                     console.error('Enrollment failed:', data.message);
                     toast.error(data.message || 'Failed to enroll in the trip.');
