@@ -58,9 +58,20 @@ const ProfileCardUi = ({
                     {type === ProfileCardEnum.AllGoing && (
                         <>
                             {isConnected ? (
-                                <span className="requested-text">Connected</span>
+                                <>
+                                    <span className="requested-text">Connected</span>
+                                    {showviewProfile && <button className="action-btn view-btn" onClick={() => onViewProfile(_id)}>
+                                        View Profile
+                                    </button>}
+                                </>
+
                             ) : hasSentRequest ? (
-                                <span className="requested-text">Requested</span>
+                                <>
+                                    <span className="requested-text">Requested</span>
+                                    {showviewProfile && <button className="action-btn view-btn" onClick={() => onViewProfile(_id)}>
+                                        View Profile
+                                    </button>}
+                                </>
                             ) : (
                                 <>
                                     {btns?.map((btn, index) => (

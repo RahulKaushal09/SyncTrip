@@ -25,6 +25,7 @@ import { inject, track } from '@vercel/analytics';
 
 import { encryptData, decryptData } from './utils/securityStorage.js';
 import { fetchLocations, mergeLocationsIntoCache, getLimitByDevice } from './utils/CommonServices.js';
+import UserProfile from './pages/User/userProfile.js';
 
 // import FullProfilePopup from './components/Popups/FullProfilePopup';
 // import WeatherComponent from './data/getWeather';
@@ -192,88 +193,94 @@ const App = () => {
           )}
           <div className="App">
             {/* <WeatherComponent locationQuery="manali" /> */}
-            {/* Always render Navbar */}
             <Navbar
               ctaAction={() => setAnyCtaPopup(true)}
               onLoginClick={() => setShowLogin(true)}
               user={user}
             // pageType={pageType} // Pass the page type to Navbar
             />
-            {/* <TripForm /> */}
-            {/* Conditionally render Popup */}
-            {anyCtaPopup && <PreRegisterPopup onClose={() => setAnyCtaPopup(false)} />}
+            <div className='
+            RouterContainer'>
+              {/* Always render Navbar */}
+              {/* <TripForm /> */}
+              {/* Conditionally render Popup */}
+              {anyCtaPopup && <PreRegisterPopup onClose={() => setAnyCtaPopup(false)} />}
 
-            {/* Loading Overlay */}
-            {isLoading && (
-              <div
-                style={{
-                  position: 'fixed',
-                  top: 0,
-                  left: 0,
-                  width: '100vw',
-                  height: '100vh',
-                  padding: "40%",
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'white', // Opaque white background
-                  zIndex: 9999,
-                }}
-              >
-                <Loader setLoadingState={isLoading} />
-                {/* <div><img src={loader}
+              {/* Loading Overlay */}
+              {isLoading && (
+                <div
+                  style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    padding: "40%",
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: 'white', // Opaque white background
+                    zIndex: 9999,
+                  }}
+                >
+                  <Loader setLoadingState={isLoading} />
+                  {/* <div><img src={loader}
                   alt='Loading Please Wait!!'></img></div> */}
-              </div>
-            )}
+                </div>
+              )}
 
-            {/* Define Routes */}
-            <Routes>
-              {/* Redirect root "/" to "/home" */}
-              <Route path="/" element={<Navigate to="/home" replace />} />
+              {/* Define Routes */}
+              <Routes>
+                {/* Redirect root "/" to "/home" */}
+                <Route path="/" element={<Navigate to="/home" replace />} />
 
-              {/* Route for Home */}
-              <Route
-                path="/home"
-                element={
-                  <Home
-                    locations={locations}
-                    locationsForPreMadeItinerary={locationsForPreMadeItinerary}
-                    ctaAction={() => setAnyCtaPopup(true)}
-                    // handleIsLoading={handleIsLoading}
-                    // hasFetchedLocations={hasFetchedLocations}
-                    handleShowMoreHome={handleShowMoreHome}
-                    setLocations={setLocations}
-                  />
-                }
-              />
+                {/* Route for Home */}
+                <Route
+                  path="/home"
+                  element={
+                    <Home
+                      locations={locations}
+                      locationsForPreMadeItinerary={locationsForPreMadeItinerary}
+                      ctaAction={() => setAnyCtaPopup(true)}
+                      // handleIsLoading={handleIsLoading}
+                      // hasFetchedLocations={hasFetchedLocations}
+                      handleShowMoreHome={handleShowMoreHome}
+                      setLocations={setLocations}
+                    />
+                  }
+                />
 
-              {/* Route for DestinationPage with dynamic locationId */}
-              <Route
-                path="/location/:locationId"
-                element={<DestinationPage ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
-              />
-              <Route
-                path="/trips"
-                element={<Trips ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
-              />
-              <Route
-                path="/AddNewtrips"
-                element={<AddNewTripPage />}
-              />
-              <Route
-                path="/trips/:tripId"
-                element={<TripsDetialsPage onLoginClick={() => decideLoginStatePopup()} ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
-              />
-              {/* enrolled Trip */}
-              <Route
-                path="/trips/en/:tripId"
-                element={<EnrolledTripDetails />}
-              />
+                {/* Route for DestinationPage with dynamic locationId */}
+                <Route
+                  path="/location/:locationId"
+                  element={<DestinationPage ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
+                />
+                <Route
+                  path="/user/:userId"
+                  element={<UserProfile />}
+                />
+                <Route
+                  path="/trips"
+                  element={<Trips ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
+                />
+                <Route
+                  path="/AddNewtrips"
+                  element={<AddNewTripPage />}
+                />
+                <Route
+                  path="/trips/:tripId"
+                  element={<TripsDetialsPage onLoginClick={() => decideLoginStatePopup()} ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}
+                />
+                {/* enrolled Trip */}
+                <Route
+                  path="/trips/en/:tripId"
+                  element={<EnrolledTripDetails />}
+                />
 
-              {/* Optional: Catch-all route for 404 */}
-              <Route path="*" element={<div>404 - Page Not Found</div>} />
-            </Routes>
-
+                {/* Optional: Catch-all route for 404 */}
+                <Route path="*" element={<div>404 - Page Not Found</div>} />
+              </Routes>
+            </div>
           </div>
           {/* Always render Footer */}
           <Footer

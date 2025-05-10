@@ -4,6 +4,12 @@
   margin: 0px 60px;
 }
 
+.RouterContainer {
+  position: relative;
+  display: inline-block;
+  height: 100vh;
+}
+
 body {
   font-family: Helvetica !important;
 }

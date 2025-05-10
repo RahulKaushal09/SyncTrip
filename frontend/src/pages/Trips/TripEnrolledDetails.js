@@ -182,6 +182,8 @@ const EnrolledTripDetails = () => {
   const viewProfile = (userId) => {
     console.log(`View profile of user ${userId}`);
     // Implement navigation to profile page
+    navigate(`/user/${userId}`);
+
   };
 
   // View Chat (placeholder)
@@ -267,7 +269,9 @@ const EnrolledTripDetails = () => {
                     let btns = [];
 
                     if (isConnected) {
-                      btns = [{ text: 'Chat', onClick: () => viewChat(user._id), className: 'chat btn btn-black' }];
+                      btns = [{ text: 'Chat', onClick: () => viewChat(user._id), className: 'chat btn btn-black' }
+                        // { text: 'View Profile', onClick: () => viewProfile(user._id), className: 'view-profile' }
+                      ];
                     } else if (hasSentRequest) {
                       btns = [{ text: 'Requested', onClick: () => { }, className: 'requested disabled', inlineStyle: { pointerEvents: 'none' } }];
                     } else if (noInteraction) {
@@ -287,6 +291,7 @@ const EnrolledTripDetails = () => {
                         isConnected={isConnected}
                         hasRecievedRequest={hasRecievedRequest}
                         type={ProfileCardEnum.AllGoing}
+                        showviewProfile={true}
                       />
                     );
                   })}
@@ -333,6 +338,7 @@ const EnrolledTripDetails = () => {
                       user={user}
                       btns={[
                         { text: 'Chat', onClick: () => viewChat(user._id), className: 'chat btn btn-black', inlineStyle: { width: "100%" } },
+                        { text: 'View Profile', onClick: () => viewProfile(user._id), className: 'view-profile btn btn-black', inlineStyle: { width: "100%" } }
                       ]}
                       onViewProfile={viewProfile}
                       hasSentRequest={false}
