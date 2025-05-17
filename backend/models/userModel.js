@@ -66,6 +66,10 @@ const UserSchema = new mongoose.Schema({
     //     tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Trip' },
     // }],
     status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+    views: [{ // New field to track profile views
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        viewedAt: { type: Date, default: Date.now }
+    }],
 }, { timestamps: true });
 
 // Virtual field to calculate age from dateOfBirth

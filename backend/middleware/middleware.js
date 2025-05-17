@@ -16,4 +16,20 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-export { authenticateToken };
+const middlewareAuthForLoggoutToo = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    // if (!token) return res.status(401).json({ message: 'No token provided' });
+    // console.log(`Token: ${token}`);
+    req.userId = "";
+    if (token) {
+        jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+            if (err) return res.status(403).json({ message: 'Invalid token', error: err });
+            req.user = user; // { id: user._id }
+            req.userId = user.id; // { id: user._id }
+        });
+    }
+    next();
+};
+
+export { authenticateToken, middlewareAuthForLoggoutToo };
