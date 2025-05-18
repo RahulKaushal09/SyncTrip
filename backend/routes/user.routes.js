@@ -26,7 +26,7 @@ router.get('/:userId', middlewareAuthForLoggoutToo, async (req, res) => {
 
 		// Fetch user with populated trips, preferred destinations, and wishlist
 		const user = await User.findById(userId)
-			.populate('trips.tripId', 'title MainImageUrl') // Assuming Trip has name and image
+			.populate('trips.tripId', 'title MainImageUrl essentials.timeline') // Assuming Trip has name and image
 			.populate('preferred_destinations', 'title  photos') // Assuming Location has name and image
 			.populate('wishlist', 'title  photos')
 			.select('-password'); // Exclude password

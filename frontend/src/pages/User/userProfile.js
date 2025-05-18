@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import '../../styles/User/userProfile.css';
+import { isTodayGreaterThanWithGivenDate } from '../../utils/CommonServices';
 
 
 const UserProfile = () => {
@@ -98,9 +99,9 @@ const UserProfile = () => {
     };
 
     if (!userData) return <div className="profile-loading">Loading...</div>;
-
-    const currentTrips = userData.trips.filter(trip => trip.status === 'ongoing');
-    const pastTrips = userData.trips.filter(trip => trip.status === 'completed');
+    console.log(isTodayGreaterThanWithGivenDate(userData.trips[0].tripId.essentials.timeline.fromDate));
+    const currentTrips = userData.trips.filter(trip => !isTodayGreaterThanWithGivenDate(trip.tripId.essentials.timeline.fromDate));
+    const pastTrips = userData.trips.filter(trip => isTodayGreaterThanWithGivenDate(trip.tripId.essentials.timeline.fromDate));
 
     return (
         <div className="profile-container">
@@ -132,7 +133,7 @@ const UserProfile = () => {
                 {userData.travelGoal && (
                     <p className="profile-goal">{userData.travelGoal}</p>
                 )}
-                <div className="profile-stats">
+                <div className="profile-stats-page">
                     <span>Rating: {userData.rating}/5</span>
                     <span>Profile Views: {userData.viewCount}</span>
                     {userData.profileCompleted && (
@@ -221,7 +222,7 @@ const UserProfile = () => {
                 </div>
             )}
 
-            <div className="profile-info">
+            <div className="profile-info-page">
                 {canEdit && userData.email && (
                     <div className="profile-info-item">Email: {userData.email}</div>
                 )}
@@ -251,7 +252,7 @@ const UserProfile = () => {
                 {(userData.socialMedias.instagram || userData.socialMedias.facebook || userData.socialMedias.twitter) && (
                     <div className="profile-social-links">
                         {userData.socialMedias.instagram && (
-                            <a href={userData.socialMedias.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+                            <a href={`https://www.instagram.com/` + userData.socialMedias.instagram.replace("@", "")} target="_blank" rel="noopener noreferrer">Instagram</a>
                         )}
                         {userData.socialMedias.facebook && (
                             <a href={userData.socialMedias.facebook} target="_blank" rel="noopener noreferrer">Facebook</a>
@@ -266,7 +267,7 @@ const UserProfile = () => {
             <div className="profile-trips-section">
                 <h2 className="profile-trips-title">Current Trips</h2>
                 {currentTrips.length > 0 ? (
-                    <div className="row">
+                    <div className="row tripCardRowScrollable">
                         {currentTrips.map(trip => (
                             <div key={trip.tripId._id} className="col-md-4 col-sm-6 mb-4">
                                 <div className="profile-trip-card">
@@ -276,7 +277,7 @@ const UserProfile = () => {
                                         className="profile-trip-image"
                                     />
                                     <div className="profile-trip-name">{trip.tripId.title}</div>
-                                    <button className="profile-btn-white">Explore Itinerary</button>
+                                    <button style={{ marginBottom: "40px" }} className=" btn btn-white">Explore Itinerary</button>
                                 </div>
                             </div>
                         ))}
@@ -284,7 +285,7 @@ const UserProfile = () => {
                 ) : (
                     <div className="profile-empty-state">
                         <p>No current trips. Start exploring new adventures!</p>
-                        <button className="profile-btn-black">Find Trips</button>
+                        <button className="btn btn-black" onClick={() => window.location.href = "/trips"} >Find Trips</button>
                     </div>
                 )}
             </div>
@@ -292,7 +293,7 @@ const UserProfile = () => {
             <div className="profile-trips-section">
                 <h2 className="profile-trips-title">Past Trips</h2>
                 {pastTrips.length > 0 ? (
-                    <div className="row">
+                    <div className="row tripCardRowScrollable">
                         {pastTrips.map(trip => (
                             <div key={trip.tripId._id} className="col-md-4 col-sm-6 mb-4">
                                 <div className="profile-trip-card">
@@ -302,7 +303,7 @@ const UserProfile = () => {
                                         className="profile-trip-image"
                                     />
                                     <div className="profile-trip-name">{trip.tripId.title}</div>
-                                    <button className="profile-btn-white">View Details</button>
+                                    <button style={{ marginBottom: "40px" }} className="btn btn-white">View Details</button>
                                 </div>
                             </div>
                         ))}
@@ -310,7 +311,7 @@ const UserProfile = () => {
                 ) : (
                     <div className="profile-empty-state">
                         <p>No past trips. Plan your next journey!</p>
-                        <button className="profile-btn-black">Explore Destinations</button>
+                        <button onClick={() => window.location.href = "/home"} className="btn btn-black">Explore Destinations</button>
                     </div>
                 )}
             </div>

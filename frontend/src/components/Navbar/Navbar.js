@@ -92,7 +92,7 @@ const Navbar = ({ ctaAction, onLoginClick, user }) => {
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu align="end">
-                                        <Dropdown.Item href="/profile">Profile</Dropdown.Item>
+                                        <Dropdown.Item href={`/user/${user.id}`}>Profile</Dropdown.Item>
                                         <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>

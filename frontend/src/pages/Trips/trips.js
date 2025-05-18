@@ -102,6 +102,7 @@ const Trips = () => {
             case 'enrolled':
                 return enrolledTrips;
             case 'history':
+
                 return trips.filter((trip) => {
                     const fromDate = new Date(trip.essentials.timeline.fromDate);
                     return fromDate < today || trip.requirements.status === 'completed';

@@ -6,7 +6,7 @@
 
 .RouterContainer {
   position: relative;
-  display: inline-block;
+  display: inline;
   height: 100vh;
 }
 

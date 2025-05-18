@@ -7,7 +7,6 @@ const TripSection = ({ trips, activeTab, isLoading, error }) => {
     const [searchTerm, setSearchTerm] = useState('');
     // Handle Search Input
 
-
     const handleSearchChange = (value) => {
         setSearchTerm(value);
     };
@@ -38,7 +37,7 @@ const TripSection = ({ trips, activeTab, isLoading, error }) => {
                             {/* Trip Cards Grid */}
                             <div className="tripSection-cards">
                                 {trips.length > 0 && trips
-                                    .filter((trip) => new Date(trip.essentials.timeline.tillDate) > new Date())
+                                    // .filter((trip) => new Date(trip.essentials.timeline.tillDate) > new Date())
                                     .map((trip, index) => (
                                         <TripCard key={index} trip={trip} activeTab={activeTab} />
                                     ))}

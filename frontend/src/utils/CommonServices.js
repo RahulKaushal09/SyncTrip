@@ -88,6 +88,15 @@ export const getLocationById = async (locationId) => {
 //         return null;
 //     }
 // };
+export const isTodayGreaterThanWithGivenDate = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set time to midnight for accurate comparison
+    const givenDate = new Date(date);
+    givenDate.setHours(0, 0, 0, 0); // Set time to midnight for accurate comparison
+    return today > givenDate;
+};
+
+
 export const getFormattedStringFromDate = (date) => {
     const d = new Date(date);
     const day = d.getDate(); // 1-31
