@@ -1,0 +1,26 @@
+.chat-container {
+    max-width: 800px;
+    margin: auto;
+}
+
+.chat-body {
+    max-height: 500px;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+    padding: 15px;
+}
+
+.chat-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-body::-webkit-scrollbar-thumb {
+    background-color: #007bff;
+    border-radius: 4px;
+}
+
+.card-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}

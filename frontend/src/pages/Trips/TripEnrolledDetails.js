@@ -189,7 +189,7 @@ const EnrolledTripDetails = () => {
   // View Chat (placeholder)
   const viewChat = (userId) => {
     console.log(`View chat with user ${userId} for trip ${tripId}`);
-    // Implement navigation or chat opening logic here
+    navigate(`/chat/${tripId}/${userId}`);
   };
   if (isLoading) return <Loader setLoadingState={isLoading} TextToShow="Loading Trip Details..." />;
   if (error) return <div className="status-message error">{error}</div>;
