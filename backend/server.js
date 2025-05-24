@@ -26,7 +26,41 @@ const allowedOrigins = [
     'https://synctrip.in',
     'https://synctrip.in/',
 ];
+// Socket.IO setup
+const io = new Server(server, {
+    cors: {
+        origin: allowedOrigins,
+        methods: ['GET', 'POST'],
+        credentials: true,
+    },
+});
 
+// Socket.IO events
+io.on('connection', (socket) => {
+    console.log(`✅ Socket connected: ${socket.id}`);
+
+    // Join a chat room
+    socket.on('join_chat', (chatId) => {
+        socket.join(chatId);
+        console.log(`➡️ Socket ${socket.id} joined chat: ${chatId}`);
+    });
+
+    // Handle typing event
+    socket.on('typing', (chatId) => {
+        socket.to(chatId).emit('typing', chatId);
+        console.log(`✍️ Typing event emitted for chat: ${chatId}`);
+    });
+
+    // Handle stop typing event
+    socket.on('stop_typing', (chatId) => {
+        socket.to(chatId).emit('stop_typing', chatId);
+        console.log(`🛑 Stop typing event emitted for chat: ${chatId}`);
+    });
+
+    socket.on('disconnect', () => {
+        console.log(`❌ Socket disconnected: ${socket.id}`);
+    });
+});
 // -----------------> Middleware <-----------------------------------//
 // CORS configuration
 app.use(
@@ -66,14 +100,14 @@ if (environment === 'development') {
 // Static file serving
 app.use('/uploads', express.static(path.join(__dirname, 'Uploads')));
 
-// -----------------> Socket.IO Setup <-----------------------------------//
-const io = new Server(server, {
-    cors: {
-        origin: allowedOrigins,
-        methods: ['GET', 'POST'],
-        credentials: true,
-    },
-});
+// // -----------------> Socket.IO Setup <-----------------------------------//
+// const io = new Server(server, {
+//     cors: {
+//         origin: allowedOrigins,
+//         methods: ['GET', 'POST'],
+//         credentials: true,
+//     },
+// });
 
 // Attach io to req for controllers
 app.use((req, res, next) => {

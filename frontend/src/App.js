@@ -260,7 +260,8 @@ const App = () => {
                   path="/user/:userId"
                   element={<UserProfile />}
                 />
-                <Route path="/chat/:tripId/:otherUserId" element={<ChatWindow />} />
+                <Route path="/chat/:tripId" element={<ChatWindow />} />
+
                 <Route
                   path="/trips"
                   element={<Trips ctaAction={() => setAnyCtaPopup(true)} handleIsLoading={handleIsLoading} />}

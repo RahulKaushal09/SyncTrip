@@ -120,12 +120,13 @@ const fetchChats = asyncHandler(async (req, res) => {
             .populate("tripId", "name") // Assuming Trip model has a 'name' field
             .populate("latestMessage")
             .sort({ updatedAt: -1 });
-
+        console.log(chats);
         // Populate sender of latest message
         chats = await User.populate(chats, {
             path: "latestMessage.sender",
             select: "name email profile_picture",
         });
+        console.log("chats after populating latestMessage.sender", chats);
 
         res.status(200).json(chats);
     } catch (error) {

@@ -5,7 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faGooglePlay, faApple } from '@fortawesome/free-brands-svg-icons';
 import SyncTripLogo from "../../assets/images/logoWeb.png";
+import { useLocation } from 'react-router-dom'; // Add useLocation
 const Footer = ({ links }) => {
+    const location = useLocation(); // Get current location
     // Default links if none are provided via props
     const defaultLinks = {
         company: [
@@ -31,7 +33,7 @@ const Footer = ({ links }) => {
     const moreLinks = links?.more || defaultLinks.more;
 
     return (
-        <footer className="footer">
+        <footer className="footer" style={{ display: location.pathname.includes('/chat') ? 'none' : 'flex' }}>
             <div className="footer-content">
                 <div className="footer-section">
                     {/* <h3 className="footer-title" style={{ fontSize: "40px", fontWeight: "700" }}>Synctrip</h3> */}

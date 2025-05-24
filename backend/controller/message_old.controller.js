@@ -9,10 +9,12 @@ const Chat = require("../models/chatModel");
 const sendMessage = asyncHandler(async (req, res) => {
     const { content, chatId } = req.body;
 
+    // Validate input
     if (!content || !content.trim() || !chatId) {
         return res.status(400).json({ message: "chatId and non-empty content are required" });
     }
 
+    // Verify user is part of the chat
     const chat = await Chat.findOne({
         _id: chatId,
         users: { $elemMatch: { $eq: req.user._id } },
@@ -23,25 +25,27 @@ const sendMessage = asyncHandler(async (req, res) => {
     }
 
     try {
+        // Create new message
         let message = await Message.create({
             chat: chatId,
             sender: req.user._id,
             content: content.trim(),
-            readBy: [req.user._id],
+            readBy: [req.user._id], // Sender has read their own message
         });
 
+        // Populate sender details
         message = await message.populate("sender", "name profile_picture");
 
+        // Update chat's latestMessage
         await Chat.findByIdAndUpdate(chatId, { latestMessage: message._id });
 
+        // Emit Socket.IO event to chat room
         if (req.io) {
             req.io.to(chatId).emit("receive_message", message);
-            console.log(`Emitted receive_message for chat: ${chatId}`, message);
         }
 
         res.status(200).json(message);
     } catch (error) {
-        console.error('Error sending message:', error);
         res.status(500);
         throw new Error(`Failed to send message: ${error.message}`);
     }
@@ -53,6 +57,7 @@ const sendMessage = asyncHandler(async (req, res) => {
 const allMessages = asyncHandler(async (req, res) => {
     const { chatId } = req.params;
 
+    // Verify user is part of the chat
     const chat = await Chat.findOne({
         _id: chatId,
         users: { $elemMatch: { $eq: req.user._id } },
@@ -63,10 +68,12 @@ const allMessages = asyncHandler(async (req, res) => {
     }
 
     try {
+        // Fetch messages
         const messages = await Message.find({ chat: chatId })
             .populate("sender", "name profile_picture")
-            .sort({ createdAt: 1 });
+            .sort({ createdAt: 1 }); // Chronological order
 
+        // Mark messages as read
         await Message.updateMany(
             { chat: chatId, readBy: { $ne: req.user._id } },
             { $addToSet: { readBy: req.user._id } }
@@ -74,7 +81,6 @@ const allMessages = asyncHandler(async (req, res) => {
 
         res.status(200).json(messages);
     } catch (error) {
-        console.error('Error fetching messages:', error);
         res.status(500);
         throw new Error(`Failed to fetch messages: ${error.message}`);
     }
