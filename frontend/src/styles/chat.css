@@ -295,6 +295,10 @@
     align-items: center;
 }
 
+.btn-chating {
+    padding: 0px !important
+}
+
 .btn-white-chating:hover {
     background-color: #f0f0f0;
 }
@@ -336,16 +340,7 @@
         flex-direction: column;
     }
 
-    .sidebar-chating {
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid #e0e0e0;
-        /* display: none; */
-    }
 
-    .sidebar-chating.active-chating {
-        display: block;
-    }
 
     .chat-area-chating {
         height: 100vh;
@@ -439,7 +434,7 @@
     }
 
     .chat-body-chating {
-        max-height: 80vh;
+        max-height: 90vh;
         padding: 10px;
     }
 

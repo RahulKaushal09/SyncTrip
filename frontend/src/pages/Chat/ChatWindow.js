@@ -6,6 +6,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/chat.css';
 import { GoArrowLeft } from "react-icons/go";
+import { BsSend } from 'react-icons/bs';
 
 const socket = io(process.env.REACT_APP_BACKEND_BASE_URL, { withCredentials: true });
 
@@ -106,10 +107,10 @@ const ChatWindow = () => {
         fetchTripAndUsers();
     }, [tripId, token, currentUserId, navigate]);
 
-    // when open scroll to this class chat-container-chating
     useEffect(() => {
         if (chatContainerBodyRef.current) {
-            chatContainerBodyRef.current.scrollTop = chatContainerBodyRef.current.scrollHeight;
+            // Scroll the page to the top of this container (smooth scroll)
+            chatContainerBodyRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }, [chatId]);
 
@@ -403,8 +404,9 @@ const ChatWindow = () => {
                                         value={newMessage}
                                         onChange={handleTyping}
                                     />
-                                    <button type="submit" className="btn btn-accent-chating">
+                                    <button type="submit" className=" btn-chating btn-accent-chating" >
                                         <i className="bi bi-send"></i>
+                                        <BsSend />
                                     </button>
                                 </form>
                             </div>
