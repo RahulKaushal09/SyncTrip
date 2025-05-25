@@ -65,11 +65,30 @@
     margin: 10px 0px;
 }
 
+.location-card-image {
+    position: relative;
+}
+
 .location-card-image img {
     height: 200px;
     width: 150px;
     object-fit: cover;
     border-radius: 10px;
+}
+
+.price-marker {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Semi-transparent black background */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    z-index: 10;
+    /* Ensure it appears above the image */
 }
 
 .location-card-icons {

@@ -346,7 +346,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
             />
             <LocationImageGallery locationImages={locationData?.photos} />
 
-            {isMobile && <AddLocationCard btnReference={joinTripButtonRef} showBtns={TripStatus && TripStatus === "completed" ? false : true} pageType={pageType} onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} btnsStyle={{ width: "100%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} title={TripsData.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={TripsData?.essentials?.timeline.fromDate ? (getFormattedStringFromDate(TripsData?.essentials?.timeline.fromDate) + " - " + getFormattedStringFromDate(TripsData?.essentials?.timeline.tillDate)) : TripsData?.essentials?.bestTime} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} alreadyEnrolled={alreadyEnrolled} />}
+            {isMobile && <AddLocationCard btnReference={joinTripButtonRef} showBtns={TripStatus && TripStatus === "completed" ? false : true} pageType={pageType} onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} btnsStyle={{ width: "100%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} title={TripsData.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={TripsData?.essentials?.timeline.fromDate ? (getFormattedStringFromDate(TripsData?.essentials?.timeline.fromDate) + " - " + getFormattedStringFromDate(TripsData?.essentials?.timeline.tillDate)) : TripsData?.essentials?.bestTime} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} alreadyEnrolled={alreadyEnrolled} price={TripsData?.essentials?.price} />}
 
             <div className="row" style={{ position: 'relative' }}>
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
@@ -422,6 +422,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                                 placesToVisit={locationData?.placesNumberToVisit || "10"}
                                 HotelsToStay={locationData?.hotels?.length || "10"}
                                 MainImage={locationData?.images[0]}
+                                price={TripsData?.essentials?.price}
                             />
                         </div>
                     </div>

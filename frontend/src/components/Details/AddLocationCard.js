@@ -6,7 +6,7 @@ import '../../styles/AddLocationCard.css';
 import { FaLeaf, FaBars, FaPlane } from "react-icons/fa";
 // improt enum class 
 import { PageTypeEnum } from '../../utils/pageType';  // adjust path as needed
-const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage, alreadyEnrolled, btnReference }) => {
+const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage, alreadyEnrolled, btnReference, price }) => {
     const [activeIcon, setActiveIcon] = useState(0);
     const [btn2Text, setBtn2Text] = useState("");
     const [btn2CTA, setBtn2CTA] = useState(() => ctaAction);
@@ -130,7 +130,12 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
                     </div>
                 </div>
                 <div className="location-card-image">
-                    <img src={MainImage} alt="MainImage" />
+                    <img src={MainImage} alt={title + " Trip"} />
+                    {price && (
+                        <div className="price-marker">
+                            <span>₹ {price}</span>
+                        </div>
+                    )}
                 </div>
             </div>
             {/* <div className="location-card-icons">
