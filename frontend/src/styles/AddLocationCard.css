@@ -71,9 +71,9 @@
 /* Responsive adjustment for smaller screens */
 @media (max-width: 600px) {
     .form-select.trip-info {
-        max-width: 100%;
+        max-width: 90%;
         /* Full width on small screens */
-        font-size: 16px;
+        font-size: 14px;
         /* Slightly larger text for touch devices */
     }
 }
