@@ -8,7 +8,7 @@ import Trips from './pages/Trips/trips';
 import AddNewTripPage from './pages/Trips/AddNewTrip';
 import TripsDetialsPage from './pages/Trips/TripsDetails';
 import PreRegisterPopup from './components/Popups/preRegisterPopup';
-import ChatWindow from './pages/Chat/ChatWindow.js';
+// import ChatWindow from './pages/Chat/ChatWindow.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 // import loader from './assets/images/loader.gif';
@@ -260,7 +260,7 @@ const App = () => {
                   path="/user/:userId"
                   element={<UserProfile />}
                 />
-                <Route path="/chat/:tripId" element={<ChatWindow />} />
+                {/* <Route path="/chat/:tripId" element={<ChatWindow />} /> */}
 
                 <Route
                   path="/trips"
