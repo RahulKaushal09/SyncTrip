@@ -21,7 +21,7 @@ const TripPlanner = ({ pageType, onLoginClick, EnrollInTrip, ctaAction, startDat
         } else if (pageType == PageTypeEnum.TRIP) {
             var user = JSON.parse(localStorage.getItem("user"));
             if (user && user?.profileCompleted !== undefined && user?.profileCompleted == true) {
-                setBtn2CTA(() => EnrollInTrip);
+                setBtn2CTA(() => () => EnrollInTrip(1)); //recheck this logic, it seems to always enroll in trip with id 1
             }
             else {
                 setBtn2CTA(() => onLoginClick);

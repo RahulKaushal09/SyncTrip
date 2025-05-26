@@ -99,9 +99,8 @@ const UserProfile = () => {
     };
 
     if (!userData) return <div className="profile-loading">Loading...</div>;
-    console.log(isTodayGreaterThanWithGivenDate(userData.trips[0].tripId.essentials.timeline.fromDate));
-    const currentTrips = userData.trips.filter(trip => !isTodayGreaterThanWithGivenDate(trip.tripId.essentials.timeline.fromDate));
-    const pastTrips = userData.trips.filter(trip => isTodayGreaterThanWithGivenDate(trip.tripId.essentials.timeline.fromDate));
+    const currentTrips = userData.trips.filter(trip => !isTodayGreaterThanWithGivenDate(trip.essentials.timeline.fromDate));
+    const pastTrips = userData.trips.filter(trip => isTodayGreaterThanWithGivenDate(trip.essentials.timeline.fromDate));
 
     return (
         <div className="profile-container">
@@ -269,14 +268,14 @@ const UserProfile = () => {
                 {currentTrips.length > 0 ? (
                     <div className="row tripCardRowScrollable">
                         {currentTrips.map(trip => (
-                            <div key={trip.tripId._id} className="col-md-4 col-sm-6 mb-4">
+                            <div key={trip._id} className="col-md-4 col-sm-6 mb-4">
                                 <div className="profile-trip-card">
                                     <img
-                                        src={trip.tripId.MainImageUrl || 'https://via.placeholder.com/400x200'}
-                                        alt={trip.tripId.title}
+                                        src={trip.MainImageUrl || 'https://via.placeholder.com/400x200'}
+                                        alt={trip.title}
                                         className="profile-trip-image"
                                     />
-                                    <div className="profile-trip-name">{trip.tripId.title}</div>
+                                    <div className="profile-trip-name">{trip.title}</div>
                                     <button style={{ marginBottom: "40px" }} className=" btn btn-white">Explore Itinerary</button>
                                 </div>
                             </div>
@@ -295,14 +294,14 @@ const UserProfile = () => {
                 {pastTrips.length > 0 ? (
                     <div className="row tripCardRowScrollable">
                         {pastTrips.map(trip => (
-                            <div key={trip.tripId._id} className="col-md-4 col-sm-6 mb-4">
+                            <div key={trip._id} className="col-md-4 col-sm-6 mb-4">
                                 <div className="profile-trip-card">
                                     <img
-                                        src={trip.tripId.MainImageUrl || 'https://via.placeholder.com/400x200'}
-                                        alt={trip.tripId.title}
+                                        src={trip.MainImageUrl || 'https://via.placeholder.com/400x200'}
+                                        alt={trip.title}
                                         className="profile-trip-image"
                                     />
-                                    <div className="profile-trip-name">{trip.tripId.title}</div>
+                                    <div className="profile-trip-name">{trip.title}</div>
                                     <button style={{ marginBottom: "40px" }} className="btn btn-white">View Details</button>
                                 </div>
                             </div>

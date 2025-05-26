@@ -6,12 +6,11 @@ import '../../styles/AddLocationCard.css';
 import { FaLeaf, FaBars, FaPlane } from "react-icons/fa";
 // improt enum class 
 import { PageTypeEnum } from '../../utils/pageType';  // adjust path as needed
-const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage, alreadyEnrolled, btnReference, price }) => {
+const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsStyle, style, ctaAction, title, address, rating, reviews, bestTime, placesToVisit, HotelsToStay, MainImage, alreadyEnrolled, btnReference, price, timelines }) => {
     const [activeIcon, setActiveIcon] = useState(0);
     const [btn2Text, setBtn2Text] = useState("");
     const [btn2CTA, setBtn2CTA] = useState(() => ctaAction);
-
-    // const [showItinearyBtn, setShowItinearyBtn] = useState(true);
+    const [selectedSlotId, setSelectedSlotId] = useState('');    // const [showItinearyBtn, setShowItinearyBtn] = useState(true);
     // create enum for page type location or trips
 
     // get random numebr 10 to 100 
@@ -29,7 +28,7 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
         } else if (pageType == PageTypeEnum.TRIP) {
             var user = JSON.parse(localStorage.getItem("user"));
             if (user && user?.profileCompleted !== undefined && user?.profileCompleted == true) {
-                setBtn2CTA(() => EnrollInTrip);
+                setBtn2CTA(selectedSlotId ? () => () => EnrollInTrip(selectedSlotId) : null);
             }
             else {
                 setBtn2CTA(() => onLoginClick);
@@ -37,7 +36,7 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
         } else {
             setBtn2CTA(() => ctaAction);
         }
-    }, [pageType, ctaAction]);
+    }, [pageType, ctaAction, selectedSlotId]);
     useEffect(() => {
         const interval = setInterval(() => {
             setActiveIcon((prev) => (prev + 1) % 3);
@@ -62,7 +61,12 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
     }, [pageType]);
 
 
-
+    const formatDateRange = (fromDate, tillDate) => {
+        const options = { day: 'numeric', month: 'short' };
+        const from = new Date(fromDate).toLocaleDateString('en-US', options);
+        const till = new Date(tillDate).toLocaleDateString('en-US', options);
+        return `${from} - ${till}`;
+    };
 
 
     return (
@@ -76,7 +80,29 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
                             <div className=" info-box">★ {rating}</div>
                             <div className=" info-box">{reviews} reviews</div>
                         </div>
-                        <p className="trip-info ">{bestTime}</p>
+                        {pageType === PageTypeEnum.LOCATION ? (
+                            <p className="trip-info">{bestTime}</p>
+                        ) : (
+                            timelines && timelines.length > 0 ? (
+                                <select
+                                    className="form-select trip-info"
+                                    value={selectedSlotId}
+                                    onChange={(e) => setSelectedSlotId(e.target.value)}
+                                    style={{ marginTop: '10px' }}
+                                    disabled={!timelines || timelines.length === 0}
+                                >
+                                    <option value="" disabled>Select trip date</option>
+                                    {timelines.map(({ slotId, fromDate, tillDate }) => (
+                                        <option key={slotId} value={slotId}>
+                                            {formatDateRange(fromDate, tillDate)}
+                                        </option>
+                                    ))}
+                                </select>
+                            ) : (
+                                <p className="trip-info">No available trip dates</p>
+                            )
+                        )}
+                        {/* <p className="trip-info ">{bestTime}</p> */}
                         <div className="location-card-icons">
                             <FaLeaf
                                 className='locationIcons'

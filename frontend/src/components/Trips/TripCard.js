@@ -8,8 +8,9 @@ import { Carousel } from 'react-bootstrap';
 import { FaRupeeSign } from 'react-icons/fa';
 const TripCard = ({ trip, activeTab }) => {
   var availableSpots = 5;
-
-  const {
+  console.log(trip);
+  var timelines = trip.essentials.timelines || [];
+  var {
     _id,
     title,
     MainImageUrl,
@@ -22,6 +23,7 @@ const TripCard = ({ trip, activeTab }) => {
         fromDate,
         tillDate
       },
+
       altitude,
       typeOfTrip,
       price,
@@ -127,7 +129,7 @@ const TripCard = ({ trip, activeTab }) => {
         </div>
         <div className="trip-details">
           <p className='dayNights-font'>{duration}</p>
-          <p className='otherDetails-font'>Dates: {formatDate(fromDate)} - {formatDate(tillDate)}</p>
+          <p className='otherDetails-font'>Dates: {timelines.length > 1 ? "Multiple Dates" : timelines.length == 1 ? formatDate(timelines[0].fromDate) + "-" + formatDate(timelines[0].tillDate) : formatDate(fromDate) + "-" + formatDate(tillDate)}</p>
           <p className='otherDetails-font'>Price: {price}</p>
           {activeTab !== 'history' && <p className='otherDetails-font'>Available Spots: <span style={{ color: '#dc3545', fontWeight: 'bold' }}>{availableSeats ? availableSeats : availableSpots} Left</span></p>}
           <p className='otherDetails-font'>Includes: <span style={{ color: '#28a745' }}>{include} included</span></p>

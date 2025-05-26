@@ -36,13 +36,15 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [isLoading, setIsLoading] = useState(true);
     const joinTripButtonRef = useRef(null);
 
-    const EnrollInTrip = async () => {
-
+    const EnrollInTrip = async (slotId) => {
         // Check if user is logged in and profile is complete
         // const user = JSON.parse(localStorage.getItem("user"));
         setUser(JSON.parse(localStorage.getItem("user")));
         const userToken = localStorage.getItem("userToken"); // Assuming this is where the token is stored
-        console.log('User token:', user);
+        if (!slotId) {
+            toast.error('Please select a trip date slot');
+            return;
+        }
         if (alreadyEnrolled) {
             toast.success("You are already enrolled in this trip.");
             navigate(`/trips/en/${tripId}`); // Redirect to the trip details page
@@ -59,7 +61,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${userToken}`, // Send token for authentication
                     },
-                    body: JSON.stringify({ userId: user._id }), // Send userId in the body
+                    body: JSON.stringify({ userId: user._id, slotId: parseInt(slotId) }),
                 });
 
                 const data = await response.json();
@@ -123,8 +125,19 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                 const Trip = TripRes.trip;
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
-                const fromDate = new Date(Trip.essentials.timeline.fromDate);
+                var fromDate;
+                var endDate;
+                for (let i = 0; i < Trip.essentials.timelines.length; i++) {
+                    const timeline = Trip.essentials.timelines[i];
 
+                    const from = timeline.fromDate ? new Date(timeline.fromDate) : new Date();
+                    const till = timeline.tillDate ? new Date(timeline.tillDate) : new Date();
+
+                    if (from > fromDate) fromDate = from;
+                    if (till > endDate) endDate = till;
+                }
+                // const fromDate = new Date(Trip.essentials.timeline.fromDate);
+                // const fromDate = Trip.essentials.timelines?.[0]?.fromDate ? new Date(Trip.essentials.timelines[0].fromDate) : new Date();
                 // Set trip status
                 setTripStatus(fromDate < today || Trip.requirements.status === 'completed'
                     ? 'completed'
@@ -231,8 +244,19 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
             const Trip = TripRes.trip;
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            const fromDate = new Date(Trip.essentials.timeline.fromDate);
+            // const fromDate = new Date(Trip.essentials.timeline.fromDate);
+            var fromDate;
+            var endDate;
+            for (let i = 0; i < Trip.essentials.timelines.length; i++) {
+                const timeline = Trip.essentials.timelines[i];
 
+                const from = timeline.fromDate ? new Date(timeline.fromDate) : new Date();
+                const till = timeline.tillDate ? new Date(timeline.tillDate) : new Date();
+
+                if (from > fromDate) fromDate = from;
+                if (till > endDate) endDate = till;
+            }
+            // const fromDate = Trip.essentials.timelines?.[0]?.fromDate ? new Date(Trip.essentials.timelines[0].fromDate) : new Date();
             // Set trip status
             setTripStatus(fromDate < today || Trip.requirements.status === 'completed'
                 ? 'completed'
@@ -346,14 +370,31 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
             />
             <LocationImageGallery locationImages={locationData?.photos} />
 
-            {isMobile && <AddLocationCard btnReference={joinTripButtonRef} showBtns={TripStatus && TripStatus === "completed" ? false : true} pageType={pageType} onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} btnsStyle={{ width: "100%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} title={TripsData.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={TripsData?.essentials?.timeline.fromDate ? (getFormattedStringFromDate(TripsData?.essentials?.timeline.fromDate) + " - " + getFormattedStringFromDate(TripsData?.essentials?.timeline.tillDate)) : TripsData?.essentials?.bestTime} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} alreadyEnrolled={alreadyEnrolled} price={TripsData?.essentials?.price} />}
+            {isMobile && <AddLocationCard
+                btnReference={joinTripButtonRef}
+                showBtns={TripStatus && TripStatus === "completed" ? false : true}
+                pageType={pageType}
+                onLoginClick={onLoginClick}
+                EnrollInTrip={EnrollInTrip}
+                btnsStyle={{ width: "100%" }}
+                style={{ marginBottom: "50px", marginLeft: "0px" }}
+                title={TripsData.title} rating={locationData?.rating}
+                reviews={getRandomNumberReviews()}
+                timelines={TripsData?.essentials?.timelines}
+                // bestTime={TripsData?.essentials?.timeline.fromDate ? (getFormattedStringFromDate(TripsData?.essentials?.timeline.fromDate) + " - " + getFormattedStringFromDate(TripsData?.essentials?.timeline.tillDate)) : TripsData?.essentials?.bestTime}
+                placesToVisit={locationData?.placesNumberToVisit || "10"}
+                HotelsToStay={locationData?.hotels?.length || "10"}
+                MainImage={locationData?.images[0]}
+                alreadyEnrolled={alreadyEnrolled}
+                price={TripsData?.essentials?.price} />
+            }
 
             <div className="row" style={{ position: 'relative' }}>
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
                     {otherGoing.length > 0 ? (
                         <div>
                             <h2 className="section-title">All Other Going</h2>
-                            <div className="user-list">
+                            <div className="user-list-detailsContaier">
                                 {otherGoing.map((user) => {
                                     // const isConnected = user.status === 0;
                                     // const hasSentRequest = user.status === 1;
@@ -418,7 +459,8 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                                 title={TripsData.title}
                                 rating={locationData?.rating}
                                 reviews={getRandomNumberReviews()}
-                                bestTime={locationData?.best_time}
+                                timelines={TripsData?.essentials?.timelines}
+                                // bestTime={locationData?.best_time}
                                 placesToVisit={locationData?.placesNumberToVisit || "10"}
                                 HotelsToStay={locationData?.hotels?.length || "10"}
                                 MainImage={locationData?.images[0]}

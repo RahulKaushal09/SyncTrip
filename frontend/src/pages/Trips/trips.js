@@ -96,7 +96,14 @@ const Trips = () => {
         switch (activeTab) {
             case 'upcoming':
                 return trips.filter((trip) => {
-                    const fromDate = new Date(trip.essentials.timeline.fromDate);
+                    var fromDate = new Date();
+                    for (var i = 0; i < trip.essentials.timelines.length; i++) {
+                        if (new Date(trip.essentials.timelines[i].fromDate) > fromDate) {
+                            fromDate = new Date(trip.essentials.timelines[i].fromDate);
+                            // break;
+                        }
+                    }
+                    // const fromDate = new Date(trip.essentials.timeline.fromDate);
                     return fromDate >= today && ['active', 'scheduled'].includes(trip.requirements.status);
                 });
             case 'enrolled':
@@ -104,7 +111,14 @@ const Trips = () => {
             case 'history':
 
                 return trips.filter((trip) => {
-                    const fromDate = new Date(trip.essentials.timeline.fromDate);
+                    var fromDate = new Date() - 1; // Initialize to yesterday
+                    for (var i = 0; i < trip.essentials.timelines.length; i++) {
+                        if (new Date(trip.essentials.timelines[i].fromDate) > fromDate) {
+                            fromDate = new Date(trip.essentials.timelines[i].fromDate);
+                            // break;
+                        }
+                    }
+                    // const fromDate = new Date(trip.essentials.timeline.fromDate);
                     return fromDate < today || trip.requirements.status === 'completed';
                 });
             default:

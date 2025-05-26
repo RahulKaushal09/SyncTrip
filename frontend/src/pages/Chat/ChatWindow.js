@@ -8,8 +8,10 @@ import '../../styles/chat.css';
 import { GoArrowLeft } from "react-icons/go";
 import { BsSend } from 'react-icons/bs';
 
-const socket = io(process.env.REACT_APP_BACKEND_BASE_URL, { withCredentials: true });
-
+const socket = io(process.env.REACT_APP_BACKEND_BASE_URL, {
+    withCredentials: true,
+    query: { token: localStorage.getItem('userToken') }, // Pass token in query
+});
 const ChatWindow = () => {
     const { tripId } = useParams();
     const navigate = useNavigate();
