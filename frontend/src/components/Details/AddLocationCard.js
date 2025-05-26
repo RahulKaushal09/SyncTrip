@@ -83,7 +83,7 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
                         {pageType === PageTypeEnum.LOCATION ? (
                             <p className="trip-info">{bestTime}</p>
                         ) : (
-                            timelines && timelines.length > 0 ? (
+                            timelines && timelines.length > 1 ? (
                                 <select
                                     className="form-select trip-info"
                                     value={selectedSlotId}
@@ -98,9 +98,15 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
                                         </option>
                                     ))}
                                 </select>
-                            ) : (
-                                <p className="trip-info">No available trip dates</p>
-                            )
+                            ) : timelines && timelines.length === 1 ? (
+                                <p className="trip-info">
+                                    {formatDateRange(timelines[0].fromDate, timelines[0].tillDate)}
+                                </p>
+
+                            ) :
+                                (
+                                    <p className="trip-info">No available trip dates</p>
+                                )
                         )}
                         {/* <p className="trip-info ">{bestTime}</p> */}
                         <div className="location-card-icons">

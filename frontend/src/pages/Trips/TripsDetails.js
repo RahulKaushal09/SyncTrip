@@ -244,9 +244,26 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
             const Trip = TripRes.trip;
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            // const fromDate = new Date(Trip.essentials.timeline.fromDate);
             var fromDate;
             var endDate;
+            // const fromDate = new Date(Trip.essentials.timeline.fromDate);
+            // if (TripRes.appliedUsers && TripRes.appliedUsers.length > 0) {
+            //     var currentUser = TripRes.appliedUsers.find(u => u._id === user?._id);
+            //     if (currentUser && currentUser.slotId) {
+            //         Trip.essentials.timelines = []
+            //         fromDate = new Date(currentUser.startDate);
+            //         endDate = new Date(currentUser.endDate);
+            //         Trip.essentials.timelines.push({
+            //             slotId: currentUser.slotId,
+            //             fromDate: currentUser.startDate,
+            //             tillDate: currentUser.endDate
+            //         });
+
+            //     }
+            // } else {
+
+
+
             for (let i = 0; i < Trip.essentials.timelines.length; i++) {
                 const timeline = Trip.essentials.timelines[i];
 
@@ -256,6 +273,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                 if (from > fromDate) fromDate = from;
                 if (till > endDate) endDate = till;
             }
+            // }
             // const fromDate = Trip.essentials.timelines?.[0]?.fromDate ? new Date(Trip.essentials.timelines[0].fromDate) : new Date();
             // Set trip status
             setTripStatus(fromDate < today || Trip.requirements.status === 'completed'

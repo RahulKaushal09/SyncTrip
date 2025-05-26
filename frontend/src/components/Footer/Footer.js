@@ -33,7 +33,7 @@ const Footer = ({ links }) => {
     const moreLinks = links?.more || defaultLinks.more;
 
     return (
-        <footer className="footer" style={{ display: location.pathname.includes('/chat') ? 'none' : 'flex' }}>
+        <footer className="footer" style={{ display: location.pathname.includes('/chat') ? 'none' : 'block' }}>
             <div className="footer-content">
                 <div className="footer-section">
                     {/* <h3 className="footer-title" style={{ fontSize: "40px", fontWeight: "700" }}>Synctrip</h3> */}

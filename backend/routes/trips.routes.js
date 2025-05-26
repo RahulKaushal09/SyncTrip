@@ -192,14 +192,29 @@ router.get('/:id', async (req, res) => {
         // console.log("Fetching trip with ID:", req.params.id);  // Log the trip ID for debugging
         const trip = await Trip.findById(req.params.id).populate({
             path: 'peopleApplied',
-            select: 'name profile_picture dateOfBirth rating persona', // Select fields to return
+            select: 'name profile_picture dateOfBirth rating persona',//trips', // Select fields to return
             where: { showProfile: true } // Only include users who want to show their profile
             // Add any other fields you want to include
         });
         if (!trip) {
             return res.status(404).json({ error: 'Trip not found' });
         }
+        // Log the trip for debugging
         const appliedUsers = trip.peopleApplied.map(user => {
+            // var slotId = null;
+            // var userTrip = null;
+            // var startDate = null;
+            // var endDate = null;
+            // if (user.trips && user.trips.length > 0) {
+            //     userTrip = user.trips.find(t => t.tripId.toString() === trip._id.toString());
+            //     if (userTrip) {
+            //         slotId = userTrip.slotId; // Get the slotId from the user's trip
+            //         startDate = userTrip.startDate; // Get the start date from the user's trip
+            //         endDate = userTrip.endDate; // Get the end date from the user's trip
+
+            //     }
+            // }
+
             return {
                 _id: user._id,
                 name: user.name,
@@ -207,9 +222,15 @@ router.get('/:id', async (req, res) => {
                 age: user.dateOfBirth ? Math.floor((new Date() - new Date(user.dateOfBirth)) / (1000 * 60 * 60 * 24 * 365.25)) : null,
                 rating: user.rating || 5,
                 persona: "",
+                // slotId: slotId, // Include slotId if available
+                // startDate: startDate, // Include startDate if available
+                // endDate: endDate, // Include endDate if available
 
             };
         });
+
+
+
         trip.peopleApplied = appliedUsers; // Replace with filtered users
         const response = {
             trip,
