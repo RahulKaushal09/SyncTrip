@@ -34,54 +34,54 @@ const allowedOrigins = [
 
 ];
 // Socket.IO setup
-const io = new Server(server, {
-    cors: {
-        origin: allowedOrigins,
-        methods: ['GET', 'POST'],
-        credentials: true,
-    },
-});
-const jwt = require('jsonwebtoken');
+// const io = new Server(server, {
+//     cors: {
+//         origin: allowedOrigins,
+//         methods: ['GET', 'POST'],
+//         credentials: true,
+//     },
+// });
+// const jwt = require('jsonwebtoken');
 
-io.use((socket, next) => {
-    const token = socket.handshake.query.token;
-    if (!token) {
-        return next(new Error('Authentication error: No token provided'));
-    }
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        socket.userId = decoded.id; // Store user ID for use in events
-        next();
-    } catch (error) {
-        next(new Error('Authentication error: Invalid token'));
-    }
-});
-// Socket.IO events
-io.on('connection', (socket) => {
-    console.log(`✅ Socket connected: ${socket.id}`);
+// io.use((socket, next) => {
+//     const token = socket.handshake.query.token;
+//     if (!token) {
+//         return next(new Error('Authentication error: No token provided'));
+//     }
+//     try {
+//         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//         socket.userId = decoded.id; // Store user ID for use in events
+//         next();
+//     } catch (error) {
+//         next(new Error('Authentication error: Invalid token'));
+//     }
+// });
+// // Socket.IO events
+// io.on('connection', (socket) => {
+//     console.log(`✅ Socket connected: ${socket.id}`);
 
-    // Join a chat room
-    socket.on('join_chat', (chatId) => {
-        socket.join(chatId);
-        console.log(`➡️ Socket ${socket.id} joined chat: ${chatId}`);
-    });
+//     // Join a chat room
+//     socket.on('join_chat', (chatId) => {
+//         socket.join(chatId);
+//         console.log(`➡️ Socket ${socket.id} joined chat: ${chatId}`);
+//     });
 
-    // Handle typing event
-    socket.on('typing', (chatId) => {
-        socket.to(chatId).emit('typing', chatId);
-        console.log(`✍️ Typing event emitted for chat: ${chatId}`);
-    });
+//     // Handle typing event
+//     socket.on('typing', (chatId) => {
+//         socket.to(chatId).emit('typing', chatId);
+//         console.log(`✍️ Typing event emitted for chat: ${chatId}`);
+//     });
 
-    // Handle stop typing event
-    socket.on('stop_typing', (chatId) => {
-        socket.to(chatId).emit('stop_typing', chatId);
-        console.log(`🛑 Stop typing event emitted for chat: ${chatId}`);
-    });
+//     // Handle stop typing event
+//     socket.on('stop_typing', (chatId) => {
+//         socket.to(chatId).emit('stop_typing', chatId);
+//         console.log(`🛑 Stop typing event emitted for chat: ${chatId}`);
+//     });
 
-    socket.on('disconnect', () => {
-        console.log(`❌ Socket disconnected: ${socket.id}`);
-    });
-});
+//     socket.on('disconnect', () => {
+//         console.log(`❌ Socket disconnected: ${socket.id}`);
+//     });
+// });
 
 
 // -----------------> Middleware <-----------------------------------//
@@ -134,7 +134,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'Uploads')));
 
 // Attach io to req for controllers
 app.use((req, res, next) => {
-    req.io = io;
+    // req.io = io;
     next();
 });
 
