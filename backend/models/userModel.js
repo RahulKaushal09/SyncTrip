@@ -22,7 +22,6 @@ const UserSchema = new mongoose.Schema({
         endDate: Date,
         slotId: {
             type: Number,
-            required: true
         },
     }],
     showProfile: { type: Boolean, default: true },

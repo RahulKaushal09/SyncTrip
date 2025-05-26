@@ -270,7 +270,7 @@ router.post('/sendRequest', authenticateToken, async (req, res) => {
 			// Modify the existing entry directly in the array
 			receiver.friends[receiverTripIndex].users.push({ userId: senderId, status: -1 });
 		}
-
+		// console.log('Sender before save:', JSON.stringify(sender, null, 2));
 		await sender.save();
 		await receiver.save();
 		res.status(200).json({ message: 'Request sent successfully' });
