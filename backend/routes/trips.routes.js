@@ -40,22 +40,32 @@ router.post('/getAllTrips', async (req, res) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Normalize to start of the day
 
-        // Update statuses based on date
-
+        // Update statuses based on the latest date in timelines
         for (let trip of trips) {
-            const fromDate = new Date(trip.essentials.timeline.fromDate);
-            const tillDate = new Date(trip.essentials.timeline.tillDate);
+            let newStatus = trip.requirements?.status || 'scheduled'; // Default status if undefined
 
-            fromDate.setHours(0, 0, 0, 0);
-            tillDate.setHours(0, 0, 0, 0);
+            // Modified: Check if timelines exists and has entries
+            if (trip.essentials.timelines && trip.essentials.timelines.length > 0) {
+                // Find the earliest fromDate and latest tillDate
+                const fromDates = trip.essentials.timelines.map(t => new Date(t.fromDate));
+                const tillDates = trip.essentials.timelines.map(t => new Date(t.tillDate));
 
-            let newStatus = trip.requirements?.status;
+                const earliestFromDate = new Date(Math.min(...fromDates));
+                const latestTillDate = new Date(Math.max(...tillDates));
 
-            if (fromDate > today) {
-                newStatus = 'scheduled';
-            } else if (fromDate <= today && today <= tillDate) {
-                newStatus = 'active';
+                earliestFromDate.setHours(0, 0, 0, 0);
+                latestTillDate.setHours(0, 0, 0, 0);
+
+                // Determine status based on earliest fromDate and latest tillDate
+                if (earliestFromDate > today) {
+                    newStatus = 'scheduled';
+                } else if (earliestFromDate <= today && today <= latestTillDate) {
+                    newStatus = 'active';
+                } else {
+                    newStatus = 'completed';
+                }
             } else {
+                // Fallback: If no timelines, assume completed (or keep existing status)
                 newStatus = 'completed';
             }
 
@@ -66,21 +76,16 @@ router.post('/getAllTrips', async (req, res) => {
             }
         }
 
-        // Construct response
-        const appliedUsers = trips.map(trip => {
-            if (trip.peopleApplied && trip.peopleApplied.length > 0) {
-                trip.peopleApplied.map(user => ({
-                    name: user.name,
-                    profilePicture: user.profile_picture?.[0] || 'https://via.placeholder.com/40',
-                }))
-            }
-        }
-        );
-
+        // Modified: Fix appliedUsers mapping
         const response = {
-            trips: trips.map((trip, index) => ({
+            trips: trips.map(trip => ({
                 ...trip._doc,
-                peopleApplied: appliedUsers[index],
+                peopleApplied: trip.peopleApplied && trip.peopleApplied.length > 0
+                    ? trip.peopleApplied.map(user => ({
+                        name: user.name,
+                        profilePicture: user.profile_picture?.[0] || 'https://via.placeholder.com/40',
+                    }))
+                    : [],
             })),
             totalTrips: trips.length,
         };
@@ -88,8 +93,8 @@ router.post('/getAllTrips', async (req, res) => {
         res.json(response);
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error });
+        console.error('Error in /getAllTrips:', error);
+        res.status(500).json({ error: error.message || 'Internal server error' });
     }
 });
 
@@ -270,6 +275,43 @@ router.get('/enrolled/:id', authenticateToken, async (req, res) => {
                     rating: user.rating || 5,
                 };
             });
+        const userTrip = currentUser.trips.find(t => t.tripId.toString() === tripId);
+        let timeline = null;
+
+        if (userTrip?.slotId && trip.essentials.timelines?.length > 0) {
+            // Find the timeline slot matching the user's selected slotId
+            const selectedSlot = trip.essentials.timelines.find(
+                slot => slot.slotId === userTrip.slotId
+            );
+            if (selectedSlot) {
+                timeline = {
+                    fromDate: selectedSlot.fromDate,
+                    tillDate: selectedSlot.tillDate
+                };
+            }
+        } else if (userTrip?.startDate && userTrip?.endDate) {
+            // Fallback: Use startDate and endDate from User.trips if slotId is missing
+            timeline = {
+                fromDate: userTrip.startDate,
+                tillDate: userTrip.endDate
+            };
+        } else if (trip.essentials.timeline) {
+            // Fallback: Use existing essentials.timeline for unmigrated trips
+            timeline = {
+                fromDate: trip.essentials.timeline.fromDate,
+                tillDate: trip.essentials.timeline.tillDate
+            };
+        } else if (trip.essentials.timelines?.length > 0) {
+            // Fallback: Use first timeline slot if no user-specific data
+            timeline = {
+                fromDate: trip.essentials.timelines[0].fromDate,
+                tillDate: trip.essentials.timelines[0].tillDate
+            };
+        }
+        if (timeline.fromDate && timeline.tillDate) {
+            trip.essentials.timeline.fromDate = timeline.fromDate;
+            trip.essentials.timeline.tillDate = timeline.tillDate;
+        }
 
         const response = {
             _id: trip._id,
@@ -316,46 +358,115 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Delete User
-router.delete('/:id', async (req, res) => {
-    try {
-        await User.findByIdAndDelete(req.params.id);
-        res.json({ message: 'User deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ error });
-    }
-});
+// // Delete User
+// router.delete('/:id', async (req, res) => {
+//     try {
+//         await User.findByIdAndDelete(req.params.id);
+//         res.json({ message: 'User deleted successfully' });
+//     } catch (error) {
+//         res.status(500).json({ error });
+//     }
+// });
+// router.get('/en/enrolled', authenticateToken, async (req, res) => {
+//     try {
+//         const userId = req.user.id;
+//         const user = await User.findById(userId).populate({
+//             path: 'trips.tripId',
+//             select: 'title essentials itinerary requirements include MainImageUrl ',
+//         });
+
+
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         const enrolledTrips = user.trips
+//             .filter((trip) => trip.tripId && trip.tripId.essentials.timeline.tillDate > new Date())
+//             .map((trip) => trip.tripId);
+
+//         res.json(enrolledTrips);
+//     } catch (error) {
+//         console.error('Error fetching enrolled trips:', error);
+//         res.status(500).json({ error: 'Server error' });
+//     }
+// });
 router.get('/en/enrolled', authenticateToken, async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await User.findById(userId).populate({
             path: 'trips.tripId',
-            select: 'title essentials itinerary requirements include MainImageUrl ',
+            select: 'title essentials itinerary requirements include MainImageUrl',
         });
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        // Modified: Filter trips based on User.trips.endDate
         const enrolledTrips = user.trips
-            .filter((trip) => trip.tripId && trip.tripId.essentials.timeline.tillDate > new Date())
-            .map((trip) => trip.tripId);
+            .filter((trip) => {
+                if (!trip.tripId) return false; // Skip invalid trips
+
+                // Use endDate from User.trips (set during enrollment)
+                if (trip.endDate) {
+                    return new Date(trip.endDate) > new Date();
+                }
+
+                // // Fallback: Handle trips with old essentials.timeline (if unmigrated)
+                // if (trip.tripId.essentials.timeline?.tillDate) {
+                //     return new Date(trip.tripId.essentials.timeline.tillDate) > new Date();
+                // }
+
+                // Fallback: Handle trips with essentials.timelines
+                if (trip.tripId.essentials.timelines?.length > 0) {
+                    const latestTillDate = Math.max(
+                        ...trip.tripId.essentials.timelines.map(t => new Date(t.tillDate).getTime())
+                    );
+                    return new Date(latestTillDate) > new Date();
+                }
+
+                return false; // Exclude trips with no valid date
+            })
+            .map((trip) => {
+                // Modified: Transform tripId to include timelines (and handle old timeline)
+                const tripData = trip.tripId._doc;
+                if (tripData.essentials.timeline && !tripData.essentials.timelines) {
+                    tripData.essentials.timelines = [{
+                        slotId: 1,
+                        fromDate: tripData.essentials.timeline.fromDate,
+                        tillDate: tripData.essentials.timeline.tillDate
+                    }];
+                    // delete tripData.essentials.timeline;
+                }
+                // Include user's selected dates from User.trips
+                return {
+                    ...tripData,
+                    userSelectedDates: {
+                        startDate: trip.startDate,
+                        endDate: trip.endDate
+                    }
+                };
+            });
 
         res.json(enrolledTrips);
     } catch (error) {
         console.error('Error fetching enrolled trips:', error);
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: error.message || 'Server error' });
     }
 });
 router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
     const { tripId } = req.params;
     const userId = req.user.id; // From token
-
+    const { slotId } = req.body;
     try {
         // Find the trip and populate enrolled users
         const trip = await Trip.findById(tripId)
         if (!trip) {
             return res.status(404).json({ message: 'Trip not found' });
+        }
+        const selectedSlot = trip.essentials.timelines?.find(t => t.slotId === parseInt(slotId));
+        if (!slotId || !selectedSlot) {
+            return res.status(400).json({ message: 'Invalid or missing slotId' });
         }
 
         // Check if trip is enrollable
@@ -383,9 +494,13 @@ router.post('/enroll/:tripId', authenticateToken, async (req, res) => {
         trip.essentials.availableSeats = (trip.essentials.availableSeats || 10) - 1; // Decrease available seats
         // Update User
         user.trips.push({
-            status: 'ongoing', // Or 'scheduled' based on trip status
+            status: 'ongoing',
             tripId: trip._id,
             bookingDate: new Date(),
+            // Modified: Store selected slot's fromDate and tillDate
+            slotId: parseInt(slotId), // Store the selected slotId
+            startDate: selectedSlot.fromDate,
+            endDate: selectedSlot.tillDate
         });
 
         // Save both documents

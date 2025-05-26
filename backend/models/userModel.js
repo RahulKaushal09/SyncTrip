@@ -18,6 +18,12 @@ const UserSchema = new mongoose.Schema({
         status: { type: String, enum: ['ongoing', 'completed'], required: true },
         tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Trip' },
         bookingDate: Date,
+        startDate: Date,
+        endDate: Date,
+        slotId: {
+            type: Number,
+            required: true
+        },
     }],
     showProfile: { type: Boolean, default: true },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Location' }],

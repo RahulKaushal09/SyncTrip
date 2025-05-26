@@ -19,6 +19,75 @@ router.get("/", authenticateToken, async (req, res) => {
 }
 );
 // GET /api/users/:userId - Fetch user profile
+// router.get('/:userId', middlewareAuthForLoggoutToo, async (req, res) => {
+// 	try {
+// 		const { userId } = req.params;
+// 		const loggedInUserId = req.userId;
+
+// 		// Fetch user with populated trips, preferred destinations, and wishlist
+// 		const user = await User.findById(userId)
+// 			.populate('trips.tripId', 'title MainImageUrl essentials.timeline') // Assuming Trip has name and image
+// 			.populate('preferred_destinations', 'title  photos') // Assuming Location has name and image
+// 			.populate('wishlist', 'title  photos')
+// 			.select('-password'); // Exclude password
+
+// 		if (!user) {
+// 			return res.status(404).json({ error: 'User not found' });
+// 		}
+
+// 		// Check if the viewer is the profile owner
+// 		var canEdit = false;
+// 		if (loggedInUserId) {
+// 			if (userId != loggedInUserId) {
+
+// 				const existingView = user.views.find(view => view.userId.toString() === loggedInUserId);
+// 				if (existingView) {
+// 					// Update timestamp if user has already viewed the profile
+// 					await User.updateOne(
+// 						{ _id: userId, 'views.userId': loggedInUserId },
+// 						{ $set: { 'views.$.viewedAt': new Date() } }
+// 					);
+// 				} else {
+// 					// Add new view entry if user hasn't viewed before
+// 					await User.updateOne(
+// 						{ _id: userId },
+// 						{ $push: { views: { userId: loggedInUserId, viewedAt: new Date() } } }
+// 					);
+// 				}
+// 			}
+// 			canEdit = userId === loggedInUserId;
+// 		}
+// 		// Format response
+// 		const response = {
+// 			user: {
+// 				_id: user._id,
+// 				name: user.name,
+// 				...(canEdit ? { email: user.email, phone: user.phone || '' } : {}),
+// 				rating: user.rating,
+// 				sex: user.sex || '',
+// 				dateOfBirth: user.dateOfBirth || null,
+// 				profile_picture: user.profile_picture || [],
+// 				interestedAgeGroups: user.interestedAgeGroups || [],
+// 				interestedSex: user.interestedSex || [],
+// 				languages: user.languages || [],
+// 				persona: user.persona || [],
+// 				preferred_destinations: user.preferred_destinations || [],
+// 				trips: user.trips || [],
+// 				wishlist: user.wishlist || [],
+// 				socialMedias: user.socialMedias || { instagram: '', facebook: '', twitter: '' },
+// 				travelGoal: user.travelGoal || '',
+// 				profileCompleted: user.profileCompleted,
+// 				viewCount: user.views.length, // Include total views
+// 			},
+// 			canEdit,
+// 		};
+
+// 		res.json(response);
+// 	} catch (error) {
+// 		console.error(error);
+// 		res.status(500).json({ error: 'Server error' });
+// 	}
+// });
 router.get('/:userId', middlewareAuthForLoggoutToo, async (req, res) => {
 	try {
 		const { userId } = req.params;
@@ -26,9 +95,9 @@ router.get('/:userId', middlewareAuthForLoggoutToo, async (req, res) => {
 
 		// Fetch user with populated trips, preferred destinations, and wishlist
 		const user = await User.findById(userId)
-			.populate('trips.tripId', 'title MainImageUrl essentials.timeline') // Assuming Trip has name and image
-			.populate('preferred_destinations', 'title  photos') // Assuming Location has name and image
-			.populate('wishlist', 'title  photos')
+			.populate('trips.tripId', 'title MainImageUrl essentials.timeline essentials.timelines') // Include both timeline and timelines
+			.populate('preferred_destinations', 'title photos')
+			.populate('wishlist', 'title photos')
 			.select('-password'); // Exclude password
 
 		if (!user) {
@@ -39,7 +108,6 @@ router.get('/:userId', middlewareAuthForLoggoutToo, async (req, res) => {
 		var canEdit = false;
 		if (loggedInUserId) {
 			if (userId != loggedInUserId) {
-
 				const existingView = user.views.find(view => view.userId.toString() === loggedInUserId);
 				if (existingView) {
 					// Update timestamp if user has already viewed the profile
@@ -57,7 +125,27 @@ router.get('/:userId', middlewareAuthForLoggoutToo, async (req, res) => {
 			}
 			canEdit = userId === loggedInUserId;
 		}
-		// Format response
+
+		// Format trips to include user-selected dates while maintaining original structure
+		const formattedTrips = user.trips.map(trip => {
+			if (!trip.tripId) return null; // Skip invalid trips
+			const tripData = trip.tripId._doc;
+			// Use user-selected dates if available, otherwise fallback to timelines or timeline
+			const startDate = trip.startDate ||
+				(tripData.essentials.timelines?.[0]?.fromDate) ||
+				tripData.essentials.timeline?.fromDate || null;
+			const endDate = trip.endDate ||
+				(tripData.essentials.timelines?.[0]?.tillDate) ||
+				tripData.essentials.timeline?.tillDate || null;
+
+			return {
+				...tripData,
+				startDate, // Add startDate to match frontend expectations
+				endDate    // Add endDate to match frontend expectations
+			};
+		}).filter(trip => trip !== null); // Remove null entries
+
+		// Format response to match original structure
 		const response = {
 			user: {
 				_id: user._id,
@@ -72,7 +160,7 @@ router.get('/:userId', middlewareAuthForLoggoutToo, async (req, res) => {
 				languages: user.languages || [],
 				persona: user.persona || [],
 				preferred_destinations: user.preferred_destinations || [],
-				trips: user.trips || [],
+				trips: formattedTrips, // Use formatted trips
 				wishlist: user.wishlist || [],
 				socialMedias: user.socialMedias || { instagram: '', facebook: '', twitter: '' },
 				travelGoal: user.travelGoal || '',
@@ -88,7 +176,6 @@ router.get('/:userId', middlewareAuthForLoggoutToo, async (req, res) => {
 		res.status(500).json({ error: 'Server error' });
 	}
 });
-
 
 // User Registration
 router.post('/basicRegistration', async (req, res) => {

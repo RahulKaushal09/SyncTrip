@@ -25,6 +25,13 @@ const allowedOrigins = [
     'https://www.synctrip.in',
     'https://synctrip.in',
     'https://synctrip.in/',
+    'synctrip.vercel.app',
+    'https://synctrip.vercel.app',
+    'https://synctrip-rahulkaushal09s-projects.vercel.app/',
+    'https://synctrip-git-main-rahulkaushal09s-projects.vercel.app/',
+    'https://synctrip-rahulkaushal09s-projects.vercel.app',
+    'https://synctrip-git-main-rahulkaushal09s-projects.vercel.app',
+
 ];
 // Socket.IO setup
 const io = new Server(server, {
@@ -34,7 +41,21 @@ const io = new Server(server, {
         credentials: true,
     },
 });
+const jwt = require('jsonwebtoken');
 
+io.use((socket, next) => {
+    const token = socket.handshake.query.token;
+    if (!token) {
+        return next(new Error('Authentication error: No token provided'));
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        socket.userId = decoded.id; // Store user ID for use in events
+        next();
+    } catch (error) {
+        next(new Error('Authentication error: Invalid token'));
+    }
+});
 // Socket.IO events
 io.on('connection', (socket) => {
     console.log(`✅ Socket connected: ${socket.id}`);
@@ -61,6 +82,8 @@ io.on('connection', (socket) => {
         console.log(`❌ Socket disconnected: ${socket.id}`);
     });
 });
+
+
 // -----------------> Middleware <-----------------------------------//
 // CORS configuration
 app.use(
@@ -149,6 +172,7 @@ const eventsLocationRoutes = require('./routes/eventsFestivals.routes');
 const authRoutes = require('./routes/auth.routes');
 const chatRoutes = require('./routes/chats.routes');
 const messageRoutes = require('./routes/message.routes');
+// const { default: runMigration } = require('./miscellanous/migrations');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
@@ -199,7 +223,7 @@ mongoose
     .connect(dbUrl)
     .then(() => {
         console.log('✅ Connected to MongoDB Atlas');
-
+        // runMigration();
         // Start server
         const port = process.env.PORT || 5000;
         server.listen(port, () => {
@@ -210,33 +234,3 @@ mongoose
         console.error('❌ MongoDB connection error:', err);
         process.exit(1);
     });
-
-// -----------------> Legacy Code (Commented-Out) <-----------------------------------//
-/*
-// Old app.listen with MongoDB connection
-app.listen(port, () => {
-    console.log(`Application running in ${environment} environment, listening to port ${port}....`);
-    try {
-        mongoose.connect(dbUrl, {})
-            .then(() => console.log('Connected to MongoDB Atlas'))
-            .catch(err => console.error('MongoDB connection error:', err));
-    } catch (error) {
-        console.error('unable to connect, please check your connection....' + error)
-    }
-});
-
-// Old CORS middleware
-app.use(function (req, res, next) {
-    const origin = req.get('referer');
-    const isWhitelisted = whitelist.find((w) => origin && origin.includes(w));
-    if (isWhitelisted) {
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-auth-token");
-        res.header("Access-Control-Expose-Headers", "x-auth-token");
-        res.setHeader('Access-Control-Allow-Credentials', true);
-        next();
-    }
-    if (req.method === 'OPTIONS') res.sendStatus(200);
-    else next();
-});
-*/

@@ -24,6 +24,20 @@ const tripSchema = new mongoose.Schema({
             fromDate: Date,
             tillDate: Date
         },
+        timelines: [{
+            slotId: {
+                type: Number,
+                required: true
+            },
+            fromDate: {
+                type: Date,
+                required: true
+            },
+            tillDate: {
+                type: Date,
+                required: true
+            }
+        }],
         altitude: Number,
         typeOfTrip: String,
         price: Number,
@@ -66,6 +80,7 @@ const tripSchema = new mongoose.Schema({
         hotel: Boolean
     },
     peopleApplied: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+
     selectedHotelId: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Hotel'
