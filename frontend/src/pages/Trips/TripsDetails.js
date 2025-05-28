@@ -117,7 +117,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
 
         // Check for static trip data
         const staticTrip = staticTripData.find(t => t.TripId === tripId);
-
+        console.log("staticTrip:", staticTrip);
         if (staticTrip) {
             try {
                 // Immediately render with static data

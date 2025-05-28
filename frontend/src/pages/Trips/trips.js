@@ -61,7 +61,20 @@ const Trips = () => {
                 } //throw new Error('Failed to fetch all trips');
                 const allTripsData = await allTripsResponse.json();
                 setTrips(allTripsData.trips);
-
+                // var userId = JSON.parse(localStorage.getItem('user'))?.id;
+                // // Filter enrolled trips based on userId
+                // var enrolledTripsData_ = allTripsData.trips.filter((trip) => {
+                //     console.log("trip:", trip);
+                //     console.log("trip timeline:", new Date(trip.essentials.timeline.fromDate));
+                //     console.log("compare:", new Date(trip.essentials.timeline.fromDate) < new Date());
+                //     console.log("today:", new Date());
+                //     console.log("user in peopleApplied:", trip.peopleApplied.some((person) => person.userId === userId).length > 0 && new Date(trip.essentials.timeline.fromDate) > new Date());
+                //     if (trip.peopleApplied.some((person) => person.userId === userId).length > 0 && new Date(trip.essentials.timeline.fromDate) > new Date()) {
+                //         return true;
+                //     }
+                // });
+                // // var enrolledTripsData_ = allTripsData.trips.filter((trip) => trip.peopleApplied.some((person) => person.userId === JSON.parse(localStorage.getItem('userToken'))?.id));
+                // console.log('Enrolled Trips:', enrolledTripsData_);
                 // Fetch enrolled trips if logged in
                 if (isLoggedIn && token) {
                     const enrolledTripsResponse = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/trips/en/enrolled`, {
