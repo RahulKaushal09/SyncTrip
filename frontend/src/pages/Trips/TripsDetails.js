@@ -69,7 +69,6 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
 
                 const data = await response.json();
                 if (response.ok) {
-                    console.log('Successfully enrolled in trip:', data);
                     // setOtherPeopleGoing(data.trip); // Assuming the API returns this data
 
                     toast.success('You have successfully enrolled in the trip!');
@@ -120,7 +119,6 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
 
         // Check for static trip data
         const staticTrip = staticTripData.find(t => t.TripId === tripId);
-        console.log("staticTrip:", staticTrip);
         if (staticTrip) {
             try {
                 // Immediately render with static data
@@ -342,14 +340,12 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     useEffect(() => {
         if (!isLoading && joinTripButtonRef.current) {
             joinTripButtonRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            console.log('Scrolled to join trip button');
         } else if (!isLoading) {
             console.warn('Join trip button not found');
             // Optional retry with querySelector as fallback
             const joinTripButton = document.querySelector('.location-card-buttons');
             if (joinTripButton) {
                 joinTripButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                console.log('Scrolled to join trip button via querySelector');
             } else {
                 console.error('Join trip button still not found in DOM');
             }

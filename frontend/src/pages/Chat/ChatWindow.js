@@ -35,17 +35,10 @@ const ChatWindow = () => {
     const currentUser = user ? JSON.parse(user) : null;
     const currentUserId = currentUser ? currentUser._id : null;
 
-    // Debug logs
-    console.log('Current User:', currentUser);
-    console.log('Token:', token);
-    console.log('Trip ID:', tripId);
-    console.log('Connected Users:', connectedUsers);
-    console.log('Chat Users:', chatUsers);
 
     // Fetch trip details and connected users
     useEffect(() => {
         if (!token || !currentUser || !tripId) {
-            console.log('Missing token, user, or tripId, redirecting to /trips');
             navigate('/trips');
             return;
         }
@@ -119,7 +112,6 @@ const ChatWindow = () => {
     // Handle selecting a user to chat with
     const selectUser = async (userId) => {
         try {
-            console.log(`Selecting user: ${userId}`);
             const response = await axios.post(
                 `${process.env.REACT_APP_BACKEND_BASE_URL}/api/chats`,
                 { userId, tripId },
@@ -134,7 +126,6 @@ const ChatWindow = () => {
             }
 
             socket.emit('join_chat', response.data._id);
-            console.log(`Joined chat room: ${response.data._id}`);
 
             const messagesResponse = await axios.get(
                 `${process.env.REACT_APP_BACKEND_BASE_URL}/api/messages/${response.data._id}`,
@@ -169,7 +160,6 @@ const ChatWindow = () => {
     // Handle incoming messages and typing events
     useEffect(() => {
         socket.on('receive_message', (message) => {
-            console.log('Received message:', message);
             if (message.chat === chatId) {
                 setMessages((prevMessages) => {
                     if (!prevMessages.find((m) => m._id === message._id)) {
@@ -181,14 +171,12 @@ const ChatWindow = () => {
         });
 
         socket.on('typing', (receivedChatId) => {
-            console.log(`Typing event received for chat: ${receivedChatId}`);
             if (receivedChatId === chatId) {
                 setIsTyping(true);
             }
         });
 
         socket.on('stop_typing', (receivedChatId) => {
-            console.log(`Stop typing event received for chat: ${receivedChatId}`);
             if (receivedChatId === chatId) {
                 setIsTyping(false);
             }
@@ -212,7 +200,6 @@ const ChatWindow = () => {
     const handleSendMessage = async (e) => {
         e.preventDefault();
         if (!newMessage.trim() || !chatId) {
-            console.log('No message or chatId, aborting send');
             return;
         }
 
@@ -223,7 +210,6 @@ const ChatWindow = () => {
                 { content: newMessage, chatId },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            console.log('Message sent:', response.data);
             setNewMessage('');
 
             // Update chatUsers with the latest message
@@ -242,12 +228,10 @@ const ChatWindow = () => {
         setNewMessage(e.target.value);
 
         if (!chatId) {
-            console.log('No chatId, skipping typing event');
             return;
         }
 
         socket.emit('typing', chatId);
-        console.log(`Emitted typing for chat: ${chatId}`);
 
         if (typingTimeoutRef.current) {
             clearTimeout(typingTimeoutRef.current);
@@ -255,7 +239,6 @@ const ChatWindow = () => {
 
         typingTimeoutRef.current = setTimeout(() => {
             socket.emit('stop_typing', chatId);
-            console.log(`Emitted stop_typing for chat: ${chatId}`);
         }, 3000);
     };
 

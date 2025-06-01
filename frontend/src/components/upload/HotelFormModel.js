@@ -64,7 +64,6 @@ const HotelFormModal = ({ locationId, onClose, onHotelAdded }) => {
 
     const handleSubmit = async (e) => {
         try {
-            console.log("submitting data", hotelData);
 
             e.preventDefault();
 

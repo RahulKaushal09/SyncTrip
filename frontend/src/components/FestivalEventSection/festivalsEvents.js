@@ -7779,7 +7779,6 @@ const FestivalsEvents = () => {
 				}
 			);
 			const data = await res.json();
-			console.log("Events data:", data.events);
 
 			setEvents(data.events || []);
 		}

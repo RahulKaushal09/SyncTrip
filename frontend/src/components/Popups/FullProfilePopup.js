@@ -64,7 +64,6 @@ export default function FullProfilePopup({ user, onClose, onProfileComplete }) {
     };
 
     const handleDestinationSelect = (dest) => {
-        console.log(dest._id, selectedLocationIds);
 
         setSelectedLocationIds((prev) => {
             if (prev.includes(dest._id)) {

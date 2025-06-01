@@ -112,7 +112,6 @@ const EnrolledTripDetails = () => {
         // Optional: you could also maintain a `setRequestsSentUsers(requestsSent)` if needed
 
       } catch (err) {
-        console.log('Error fetching trip details:', err);
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -180,7 +179,6 @@ const EnrolledTripDetails = () => {
 
   // View Profile (placeholder)
   const viewProfile = (userId) => {
-    console.log(`View profile of user ${userId}`);
     // Implement navigation to profile page
     navigate(`/user/${userId}`);
 

@@ -61,8 +61,6 @@ const Home = ({ ctaAction, locations, locationsForPreMadeItinerary, setLocations
                             }
                         });
 
-                        console.log("Fetched all locations:", merged.length);
-                        console.log("Merged locations:", merged);
 
                         setLocations(merged);
                         setHasFetchedAll(true);

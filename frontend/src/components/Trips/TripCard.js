@@ -8,7 +8,6 @@ import { Carousel } from 'react-bootstrap';
 import { FaRupeeSign } from 'react-icons/fa';
 const TripCard = ({ trip, activeTab }) => {
   var availableSpots = 5;
-  console.log(trip);
   var timelines = trip.essentials.timelines || [];
   var {
     _id,
@@ -41,11 +40,9 @@ const TripCard = ({ trip, activeTab }) => {
       hotel: includeHotel
     }
   } = trip;
-  // console.log(trip);
   const [urlToTrip, setUrlToTrip] = useState("/trips/" + _id);
   useEffect(() => {
 
-    // console.log(activeTab);
     switch (activeTab) {
       case 'upcoming':
         setUrlToTrip(`/trips/${_id}`);

@@ -10,16 +10,7 @@ const ExploreSection = ({ locations, isLoading, handleShowMoreClick, searching, 
     useEffect(() => {
         setVisibleCount(locations.length);
     }, [locations.length]);
-    // const handleShowMoreClick = () => {
-    //     if (!isAllLoaded) {
-    //         // onShowMore(); // Fetch up to 1000 locations
-    //         setVisibleCount(100); // Set to max limit
-    //         setIsAllLoaded(true); // Hide button after fetching all
-    //     }
-    // };
 
-    console.log("Locations in ExploreSection:", locations);
-    console.log("Searching:", searching);
 
     if (!locations.length && searching) {
         return <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}><Loader setLoadingState={true} /></div>
