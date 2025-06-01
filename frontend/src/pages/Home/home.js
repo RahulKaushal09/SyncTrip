@@ -7,8 +7,11 @@ import TrendingSection from '../../components/TrendingSection/TrendingSection';
 import TopDestitnations from '../../components/TopDestitnations/TopDestitnations';
 import SyncTripAppPushingSection from '../../components/AppPushingSection/AppPushingSection';
 import { AllfetchLocations } from '../../utils/CommonServices';
-
+import { Helmet } from "react-helmet-async";
+import { metaTags } from '../../seoData/metaTags';
+import { homeSchema, locationSchema } from '../../seoData/seoSchemas';
 const Home = ({ ctaAction, locations, locationsForPreMadeItinerary, setLocations, handleShowMoreHome }) => {
+    const meta = metaTags.home;
     const [searchTerm, setSearchTerm] = useState('');
     // const [searchResults, setSearchResults] = useState([]);
     const [hasFetchedAll, setHasFetchedAll] = useState(false);
@@ -98,8 +101,32 @@ const Home = ({ ctaAction, locations, locationsForPreMadeItinerary, setLocations
         return shuffled.slice(0, 12);
     }
         , [locations]);
+
+    const locationJsonLd = locationSchema(locations);
     return (
+
         <div className="HomePage">
+            <Helmet>
+                <title>{meta.title}</title>
+                <meta name="description" content={meta.description} />
+                <meta name="keywords" content={meta.keywords} />
+
+                <meta property="og:title" content={meta.title} />
+                <meta property="og:description" content={meta.description} />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://synctrip.in" />
+
+                {/* Twitter */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={meta.title} />
+                <meta name="twitter:description" content={meta.description} />
+
+                {/* JSON-LD */}
+                <script type="application/ld+json">{JSON.stringify(homeSchema)}</script>
+                <script type="application/ld+json">{JSON.stringify(locationJsonLd)}</script>
+
+            </Helmet>
+
             <MainSearchBar
                 searchTerm={searchTerm}
                 setSearchTerm={handleSearchChange}

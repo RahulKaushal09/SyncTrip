@@ -113,7 +113,7 @@ const TripCard = ({ trip, activeTab }) => {
             <img
               className="d-block"
               src={MainImageUrl}
-              alt={`${title} Landscape`}
+              alt={`Trips To ${title}`}
               style={{ objectFit: 'cover' }}
             />
           </Carousel.Item>

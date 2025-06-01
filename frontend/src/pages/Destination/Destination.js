@@ -13,6 +13,9 @@ import SyncTripAppPushingSection from '../../components/AppPushingSection/AppPus
 import { PageTypeEnum } from '../../utils/pageType'; // adjust path as needed
 import { decryptData, encryptData } from '../../utils/securityStorage';
 import Loader from '../../components/Loader/loader';
+import { Helmet } from 'react-helmet-async';
+import { metaTags } from '../../seoData/metaTags';
+import { locationDataSchema } from '../../seoData/seoSchemas';
 const DestinationPage = ({ ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
     const [locationData, setLocationData] = useState(null);
@@ -170,19 +173,46 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
     // }, [locationData]);
 
 
+    const meta = metaTags.location(locationData);
     if (loading) {
-        return (<div className='loader-container' >
-            <Loader setLoadingState={loading} TextToShow={"Loading Details"} />
-        </div>);
-        // return <p>Loading...</p>; // Or any placeholder UI
+        return (
+            <div className="loader-container">
+                <Helmet>
+                    <title>Explore Destination – Plan Your Trip with SyncTrip</title>
+                    <meta
+                        name="description"
+                        content="Discover exciting destinations with SyncTrip. Plan your trip and explore top attractions."
+                    />
+                </Helmet>
+                <Loader setLoadingState={loading} TextToShow="Loading Details" />
+            </div>
+        );
     }
-    else {
-        // console.log("locationData:", locationData);
-    }
-
     // Render when data is loaded
     return (
         <div className="DestinationPage">
+            <Helmet>
+                <title>{meta.title}</title>
+                <meta name="description" content={meta.description} />
+                <meta name="keywords" content={meta.keywords} />
+                <link rel="canonical" href={`https://synctrip.in/location/${locationId}`} />
+
+                {/* Open Graph */}
+                <meta property="og:title" content={meta.title} />
+                <meta property="og:description" content={meta.description} />
+                <meta property="og:image" content={meta.ogImage} />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content={`https://synctrip.in/location/${locationId}`} />
+
+                {/* Twitter */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={meta.title} />
+                <meta name="twitter:description" content={meta.description} />
+                <meta name="twitter:image" content={meta.ogImage} />
+
+                {/* JSON-LD */}
+                <script type="application/ld+json">{JSON.stringify(locationDataSchema(locationData))}</script>
+            </Helmet>
             <LocationEventsDetails
                 type="Explore"
                 location={locationData?.title || 'Unknown Location'}
@@ -190,7 +220,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                 rating={locationData?.rating || 'N/A'}
                 country={locationData?.country || 'India'}
             />
-            <LocationImageGallery locationImages={locationData?.photos} />
+            <LocationImageGallery locationImages={locationData?.photos} locationName={locationData?.title || 'Unknown Location'} />
 
             {isMobile && <AddLocationCard showBtns={true} pageType={pageType} btnsStyle={{ width: "45%" }} style={{ marginBottom: "50px", marginLeft: "0px" }} ctaAction={ctaAction} title={locationData?.title} rating={locationData?.rating} reviews={getRandomNumberReviews()} bestTime={locationData?.best_time} placesToVisit={locationData?.placesNumberToVisit || "10"} HotelsToStay={locationData?.hotels?.length || "10"} MainImage={locationData?.images[0]} />}
 
@@ -200,7 +230,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                     <PlacesToVisitSection title={locationData?.title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
                     <PlanTripDates pageType={pageType} ctaAction={ctaAction} />
                     <LocationMapSection latitude={locationData?.fullDetails?.coordinates?.lat} longitude={locationData?.fullDetails?.coordinates?.long} />
-                    <HotelsAndStaysSection hotelIds={hotelIds} />
+                    <HotelsAndStaysSection hotelIds={hotelIds} locationName={locationData?.title} />
                 </div>
 
                 {!isMobile && (

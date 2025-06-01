@@ -7612,14 +7612,11 @@ const findClosestCity = (city, indianCities) => {
 
 		citywords[i] = citywords[i].charAt(0).toUpperCase() + citywords[i].slice(1);
 		citywords[i] = citywords[i].trim(); // Trim leading and trailing spaces
-		// console.log("Finding closest city for:", citywords[i]);
 		var indianCitiesLocationName = indianCities.map(city => city.locationName);
 		const fuse = new Fuse(indianCitiesLocationName, { threshold: 0.1 });
 
 		const result = fuse.search(citywords[i]);
-		// console.log("Search result:", result);
 		if (result.length > 0) {
-			// console.log("Search result:", result);
 			return result.length > 0 ? result[0].item : "Unknown City";
 		}
 
@@ -7643,19 +7640,14 @@ function GetLocationBlock({ fetchEvents, indianCities }) {
 					)
 						.then((res) => res.json())
 						.then((data) => {
-							// console.log(data);
 							if (!data || !data.address) {
 								setLocation("Location unavailable");
 								return;
 							}
 							const city = data.address.state_district || data.address.state || data.address.county || "Unknown City";
-							// console.log(city);
 							var indianCityLocationName = indianCities.map(city => city.locationName);
-							console.log("Indian city location names:", indianCityLocationName);
 							const matchedCity = findClosestCity(city, indianCityLocationName);
-							console.log("Matched city:", matchedCity);
 							var cityObj = indianCities.find(city => city.locationName === matchedCity);
-							console.log("City object:", cityObj);
 							setLocation(matchedCity);
 							if (matchedCity !== location) {
 								fetchEvents(cityObj);
@@ -7775,7 +7767,6 @@ const FestivalsEvents = () => {
 	const fetchEvents = async (city) => {
 		// const encodedCity = encodeURIComponent(city);
 		if (city !== undefined && city !== null) {
-			console.log("Fetching events for city:", city);
 
 			const res = await fetch(
 				`${process.env.REACT_APP_BACKEND_BASE_URL}/api/events/getEventsForLocation`,

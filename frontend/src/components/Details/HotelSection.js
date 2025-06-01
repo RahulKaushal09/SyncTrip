@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../../styles/HotelSection.css'; // We'll create this CSS file separately
 import { CiHeart } from "react-icons/ci";
 
-const HotelImageCarousel = ({ images }) => {
+const HotelImageCarousel = ({ images, locationName }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     // Handle next image
 
@@ -24,7 +24,7 @@ const HotelImageCarousel = ({ images }) => {
             {/* Display current image */}
             <img
                 src={images[currentIndex]}
-                alt={`Hotel image ${currentIndex + 1}`}
+                alt={`${locationName}`}
                 className="hotel-image"
             // style={{ width: '100%', height: 'auto' }}
             />
@@ -73,6 +73,7 @@ const HotelImageCarousel = ({ images }) => {
                     <span
                         key={index}
                         onClick={() => setCurrentIndex(index)}
+                        alt={locationName}
                         style={{
                             height: '10px',
                             width: '10px',
@@ -88,14 +89,14 @@ const HotelImageCarousel = ({ images }) => {
         </div>
     );
 };
-const HotelCard = ({ hotel }) => {
+const HotelCard = ({ hotel, locationName }) => {
 
 
     return (
         <div className="hotel-card">{/*//onClick={() => window.location.href = hotel?.hotel_link} style={{ cursor: 'pointer' }} onclick={hotel?.hotel_link}>*/}
             <div className='top-rated'>Top Rated</div>
             <CiHeart className="heart-icon" />
-            <HotelImageCarousel images={hotel.hotel_images} />
+            <HotelImageCarousel images={hotel.hotel_images} locationName={locationName} />
             {/* <img src={hotel.hotel_images[0]} alt="Hotel" className="hotel-image" /> */}
             <div className="card-content-hotel">
                 <div className="rating-hotel">
@@ -114,7 +115,7 @@ const HotelCard = ({ hotel }) => {
     );
 };
 
-const HotelsAndStaysSection = ({ hotelIds }) => {
+const HotelsAndStaysSection = ({ hotelIds, locationName }) => {
     // Sample image URLs (replace with actual hotel images)
     const [hotels, setHotels] = useState([]); // State to store fetched hotels
     const [activeHotelShow, setActiveHotelShow] = useState(4);
@@ -142,10 +143,10 @@ const HotelsAndStaysSection = ({ hotelIds }) => {
 
     return (
         <div className="hotels-container">
-            <h2 className='DescriptionHeading'><strong>Hotels & Stays</strong></h2>
+            <h2 className='DescriptionHeading'><strong>Hotels & Stays {locationName ? "in " + locationName : ""} </strong></h2>
             <div className="hotels-grid">
                 {hotels.slice(0, activeHotelShow).map((hotel, index) => (
-                    <HotelCard key={index} hotel={hotel} />
+                    <HotelCard key={index} hotel={hotel} locationName={"Top " + index + " hotels in " + locationName} />
                 )
                     // <HotelCard key={index} imageUrl={image} />
                 )}

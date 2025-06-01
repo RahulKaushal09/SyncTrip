@@ -30,7 +30,7 @@ router.post('/getAllTrips', async (req, res) => {
     try {
         const trips = await Trip.find({}).populate({
             path: 'peopleApplied',
-            select: 'name profile_picture'
+            select: 'name profile_picture _id'
         });
 
         if (!trips || trips.length === 0) {
@@ -84,6 +84,7 @@ router.post('/getAllTrips', async (req, res) => {
                     ? trip.peopleApplied.map(user => ({
                         name: user.name,
                         profilePicture: user.profile_picture?.[0] || 'https://via.placeholder.com/40',
+                        userId: user._id,
                     }))
                     : [],
             })),

@@ -20,6 +20,9 @@ import { ProfileCardEnum } from '../../utils/EnumClasses.js';
 import { getFormattedStringFromDate } from '../../utils/CommonServices.js';
 import toast from 'react-hot-toast';
 import Loader from '../../components/Loader/loader.js';
+import { metaTags } from '../../seoData/metaTags.js';
+import { Helmet } from "react-helmet-async";
+import { tripDataSchema } from '../../seoData/seoSchemas.js';
 const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
     const [locationData, setLocationData] = useState(null);
@@ -352,33 +355,49 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
             }
         }
     }, [isLoading]);
-    // Log locationData when it updates
-    // useEffect(() => {
-    //     console.log("useEffect triggered with locationData:", locationData);
-    //     if (locationData) {
-    //         console.log('locationData updated:', locationData);
-    //     } else {
-    //         console.log('locationData is still null');
-    //     }
-    // }, [locationData]);
+
     if (isLoading || !TripsData || !locationData) {
         return (
-            <Loader
-                setLoadingState={isLoading}
-                TextToShow={"Loading Trip Details"}
-            />
+            <div className="loader-container">
+                <Helmet>
+                    <title>Join Group Trip – SyncTrip</title>
+                    <meta
+                        name="description"
+                        content="Join exciting group trips with SyncTrip. Explore destinations and meet new travelers."
+                    />
+                </Helmet>
+                <Loader setLoadingState={isLoading} TextToShow="Loading Trip Details" />
+            </div>
         );
     }
-    else {
 
-        // console.log("locationData:", locationData);
-    }
-
+    const meta = metaTags.tripDetails(TripsData, locationData);
     // Render when data is loaded
     return (
 
         <div className="DestinationPage">
+            <Helmet>
+                <title>{meta.title}</title>
+                <meta name="description" content={meta.description} />
+                <meta name="keywords" content={meta.keywords} />
+                <link rel="canonical" href={`https://synctrip.in/trips/${tripId}`} />
 
+                {/* Open Graph */}
+                <meta property="og:title" content={meta.title} />
+                <meta property="og:description" content={meta.description} />
+                <meta property="og:image" content={meta.ogImage} />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content={`https://synctrip.in/trips/${tripId}`} />
+
+                {/* Twitter */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={meta.title} />
+                <meta name="twitter:description" content={meta.description} />
+                <meta name="twitter:image" content={meta.ogImage} />
+
+                {/* JSON-LD */}
+                <script type="application/ld+json">{JSON.stringify(tripDataSchema(TripsData, locationData))}</script>
+            </Helmet>
             <LocationEventsDetails
                 type="Trip"
                 location={locationData?.title || 'Unknown Location'}
@@ -386,7 +405,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                 rating={locationData?.rating || 'N/A'}
                 country={locationData?.country || 'India'}
             />
-            <LocationImageGallery locationImages={locationData?.photos} />
+            <LocationImageGallery locationImages={locationData?.photos} locationName={TripsData.title} />
 
             {isMobile && <AddLocationCard
                 btnReference={joinTripButtonRef}
@@ -455,7 +474,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                     <PlacesToVisitSection title={TripsData.title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
                     {TripStatus && TripStatus !== "completed" && <PlanTripDates onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} pageType={pageType} ctaAction={ctaAction} startDatePreTrip={TripsData?.essentials?.timeline?.fromDate} endDatePreTrip={TripsData?.essentials?.timeline?.tillDate} />}
                     <LocationMapSection latitude={locationData?.fullDetails?.coordinates?.lat} longitude={locationData?.fullDetails?.coordinates?.long} />
-                    <HotelsAndStaysSection hotelIds={TripsData.selectedHotelId ? TripsData.selectedHotelId : hotelIds} />
+                    <HotelsAndStaysSection hotelIds={TripsData.selectedHotelId ? TripsData.selectedHotelId : hotelIds} locationName={TripsData.title} />
                 </div>
 
                 {!isMobile && (

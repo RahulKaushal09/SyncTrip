@@ -162,7 +162,7 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
                     </div>
                 </div>
                 <div className="location-card-image">
-                    <img src={MainImage} alt={title + " Trip"} />
+                    <img src={MainImage} alt={title + " best Package Trip"} />
                     {price && (
                         <div className="price-marker">
                             <span>₹ {price}</span>

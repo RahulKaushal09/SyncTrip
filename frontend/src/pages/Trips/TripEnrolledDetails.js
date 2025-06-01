@@ -436,7 +436,7 @@ const EnrolledTripDetails = () => {
         </div>
       </section>
       <PlacesToVisitSection title={trip?.title} placesIds={locationData?.placesToVisit} />
-      <HotelsAndStaysSection hotelIds={trip.selectedHotelId ? trip.selectedHotelId : locationData?.hotels} />
+      <HotelsAndStaysSection hotelIds={trip.selectedHotelId ? trip.selectedHotelId : locationData?.hotels} locationName={trip?.title} />
     </div>
   );
 };

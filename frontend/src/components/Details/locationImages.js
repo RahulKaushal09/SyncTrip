@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../../styles/LocationImageGallery.css';
 
-const LocationImageGallery = ({ locationImages }) => {
+const LocationImageGallery = ({ locationImages, locationName }) => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const carouselRef = useRef(null);
@@ -69,7 +69,7 @@ const LocationImageGallery = ({ locationImages }) => {
                         <img
                             key={index}
                             src={image}
-                            alt={`Location View ${index + 1}`}
+                            alt={`Attraction in ${locationName} - SyncTrip`}
                             className="carousel-image"
                             loading="lazy" // Optional: Improve performance
                         />
@@ -79,7 +79,7 @@ const LocationImageGallery = ({ locationImages }) => {
                 <div className="image-grid">
                     <img
                         src={locationImages[0]}
-                        alt="Location View 1"
+                        alt={`Attraction in ${locationName} - SyncTrip`}
                         className="main-image"
                     />
                     <div className="right-grid">
@@ -87,14 +87,14 @@ const LocationImageGallery = ({ locationImages }) => {
                             <img
                                 key={index}
                                 src={image}
-                                alt={`Location View ${index + 2}`}
+                                alt={`Attraction in ${locationName} - SyncTrip`}
                                 className={`right-image right-image-${index + 1}`}
                             />
                         ))}
                         <div className="last-image-container">
                             <img
                                 src={locationImages[4]}
-                                alt="Location View 5"
+                                alt={`Attraction in ${locationName} - SyncTrip`}
                                 className="right-image right-image-4"
                             />
                             <div className="more-images-button" onClick={handleMoreImagesClick}>
@@ -116,7 +116,7 @@ const LocationImageGallery = ({ locationImages }) => {
                                 <img
                                     key={index}
                                     src={image}
-                                    alt={`Location View ${index + 1}`}
+                                    alt={`Attraction in ${locationName} - SyncTrip`}
                                     className="popup-image"
                                     style={{ height: '200px', width: '200px' }}
                                 />

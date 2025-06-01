@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import TripSection from '../../components/Trips/TripSection';
 import '../../styles/trips/Trip.css';
-
+import { Helmet } from 'react-helmet-async';
+import { tripListSchema } from '../../seoData/seoSchemas';
+import { metaTags } from '../../seoData/metaTags';
 const Trips = () => {
+    const meta = metaTags.trips;
     const [trips, setTrips] = useState([]);
     const [enrolledTrips, setEnrolledTrips] = useState([]);
     const [error, setError] = useState(null);
@@ -40,7 +43,7 @@ const Trips = () => {
         //     window.removeEventListener('authChange', handleStorageChange);
         // };
     }, []);
-
+    const tripsJsonLd = useMemo(() => tripListSchema(trips), [trips]);
     // Fetch trips when token or login status changes
     useEffect(() => {
         const fetchTrips = async () => {
@@ -142,6 +145,27 @@ const Trips = () => {
 
     return (
         <div className="trips-container">
+            <Helmet>
+                <title>{meta.title}</title>
+                <meta name="description" content={meta.description} />
+                <meta name="keywords" content={meta.keywords} />
+
+                {/* Open Graph */}
+                <meta property="og:title" content={meta.title} />
+                <meta property="og:description" content={meta.description} />
+                <meta property="og:image" content={meta.ogImage} />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://synctrip.in/trips" />
+
+                {/* Twitter */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={meta.title} />
+                <meta name="twitter:description" content={meta.description} />
+                <meta name="twitter:image" content={meta.ogImage} />
+
+                {/* JSON-LD for Trips */}
+                <script type="application/ld+json">{JSON.stringify(tripsJsonLd)}</script>
+            </Helmet>
             <div className="tabs">
                 <button
                     className={`tab-button ${activeTab === 'upcoming' ? 'active' : ''}`}
