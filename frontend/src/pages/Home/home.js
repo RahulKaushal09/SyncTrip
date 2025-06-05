@@ -137,7 +137,6 @@ const Home = ({ ctaAction, locations, locationsForPreMadeItinerary, setLocations
                 showMoreButtonToShow={searchTerm.length === 0 ? true : false}
             />
 
-            {/* {error && <div>Error: {error}</div>} */}
             <PreMadeItinerary locations={locationsForPreMadeItinerary} />
             <FestivalsEvents />
             {!mobileView && <TrendingSection ctaAction={ctaAction} />}
