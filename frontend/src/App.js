@@ -8,6 +8,16 @@ import Trips from './pages/Trips/trips';
 import AddNewTripPage from './pages/Trips/AddNewTrip';
 import TripsDetialsPage from './pages/Trips/TripsDetails';
 import PreRegisterPopup from './components/Popups/preRegisterPopup';
+
+//ADMIN IMPORTS
+import AdminLoginPage from './pages/Admin/AdminLogin.js';
+// import AdminLogin from './components/Admin/AdminLogin.js';
+import TripsDashboard from './components/Admin/TripsDashboard.js';
+// import AdminTripDetails from './components/Admin/TripDetailsAdmin.js';
+import AdminTripDetailsPage from './pages/Admin/AdminTripDashBoardDetails.js';
+
+
+
 import { HelmetProvider } from "react-helmet-async";
 
 // import ChatWindow from './pages/Chat/ChatWindow.js';
@@ -283,6 +293,9 @@ const App = () => {
                     path="/trips/en/:tripId"
                     element={<EnrolledTripDetails />}
                   />
+                  <Route path="/admin/login" element={<AdminLoginPage />} />
+                  <Route path="/admin/Trips/Dashboard" element={<TripsDashboard />} />
+                  <Route path="/admin/Trips/:tripId" element={<AdminTripDetailsPage />} />
 
                   {/* Optional: Catch-all route for 404 */}
                   <Route path="*" element={<div>404 - Page Not Found</div>} />

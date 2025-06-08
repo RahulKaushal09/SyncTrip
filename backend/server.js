@@ -173,6 +173,7 @@ const eventsLocationRoutes = require('./routes/eventsFestivals.routes');
 const authRoutes = require('./routes/auth.routes');
 const chatRoutes = require('./routes/chats.routes');
 const messageRoutes = require('./routes/message.routes');
+const adminRoutes = require('./routes/admin.routes'); // Import admin routes
 // const { default: runMigration } = require('./miscellanous/migrations');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -188,6 +189,7 @@ app.use('/api/events', eventsLocationRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/chats', chatRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/admin', adminRoutes); // Mount admin routes
 
 // -----------------> API Endpoints <-----------------------------------//
 // Root route for deployment check

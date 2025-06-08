@@ -18,6 +18,24 @@ router.get("/", authenticateToken, async (req, res) => {
 	}
 }
 );
+
+
+router.post('/admin/login', async (req, res) => {
+	try {
+		const { email, password } = req.body;
+		const user = await User.findOne({ email });
+		if (!user) return res.status(400).json({ message: 'User not found' });
+		if (!user.isAdmin) return res.status(403).json({ message: 'Access denied. Not an admin.' });
+
+		const isMatch = await bcrypt.compare(password, user.password);
+		if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+
+		const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET);
+		res.json({ token, user: { _id: user._id, name: user.name, email: user.email } });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+});
 // GET /api/users/:userId - Fetch user profile
 // router.get('/:userId', middlewareAuthForLoggoutToo, async (req, res) => {
 // 	try {
@@ -78,6 +96,7 @@ router.get("/", authenticateToken, async (req, res) => {
 // 				travelGoal: user.travelGoal || '',
 // 				profileCompleted: user.profileCompleted,
 // 				viewCount: user.views.length, // Include total views
+// 				isAdmin: user.isAdmin || false, // Include admin status
 // 			},
 // 			canEdit,
 // 		};

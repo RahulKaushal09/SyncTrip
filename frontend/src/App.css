@@ -2,8 +2,8 @@
   text-align: center;
   font-family: Helvetica !important;
   margin: 0px 60px;
-  height: 100vh;
-  display: contents;
+  /* height: 100vh;
+  display: inline-block; */
 }
 
 .RouterContainer {

@@ -53,6 +53,9 @@ const TripCard = ({ trip, activeTab }) => {
       case 'history':
         setUrlToTrip(`/trips/${_id}`);
         break;
+      case 'admin':
+        setUrlToTrip(`/admin/Trips/${_id}`);
+        break;
       default:
         setUrlToTrip(`/trips/${_id}`);
         break;

@@ -1,9 +1,11 @@
 import React from 'react';
 import '../../styles/preItinerary/card.css'; // Custom CSS for styling
 
-const ItineraryCard = ({ name, imgSrc, days }) => { // Destructure props
+const ItineraryCard = ({ name = 'Unknown',
+    imgSrc = 'https://via.placeholder.com/200x300?text=No+Image',
+    days = 'N/A', }) => { // Destructure props
     return (
-        <div className="itinerary-card">
+        <div className="itinerary-card" key={name}>
             <img
                 src={imgSrc || 'https://via.placeholder.com/200x300?text=No+Image'} // Fallback image if imgSrc is missing
                 alt={`${name} Itinerary`}
@@ -18,10 +20,10 @@ const ItineraryCard = ({ name, imgSrc, days }) => { // Destructure props
 };
 
 // Optional: Add default props for safety
-ItineraryCard.defaultProps = {
-    name: 'Unknown',
-    imgSrc: 'https://via.placeholder.com/200x300?text=No+Image',
-    days: 'N/A',
-};
+// ItineraryCard.defaultProps = {
+//     name: 'Unknown',
+//     imgSrc: 'https://via.placeholder.com/200x300?text=No+Image',
+//     days: 'N/A',
+// };
 
 export default ItineraryCard;

@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema({
         slotId: {
             type: Number,
         },
+        remark: { type: String, default: '' } // New field for admin remarks
     }],
     showProfile: { type: Boolean, default: true },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Location' }],
@@ -37,28 +38,7 @@ const UserSchema = new mongoose.Schema({
             }
         ]
     }],
-    // matched: [{
-    //     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    //     tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Trip' },
-    //     chatHistoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'ChatHistory' },
-    //     status: { type: String, enum: ['accepted', 'rejected'], required: true },
-    // }],
-    // requested: [{
-    //     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    //     trips: [{
-    //         tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
-    //         type: { type: String, enum: ['sent', 'received'], required: true },
-    //         status: { type: String, enum: ['pending', 'accepted', 'rejected'], required: true },
-    //     }],
-    // }],
-    // recievedReq: [{
-    //     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    //     trips: [{
-    //         tripId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
-    //         type: { type: String, enum: ['sent', 'received'], required: true },
-    //         status: { type: String, enum: ['pending', 'accepted', 'rejected'], required: true },
-    //     }],
-    // }],
+
     profileCompleted: { type: Boolean, default: false },
     socialMedias: {
         instagram: { type: String, default: '' },
@@ -75,6 +55,7 @@ const UserSchema = new mongoose.Schema({
         userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         viewedAt: { type: Date, default: Date.now }
     }],
+    isAdmin: { type: Boolean, default: false } // New field to identify admins
 }, { timestamps: true });
 
 // Virtual field to calculate age from dateOfBirth
