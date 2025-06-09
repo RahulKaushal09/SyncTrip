@@ -140,9 +140,12 @@ const HotelsAndStaysSection = ({ hotelIds, locationName }) => {
 
         fetchHotels();
     }, [hotelIds]); // Re-run when hotelIds change
-
+    if (!hotels || hotels.length === 0) {
+        return <div></div>;
+    }
     return (
         <div className="hotels-container">
+
             <h2 className='DescriptionHeading'><strong>Hotels & Stays {locationName ? "in " + locationName : ""} </strong></h2>
             <div className="hotels-grid">
                 {hotels.slice(0, activeHotelShow).map((hotel, index) => (
@@ -168,6 +171,8 @@ const HotelsAndStaysSection = ({ hotelIds, locationName }) => {
                 </button>
             )}
             <hr></hr>
+
+
         </div>
     );
 };

@@ -470,7 +470,7 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
                     <PlacesToVisitSection title={TripsData.title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
                     {TripStatus && TripStatus !== "completed" && <PlanTripDates onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} pageType={pageType} ctaAction={ctaAction} startDatePreTrip={TripsData?.essentials?.timeline?.fromDate} endDatePreTrip={TripsData?.essentials?.timeline?.tillDate} />}
                     <LocationMapSection latitude={locationData?.fullDetails?.coordinates?.lat} longitude={locationData?.fullDetails?.coordinates?.long} />
-                    <HotelsAndStaysSection hotelIds={TripsData.selectedHotelId ? TripsData.selectedHotelId : hotelIds} locationName={TripsData.title} />
+                    {(TripsData.selectedHotelId.length > 0 || hotelIds.length > 0) && <HotelsAndStaysSection hotelIds={TripsData.selectedHotelId ? TripsData.selectedHotelId : hotelIds} locationName={TripsData.title} />}
                 </div>
 
                 {!isMobile && (

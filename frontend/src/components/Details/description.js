@@ -48,7 +48,7 @@ const Discription = ({ pageType, shortDescription, fullDescription, bestTime }) 
                 <h2 className='DescriptionHeading'><strong>{pageType && pageType == PageTypeEnum.TRIP ? "Itinerary" : "Description"}</strong></h2>
                 <p
                     className="description-text"
-                    dangerouslySetInnerHTML={{ __html: isExpanded ? fullDescription : shortDescription.slice(0, 300) + '...' }}
+                    dangerouslySetInnerHTML={{ __html: isExpanded ? fullDescription : shortDescription.slice(0, 700) + '...' }}
                 ></p>
                 <button
                     className="view-more-btn"
