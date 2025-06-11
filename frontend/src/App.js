@@ -10,6 +10,7 @@ import TripsDetialsPage from './pages/Trips/TripsDetails';
 import PreRegisterPopup from './components/Popups/preRegisterPopup';
 
 //ADMIN IMPORTS
+
 import AdminLoginPage from './pages/Admin/AdminLogin.js';
 // import AdminLogin from './components/Admin/AdminLogin.js';
 import TripsDashboard from './components/Admin/TripsDashboard.js';
@@ -34,6 +35,7 @@ import EnrolledTripDetails from './pages/Trips/TripEnrolledDetails.js';
 import { Toaster } from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
 import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/react"
 import { inject, track } from '@vercel/analytics';
 
 import { encryptData, decryptData } from './utils/securityStorage.js';
