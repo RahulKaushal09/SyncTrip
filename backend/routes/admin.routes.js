@@ -79,13 +79,13 @@ router.get('/trip/:id', authenticateAdmin, async (req, res) => {
 
         const appliedUsers = await User.find({
             _id: { $in: trip.peopleApplied },
+
         })
             .populate({
                 path: 'friends.users.userId',
                 select: 'name',
             })
             .lean();
-
         const formattedUsers = appliedUsers.map((user) => {
             const userTrip = user.trips.find((t) => t.tripId.toString() === trip._id.toString());
             const friendsForTrip = user.friends.find((f) => f.tripId.toString() === trip._id.toString());
@@ -100,6 +100,7 @@ router.get('/trip/:id', authenticateAdmin, async (req, res) => {
             return {
                 _id: user._id,
                 name: user.name,
+                phone: user.phone || '',
                 profilePicture: user.profile_picture?.[0] || 'https://via.placeholder.com/40',
                 age: user.dateOfBirth
                     ? Math.floor((new Date() - new Date(user.dateOfBirth)) / (1000 * 60 * 60 * 24 * 365.25))

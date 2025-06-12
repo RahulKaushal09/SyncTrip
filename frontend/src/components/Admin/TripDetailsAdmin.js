@@ -199,6 +199,12 @@ function AdminTripDetails() {
                                     )}
                                 </div>
                                 <div className="mt-2">
+                                    <h5 className="admin-card-title-sm">Phone Number</h5>
+                                    <p className="admin-text-sm">
+                                        {user.phone || 'N/A'}
+                                    </p>
+                                </div>
+                                <div className="mt-2">
                                     <h5 className="admin-card-title-sm">Enrollment Dates</h5>
                                     <p className="admin-text-sm">
                                         {user.startDate && user.endDate

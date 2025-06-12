@@ -113,6 +113,7 @@ const HotelFormModal = ({ locationId, onClose, onHotelAdded }) => {
 
     return (
         <div className="modal d-block" tabIndex="-1" style={{ background: 'rgba(0,0,0,0.5)' }}>
+
             <div className="modal-dialog modal-lg">
                 <div className="modal-content p-4">
                     <h5>Add New Hotel</h5>
