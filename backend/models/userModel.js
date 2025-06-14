@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    phone: { type: String, unique: true }, // Not required initially for Google login
+    email: { type: String, required: true, unique: true, sparse: true },
+    phone: { type: String, unique: true, sparse: true }, // Not required initially for Google login
     password: { type: String }, // Not required for Google login
     rating: { type: Number, default: 5 },
     sex: { type: String }, // Not required initially for Google login

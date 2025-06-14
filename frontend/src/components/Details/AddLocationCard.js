@@ -46,6 +46,11 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
         return () => clearInterval(interval);
     }, []);
     useEffect(() => {
+        if (timelines.length === 1) {
+            setSelectedSlotId(timelines[0].slotId);
+        }
+    }, [timelines]);
+    useEffect(() => {
         if (pageType == PageTypeEnum.LOCATION) {
             setBtn2Text("Create a Trip →");
         } else if (pageType == PageTypeEnum.TRIP) {

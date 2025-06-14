@@ -7,6 +7,10 @@ const PlacesToVisitSchema = new mongoose.Schema({
     description: String,
     highlights: String,
     image: [String],
+    coordinates: {
+        lat: Number,
+        long: Number
+    },
     location: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' }  // Mapping to Location
 }, { timestamps: true });
 
