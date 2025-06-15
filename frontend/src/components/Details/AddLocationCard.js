@@ -46,8 +46,10 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
         return () => clearInterval(interval);
     }, []);
     useEffect(() => {
-        if (timelines.length === 1) {
-            setSelectedSlotId(timelines[0].slotId);
+        if (pageType == PageTypeEnum.TRIP) {
+            if (timelines.length === 1) {
+                setSelectedSlotId(timelines[0].slotId);
+            }
         }
     }, [timelines]);
     useEffect(() => {

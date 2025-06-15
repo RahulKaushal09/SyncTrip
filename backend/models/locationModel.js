@@ -35,7 +35,27 @@ const LocationSchema = new mongoose.Schema({
     photos: [String],
     images: [String],
     hotels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' }],   // Linking Hotels
-    placesToVisit: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PlacesToVisit' }]  // Linking Places to Visit
+    placesToVisit: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PlacesToVisit' }],  // Linking Places to Visit
+    cultures: [{
+        name: String,
+        description: String,
+        timings: String,
+        village: String,
+        images: [{
+            image_url: String,
+            title: String
+        }]
+    }],
+    festivals: [{
+        name: String,
+        description: String,
+        timings: String,
+        village: String,
+        images: [{
+            image_url: String,
+            title: String
+        }]
+    }]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Location', LocationSchema);
