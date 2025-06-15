@@ -241,7 +241,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                 </div>
 
                 {!isMobile && (
-                    <div className="col-lg-4">
+                    <div className="col-lg-4" style={{ marginBottom: "20px" }}>
                         <div
                             style={{
                                 position: 'sticky',
@@ -267,7 +267,7 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
             </div>
 
             <SyncTripAppPushingSection showWork={false} ctaAction={ctaAction} />
-        </div>
+        </div >
     );
 };
 

@@ -4,8 +4,28 @@ import { CiHeart } from "react-icons/ci";
 
 const HotelImageCarousel = ({ images, locationName }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    // Handle next image
+    const [validImages, setValidImages] = useState([]);
 
+    // Handle next image
+    useEffect(() => {
+        const loadImages = async () => {
+            const promises = images.map((url) =>
+                new Promise((resolve) => {
+                    const img = new Image();
+                    img.src = url;
+                    img.onload = () => resolve(url);   // valid
+                    img.onerror = () => resolve(null); // invalid
+                })
+            );
+
+            const results = await Promise.all(promises);
+            const filtered = results.filter((url) => url !== null);
+            setValidImages(filtered);
+            setCurrentIndex(0); // reset to 0
+        };
+
+        loadImages();
+    }, [images]);
     const nextImage = () => {
         setCurrentIndex((prevIndex) =>
             prevIndex === images.length - 1 ? 0 : prevIndex + 1
@@ -18,58 +38,63 @@ const HotelImageCarousel = ({ images, locationName }) => {
             prevIndex === 0 ? images.length - 1 : prevIndex - 1
         );
     };
+    if (validImages.length === 0) validImages.push("https://wbksuxwcqnzuppviunfz.supabase.co/storage/v1/object/public/hotel-images//emptyState.jpg"); // Placeholder if no valid images
 
     return (
         <div className="carousel" style={{ position: 'relative', width: '100%' }}>
             {/* Display current image */}
             <img
-                src={images[currentIndex]}
+                src={validImages[currentIndex]}
                 alt={`${locationName}`}
                 className="hotel-image"
             // style={{ width: '100%', height: 'auto' }}
             />
 
             {/* Previous button */}
-            <button
-                onClick={prevImage}
-                style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '10px',
-                    transform: 'translateY(-50%)',
-                    background: "transparent",
-                    // background: 'rgba(0, 0, 0, 0.5)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '10px',
-                    cursor: 'pointer'
-                }}
-            >
-                &#10094; {/* Left arrow */}
-            </button>
+            {validImages.length > 1 && (
+                <button
+                    onClick={prevImage}
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '10px',
+                        transform: 'translateY(-50%)',
+                        background: "transparent",
+                        // background: 'rgba(0, 0, 0, 0.5)',
+                        color: 'white',
+                        border: 'none',
+                        padding: '10px',
+                        cursor: 'pointer'
+                    }}
+                >
+                    &#10094; {/* Left arrow */}
+                </button>
+            )}
+            {validImages.length > 1 && (
 
-            {/* Next button */}
-            <button
-                onClick={nextImage}
-                style={{
-                    position: 'absolute',
-                    top: '50%',
-                    right: '10px',
-                    transform: 'translateY(-50%)',
-                    background: "transparent",
-                    // background: 'rgba(0, 0, 0, 0.5)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '10px',
-                    cursor: 'pointer'
-                }}
-            >
-                &#10095; {/* Right arrow */}
-            </button>
+                <button
+                    onClick={nextImage}
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        right: '10px',
+                        transform: 'translateY(-50%)',
+                        background: "transparent",
+                        // background: 'rgba(0, 0, 0, 0.5)',
+                        color: 'white',
+                        border: 'none',
+                        padding: '10px',
+                        cursor: 'pointer'
+                    }}
+                >
+                    &#10095; {/* Right arrow */}
+                </button>
+            )}
 
             {/* Optional: Dots for navigation */}
+
             <div className='coursel-dots-custom'>
-                {images.map((_, index) => (
+                {validImages.map((_, index) => (
                     <span
                         key={index}
                         onClick={() => setCurrentIndex(index)}
