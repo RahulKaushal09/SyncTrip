@@ -39,7 +39,7 @@ router.post('/getAllTrips', async (req, res) => {
 
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Normalize to start of the day
-
+        console.log("trips:", trips); // Debugging line
         // Update statuses based on the latest date in timelines
         for (let trip of trips) {
             let newStatus = trip.requirements?.status || 'scheduled'; // Default status if undefined

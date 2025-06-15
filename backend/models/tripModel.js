@@ -63,7 +63,18 @@ const tripSchema = new mongoose.Schema({
         }
     },
     numberOfPeopleApplied: Number,
-    itinerary: String,
+    // itinerary: String,
+    itinerary: {
+        topSectionHtml: String,
+        days: [
+            {
+                dayTitle: { type: String, required: true },
+                date: Date,
+                htmlDescription: { type: String, required: true }
+            }
+        ],
+        bottomSectionHtml: String
+    },
     tripRating: Number,
     requirements: {
         age: Number,

@@ -12,6 +12,7 @@ import { getLocationById } from '../../utils/CommonServices.js';
 import { extractTextFromHTML } from '../../utils/htmlRelatedServices.js'; // Adjust the import path as needed
 import toast from 'react-hot-toast';
 import Loader from '../../components/Loader/loader.js';
+import ItineraryComponent from '../../components/Trips/ItinearyBlockComponent.js';
 const EnrolledTripDetails = () => {
   const { tripId } = useParams();
   const navigate = useNavigate();
@@ -353,7 +354,7 @@ const EnrolledTripDetails = () => {
       </section>
 
       {/* Enhanced Trip Information */}
-      <section className="trip-info">
+      <section className="">
         <div className="trip-info-grid">
           <div className="trip-details-card">
             <h2 className="section-title">Trip Details</h2>
@@ -425,13 +426,14 @@ const EnrolledTripDetails = () => {
             </div>
           </div>
         </div>
-        <div className="trip-itinerary-card">
+        <ItineraryComponent itinerary={trip.itinerary} />
+        {/* <div className="trip-itinerary-card">
           <h2 className="section-title">Itinerary</h2>
           <div
             className="itinerary-content" style={{ textAlign: 'left' }}
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(trip.itinerary) }}
           />
-        </div>
+        </div> */}
       </section>
       <PlacesToVisitSection title={trip?.title} placesIds={locationData?.placesToVisit} />
       <HotelsAndStaysSection hotelIds={trip.selectedHotelId ? trip.selectedHotelId : locationData?.hotels} locationName={trip?.title} />

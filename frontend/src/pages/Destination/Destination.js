@@ -16,6 +16,7 @@ import Loader from '../../components/Loader/loader';
 import { Helmet } from 'react-helmet-async';
 import { metaTags } from '../../seoData/metaTags';
 import { locationDataSchema } from '../../seoData/seoSchemas';
+import MultiStopMap from '../../components/Details/multipleStopMap';
 const DestinationPage = ({ ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
     const [locationData, setLocationData] = useState(null);
@@ -230,6 +231,12 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                     <PlacesToVisitSection title={locationData?.title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
                     <PlanTripDates pageType={pageType} ctaAction={ctaAction} />
                     <LocationMapSection latitude={locationData?.fullDetails?.coordinates?.lat} longitude={locationData?.fullDetails?.coordinates?.long} />
+                    {/* <MultiStopMap waypoints={[
+                        [28.6139, 77.2090],   // Delhi
+                        [27.1767, 78.0081],   // Agra
+                        [26.9124, 75.7873]    // Jaipur
+                    ]} /> */}
+
                     <HotelsAndStaysSection hotelIds={hotelIds} locationName={locationData?.title} />
                 </div>
 
