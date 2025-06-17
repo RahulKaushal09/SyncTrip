@@ -24,7 +24,6 @@ import { metaTags } from '../../seoData/metaTags.js';
 import { Helmet } from "react-helmet-async";
 import { tripDataSchema } from '../../seoData/seoSchemas.js';
 import ItineraryComponent from '../../components/Trips/ItinearyBlockComponent.js';
-import CultureFestivalsSection from '../../components/Details/cultureFestivalsSection.js';
 const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
     const [locationData, setLocationData] = useState(null);
