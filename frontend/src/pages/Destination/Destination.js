@@ -61,30 +61,30 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
 
             try {
                 // Step 1: Try reading from cache
-                const encryptedData = localStorage.getItem(cacheKey);
-                const encryptedExpiry = localStorage.getItem(expiryKey);
-                let cachedLocations = [];
+                // const encryptedData = localStorage.getItem(cacheKey);
+                // const encryptedExpiry = localStorage.getItem(expiryKey);
+                // let cachedLocations = [];
 
-                if (encryptedData && encryptedExpiry) {
-                    const expiry = decryptData(encryptedExpiry);
-                    if (expiry && new Date(expiry) > now) {
-                        const decrypted = decryptData(encryptedData);
-                        if (Array.isArray(decrypted)) {
-                            cachedLocations = decrypted;
+                // if (encryptedData && encryptedExpiry) {
+                //     const expiry = decryptData(encryptedExpiry);
+                //     if (expiry && new Date(expiry) > now) {
+                //         const decrypted = decryptData(encryptedData);
+                //         if (Array.isArray(decrypted)) {
+                //             cachedLocations = decrypted;
 
-                            // ✅ Find the location in cache
-                            const cachedLocation = cachedLocations.find(loc => loc._id === locationId);
-                            if (cachedLocation) {
-                                cachedLocation.title = extractTextFromHTML(
-                                    cachedLocation?.title?.replace(/[0-9.]/g, '')
-                                );
-                                setHotelids(cachedLocation?.hotels || []);
-                                setLocationData(cachedLocation);
-                                return;
-                            }
-                        }
-                    }
-                }
+                //             // ✅ Find the location in cache
+                //             const cachedLocation = cachedLocations.find(loc => loc._id === locationId);
+                //             if (cachedLocation) {
+                //                 cachedLocation.title = extractTextFromHTML(
+                //                     cachedLocation?.title?.replace(/[0-9.]/g, '')
+                //                 );
+                //                 setHotelids(cachedLocation?.hotels || []);
+                //                 setLocationData(cachedLocation);
+                //                 return;
+                //             }
+                //         }
+                //     }
+                // }
 
                 // Step 2: Not in cache – fetch from server
                 const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/${locationId}`;
@@ -104,8 +104,8 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                 const updatedLocations = [...cachedLocations.filter(loc => loc._id !== locationId), location];
                 const newExpiry = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
 
-                localStorage.setItem(cacheKey, encryptData(updatedLocations));
-                localStorage.setItem(expiryKey, encryptData(newExpiry.toISOString()));
+                // localStorage.setItem(cacheKey, encryptData(updatedLocations));
+                // localStorage.setItem(expiryKey, encryptData(newExpiry.toISOString()));
 
             } catch (err) {
                 console.error('Fetch error:', err.message);

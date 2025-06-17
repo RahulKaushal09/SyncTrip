@@ -80,8 +80,8 @@ const App = () => {
 
     const loadInitial = async () => {
       const now = new Date();
-      const encrypted = localStorage.getItem(process.env.REACT_APP_CACHE_KEY || 'cached_locations');
-      const expiryEncrypted = localStorage.getItem(process.env.REACT_APP_CACHE_EXPIRY_KEY || 'cached_locations_expiry');
+      const encrypted = localStorage.getItem(process.env.REACT_APP_CACHE_KEY || 'cached_locations_v1');
+      const expiryEncrypted = localStorage.getItem(process.env.REACT_APP_CACHE_EXPIRY_KEY || 'cached_locations_expiry_v1');
 
       if (encrypted && expiryEncrypted) {
         const expiry = decryptData(expiryEncrypted);
