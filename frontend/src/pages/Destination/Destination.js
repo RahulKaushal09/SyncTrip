@@ -56,8 +56,8 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
         const fetchLocationDetails = async () => {
             setLoading(true);
             const now = new Date();
-            const cacheKey = process.env.REACT_APP_CACHE_KEY || 'cached_locations_v1';
-            const expiryKey = process.env.REACT_APP_CACHE_EXPIRY_KEY || 'cached_locations_expiry_v1';
+            // const cacheKey = process.env.REACT_APP_CACHE_KEY || 'cached_locations_v1';
+            // const expiryKey = process.env.REACT_APP_CACHE_EXPIRY_KEY || 'cached_locations_expiry_v1';
 
             try {
                 // Step 1: Try reading from cache
@@ -101,8 +101,8 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                 setLocationData(location);
 
                 // Step 3: Add to cache uniquely
-                const updatedLocations = [...cachedLocations.filter(loc => loc._id !== locationId), location];
-                const newExpiry = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
+                // const updatedLocations = [...cachedLocations.filter(loc => loc._id !== locationId), location];
+                // const newExpiry = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
 
                 // localStorage.setItem(cacheKey, encryptData(updatedLocations));
                 // localStorage.setItem(expiryKey, encryptData(newExpiry.toISOString()));
