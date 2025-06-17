@@ -56,8 +56,8 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
         const fetchLocationDetails = async () => {
             setLoading(true);
             const now = new Date();
-            const cacheKey = process.env.REACT_APP_CACHE_KEY || 'cached_locations';
-            const expiryKey = process.env.REACT_APP_CACHE_EXPIRY_KEY || 'cached_locations_expiry';
+            const cacheKey = process.env.REACT_APP_CACHE_KEY || 'cached_locations_v1';
+            const expiryKey = process.env.REACT_APP_CACHE_EXPIRY_KEY || 'cached_locations_expiry_v1';
 
             try {
                 // Step 1: Try reading from cache

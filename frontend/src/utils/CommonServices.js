@@ -1,7 +1,7 @@
 import { encryptData, decryptData } from "./securityStorage.js"; // Assuming you have an encryption service
 
-const CACHE_KEY = process.env.REACT_APP_CACHE_KEY || 'cached_locations';
-const CACHE_EXPIRY_KEY = process.env.REACT_APP_CACHE_EXPIRY_KEY || 'cached_locations_expiry';
+const CACHE_KEY = process.env.REACT_APP_CACHE_KEY || 'cached_locations_v1';
+const CACHE_EXPIRY_KEY = process.env.REACT_APP_CACHE_EXPIRY_KEY || 'cached_locations_expiry_v1';
 const CACHE_TTL_DAYS = 30;
 
 export const getLimitByDevice = () => (window.innerWidth <= 768 ? 8 : 12);
@@ -107,8 +107,8 @@ export const getFormattedStringFromDate = (date) => {
 };
 export const fetchLocations = async (skip = 0, limit = 12) => {
     const now = new Date();
-    const encrypted = localStorage.getItem(process.env.REACT_APP_CACHE_KEY || 'cached_locations');
-    const expiryEncrypted = localStorage.getItem(process.env.REACT_APP_CACHE_EXPIRY_KEY || 'cached_locations_expiry');
+    const encrypted = localStorage.getItem(process.env.REACT_APP_CACHE_KEY || 'cached_locations_v1');
+    const expiryEncrypted = localStorage.getItem(process.env.REACT_APP_CACHE_EXPIRY_KEY || 'cached_locations_expiry_v1');
 
     let cachedLocations = [];
     if (encrypted && expiryEncrypted) {
