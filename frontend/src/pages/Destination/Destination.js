@@ -16,7 +16,8 @@ import Loader from '../../components/Loader/loader';
 import { Helmet } from 'react-helmet-async';
 import { metaTags } from '../../seoData/metaTags';
 import { locationDataSchema } from '../../seoData/seoSchemas';
-import MultiStopMap from '../../components/Details/multipleStopMap';
+// import MultiStopMap from '../../components/Details/multipleStopMap';
+import CultureFestivalsSection from '../../components/Details/cultureFestivalsSection';
 const DestinationPage = ({ ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
     const [locationData, setLocationData] = useState(null);
@@ -116,62 +117,6 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
 
         fetchLocationDetails();
     }, [locationId]);
-    // Fetch location details
-    // useEffect(() => {
-    //     const fetchLocationDetails = async () => {
-    //         // console.log('Starting fetch for locationId:', locationId);
-    //         // handleIsLoading(true);
-    //         setLoading(true);
-
-    //         try {
-    //             const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/locations/${locationId}`;
-    //             // console.log('Fetching from:', url);
-
-    //             const locationResponse = await fetch(url, {
-    //                 method: 'GET',
-    //                 headers: { 'Content-Type': 'application/json' },
-    //             });
-
-    //             // console.log('Response status:', locationResponse.status);
-
-    //             if (!locationResponse.ok) {
-    //                 throw new Error(`Failed to fetch location: ${locationResponse.statusText}`);
-    //             }
-
-    //             const location = await locationResponse.json();
-    //             // console.log('Raw API response:', location);
-    //             location.title = location?.title?.replace(/[0-9. ]/g, '');
-    //             location.title = extractTextFromHTML(location.title);
-    //             setHotelids(location?.hotels);
-    //             if (!location) {
-    //                 throw new Error('Location data is empty or null');
-    //             }
-
-    //             setLocationData(location);
-    //             // console.log('Setting locationData state:', location);
-
-    //         } catch (err) {
-    //             console.error('Fetch error:', err.message);
-    //             setError(err.message);
-    //         } finally {
-    //             setLoading(false);
-    //             // handleIsLoading(false);
-    //         }
-    //     };
-
-    //     fetchLocationDetails();
-    // }, [locationId]);
-
-
-    // Log locationData when it updates
-    // useEffect(() => {
-    //     // console.log("useEffect triggered with locationData:", locationData);
-    //     if (locationData) {
-    //         console.log('locationData updated:', locationData);
-    //     } else {
-    //         console.log('locationData is still null');
-    //     }
-    // }, [locationData]);
 
 
     const meta = metaTags.location(locationData);
@@ -229,19 +174,23 @@ const DestinationPage = ({ ctaAction, handleIsLoading }) => {
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
                     {!isMobile && <Discription pageType={pageType} shortDescription={locationData?.description || ""} fullDescription={locationData?.fullDetails?.full_description || ""} bestTime={locationData?.best_time} />}
                     <PlacesToVisitSection title={locationData?.title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
+                    <HotelsAndStaysSection hotelIds={hotelIds} locationName={locationData?.title} />
+                    <CultureFestivalsSection data={locationData?.cultures} heading={`Local Cultures of ${locationData?.title}`} type="culture" />
                     <PlanTripDates pageType={pageType} ctaAction={ctaAction} />
+                    <CultureFestivalsSection data={locationData?.festivals} heading={`Festivals of ${locationData?.title}`} type="festival" />
                     <LocationMapSection latitude={locationData?.fullDetails?.coordinates?.lat} longitude={locationData?.fullDetails?.coordinates?.long} />
+
                     {/* <MultiStopMap waypoints={[
                         [28.6139, 77.2090],   // Delhi
                         [27.1767, 78.0081],   // Agra
                         [26.9124, 75.7873]    // Jaipur
                     ]} /> */}
-
-                    <HotelsAndStaysSection hotelIds={hotelIds} locationName={locationData?.title} />
+                    {/* <Demo data={locationData.cultures} />
+                    <Demo data={locationData.festivals} /> */}
                 </div>
 
                 {!isMobile && (
-                    <div className="col-lg-4" style={{ marginBottom: "20px" }}>
+                    <div className="col-lg-4" style={{ marginBottom: "17px" }}>
                         <div
                             style={{
                                 position: 'sticky',

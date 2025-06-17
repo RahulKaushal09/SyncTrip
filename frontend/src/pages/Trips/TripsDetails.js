@@ -24,6 +24,7 @@ import { metaTags } from '../../seoData/metaTags.js';
 import { Helmet } from "react-helmet-async";
 import { tripDataSchema } from '../../seoData/seoSchemas.js';
 import ItineraryComponent from '../../components/Trips/ItinearyBlockComponent.js';
+import CultureFestivalsSection from '../../components/Details/cultureFestivalsSection.js';
 const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
     const [isMobile, setIsMobile] = useState(false);
     const [locationData, setLocationData] = useState(null);
@@ -425,6 +426,12 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
 
             <div className="row" style={{ position: 'relative' }}>
                 <div className={!isMobile ? "col-lg-8" : "col-lg-12"}>
+                    <ItineraryComponent itinerary={TripsData?.itinerary} />
+
+                    {/* <Discription pageType={pageType} shortDescription={TripsData?.itinerary || ""} fullDescription={TripsData?.itinerary || ""} bestTime={TripsData?.essentials.bestTime} /> */}
+                    <PlacesToVisitSection title={TripsData.title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
+                    {(TripsData.selectedHotelId.length > 0 || hotelIds.length > 0) && <HotelsAndStaysSection hotelIds={TripsData.selectedHotelId.length > 0 ? TripsData.selectedHotelId : hotelIds} locationName={TripsData.title} />}
+                    {/* {TripStatus && TripStatus !== "completed" && <PlanTripDates onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} pageType={pageType} ctaAction={ctaAction} startDatePreTrip={TripsData?.essentials?.timeline?.fromDate} endDatePreTrip={TripsData?.essentials?.timeline?.tillDate} />} */}
                     {otherGoing.length > 0 ? (
                         <div>
                             <h2 className="section-title">All Other Going</h2>
@@ -467,16 +474,13 @@ const TripsDetialsPage = ({ onLoginClick, ctaAction, handleIsLoading }) => {
 
                         </div>
                     ) : ("")}
-                    <ItineraryComponent itinerary={TripsData?.itinerary} />
-                    {/* <Discription pageType={pageType} shortDescription={TripsData?.itinerary || ""} fullDescription={TripsData?.itinerary || ""} bestTime={TripsData?.essentials.bestTime} /> */}
-                    <PlacesToVisitSection title={TripsData.title} placesIds={locationData?.placesToVisit} ctaAction={ctaAction} />
-                    {TripStatus && TripStatus !== "completed" && <PlanTripDates onLoginClick={onLoginClick} EnrollInTrip={EnrollInTrip} pageType={pageType} ctaAction={ctaAction} startDatePreTrip={TripsData?.essentials?.timeline?.fromDate} endDatePreTrip={TripsData?.essentials?.timeline?.tillDate} />}
                     <LocationMapSection latitude={locationData?.fullDetails?.coordinates?.lat} longitude={locationData?.fullDetails?.coordinates?.long} />
-                    {(TripsData.selectedHotelId.length > 0 || hotelIds.length > 0) && <HotelsAndStaysSection hotelIds={TripsData.selectedHotelId.length > 0 ? TripsData.selectedHotelId : hotelIds} locationName={TripsData.title} />}
+
+
                 </div>
 
                 {!isMobile && (
-                    <div className="col-lg-4" style={{ marginBottom: "20px" }}>
+                    <div className="col-lg-4" style={{ marginBottom: "17px" }}>
                         <div
                             style={{
                                 position: 'sticky',

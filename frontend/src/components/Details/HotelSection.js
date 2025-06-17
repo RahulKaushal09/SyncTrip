@@ -127,7 +127,7 @@ const HotelCard = ({ hotel, locationName }) => {
                 <div className="rating-hotel">
                     <span className="stars">★</span> <strong>{hotel.hotel_location.rating.score}</strong> (672 reviews)
                 </div>
-                <h3>{hotel.hotel_name}</h3>
+                <h3>{hotel.hotel_name.replace(/[0-9.]/g, '')}</h3>
                 <p>{hotel.hotel_location.neighbourhood}</p>
                 {/* <div className='d-flex justify-content-between align-items-center'>
                     <div classPrice="price">
@@ -147,21 +147,62 @@ const HotelsAndStaysSection = ({ hotelIds, locationName }) => {
     const [previousShowMore, setPreviousShowMore] = useState(4); // State to track the number of hotels shown
     useEffect(() => {
         const fetchHotels = async () => {
-            if (!hotelIds || hotelIds.length === 0) return; // Avoid making a request if no hotelIds are available
+            if (!hotelIds || hotelIds.length === 0) return;
 
             try {
                 const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/hotels/getHotelsByIds`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ hotelIds }), // Send array of hotel ObjectIds
+                    body: JSON.stringify({ hotelIds }),
                 });
+
                 if (!response.ok) throw new Error('Failed to fetch hotels');
                 const data = await response.json();
-                setHotels(data); // Store the fetched hotels in state
+
+                const validateImages = async (urls) => {
+                    const checks = urls.map(url =>
+                        new Promise((resolve) => {
+                            const img = new Image();
+                            img.src = url;
+                            img.onload = () => resolve(true);
+                            img.onerror = () => resolve(false);
+                        })
+                    );
+                    const results = await Promise.all(checks);
+                    return results.filter(Boolean).length; // count of valid images
+                };
+
+                const hotelsWithValidImageCount = await Promise.all(
+                    data.map(async (hotel) => {
+                        const validCount = await validateImages(hotel.hotel_images || []);
+                        return { ...hotel, validImageCount: validCount };
+                    })
+                );
+
+                // Sort: hotels with valid images first
+                hotelsWithValidImageCount.sort((a, b) => b.validImageCount - a.validImageCount);
+
+                setHotels(hotelsWithValidImageCount);
             } catch (err) {
                 console.error(err.message);
             }
         };
+        // const fetchHotels = async () => {
+        //     if (!hotelIds || hotelIds.length === 0) return; // Avoid making a request if no hotelIds are available
+
+        //     try {
+        //         const response = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/hotels/getHotelsByIds`, {
+        //             method: 'POST',
+        //             headers: { 'Content-Type': 'application/json' },
+        //             body: JSON.stringify({ hotelIds }), // Send array of hotel ObjectIds
+        //         });
+        //         if (!response.ok) throw new Error('Failed to fetch hotels');
+        //         const data = await response.json();
+        //         setHotels(data); // Store the fetched hotels in state
+        //     } catch (err) {
+        //         console.error(err.message);
+        //     }
+        // };
 
         fetchHotels();
     }, [hotelIds]); // Re-run when hotelIds change
@@ -182,7 +223,7 @@ const HotelsAndStaysSection = ({ hotelIds, locationName }) => {
             </div>
             {hotels.length > 10 && previousShowMore < hotels.length && (
                 <button
-                    className='view-more-btn mt-5'
+                    className='view-more-btn mt-4'
                     onClick={() => {
                         setActiveHotelShow(prev => prev + 6);
                         setPreviousShowMore(activeHotelShow + 6);
@@ -195,7 +236,7 @@ const HotelsAndStaysSection = ({ hotelIds, locationName }) => {
                     Load More
                 </button>
             )}
-            <hr></hr>
+            {/* <hr></hr> */}
 
 
         </div>

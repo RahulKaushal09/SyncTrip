@@ -13,6 +13,7 @@ import { extractTextFromHTML } from '../../utils/htmlRelatedServices.js'; // Adj
 import toast from 'react-hot-toast';
 import Loader from '../../components/Loader/loader.js';
 import ItineraryComponent from '../../components/Trips/ItinearyBlockComponent.js';
+import CultureFestivalsSection from '../../components/Details/cultureFestivalsSection.js';
 const EnrolledTripDetails = () => {
   const { tripId } = useParams();
   const navigate = useNavigate();
@@ -355,6 +356,7 @@ const EnrolledTripDetails = () => {
 
       {/* Enhanced Trip Information */}
       <section className="">
+        <ItineraryComponent itinerary={trip.itinerary} />
         <div className="trip-info-grid">
           <div className="trip-details-card">
             <h2 className="section-title">Trip Details</h2>
@@ -426,7 +428,7 @@ const EnrolledTripDetails = () => {
             </div>
           </div>
         </div>
-        <ItineraryComponent itinerary={trip.itinerary} />
+
         {/* <div className="trip-itinerary-card">
           <h2 className="section-title">Itinerary</h2>
           <div
@@ -437,6 +439,14 @@ const EnrolledTripDetails = () => {
       </section>
       <PlacesToVisitSection title={trip?.title} placesIds={locationData?.placesToVisit} />
       <HotelsAndStaysSection hotelIds={trip.selectedHotelId ? trip.selectedHotelId : locationData?.hotels} locationName={trip?.title} />
+      <div className='row'>
+        <div className='col-lg-6 col-md-6 col-sm-12'>
+          <CultureFestivalsSection data={locationData?.cultures} heading={`Local Cultures of ${locationData?.title}`} type="culture" />
+        </div>
+        <div className='col-lg-6 col-md-6 col-sm-12'>
+          <CultureFestivalsSection data={locationData?.festivals} heading={`Festivals of ${locationData?.title}`} type="festival" />
+        </div>
+      </div>
     </div>
   );
 };

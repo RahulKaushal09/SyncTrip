@@ -41,7 +41,6 @@ import { inject, track } from '@vercel/analytics';
 import { encryptData, decryptData } from './utils/securityStorage.js';
 import { fetchLocations, mergeLocationsIntoCache, getLimitByDevice } from './utils/CommonServices.js';
 import UserProfile from './pages/User/userProfile.js';
-
 // import FullProfilePopup from './components/Popups/FullProfilePopup';
 // import WeatherComponent from './data/getWeather';
 // import TripForm from './components/upload/TripFormUpload';

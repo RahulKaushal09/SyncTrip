@@ -48,7 +48,7 @@ const PlacesToVisitSection = ({ title, placesIds }) => {
             </div>
             {previousShowMore < places.length && (
                 <button
-                    className='view-more-btn mt-5'
+                    className='view-more-btn mt-2 '
                     onClick={() => {
                         setActiveHotelShow(prev => prev + 6);
                         setPreviousShowMore(activeHotelShow + 6);

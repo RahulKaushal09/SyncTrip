@@ -48,7 +48,7 @@ const LocationMapSection = ({ latitude, longitude }) => {
                     </Marker>
                 </MapContainer>
             </div>
-            <hr></hr>
+            {/* <hr></hr> */}
         </div>
     );
 };

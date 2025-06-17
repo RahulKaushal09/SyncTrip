@@ -81,7 +81,7 @@ const AddLocationCard = ({ showBtns, pageType, onLoginClick, EnrollInTrip, btnsS
             <div className="location-card-header ">
                 <div className='d-flex row text-start'>
                     <div className="location-card-title text-start">
-                        <h4>{title}</h4>
+                        <h2 className='DescriptionHeading'><strong>{title}</strong></h2>
                         {address && <p className='text-muted' style={{ fontSize: "14px" }}>{address}</p>}
                         <div className='d-flex reviewingBox'>
                             <div className=" info-box">★ {rating}</div>

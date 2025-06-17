@@ -17,7 +17,7 @@ const Discription = ({ pageType, shortDescription, fullDescription, bestTime }) 
         <div className="travel-info-container">
             {pageType !== PageTypeEnum.TRIP && <div className="info-grid" >
                 <div className="essentials-section">
-                    <h2 className='DescriptionHeading'>Essentials</h2>
+                    <h2 className='DescriptionHeading'><strong>Essentials</strong></h2>
                     <div className="essentials-item">
                         <TiWeatherPartlySunny className="icon" /> Weather: 32°C
                     </div>
@@ -30,7 +30,7 @@ const Discription = ({ pageType, shortDescription, fullDescription, bestTime }) 
                 </div>
 
                 <div className="weather-section">
-                    <h2 className='DescriptionHeading'>Upcoming weather</h2>
+                    <h2 className='DescriptionHeading'><strong>Upcoming weather</strong></h2>
                     <div className="weather-item">
                         <TbTemperatureSun className="day-icon" /> Monday: 32°C
                     </div>

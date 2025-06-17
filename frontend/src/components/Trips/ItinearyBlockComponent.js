@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../../styles/trips/Itinerary.css'; // Create this CSS file
 import parse from 'html-react-parser';
+// import ItineraryDayWiseComponent from './itinenaryDatWise';
 
 const ItineraryComponent = ({ itinerary }) => {
     const [selectedDay, setSelectedDay] = useState(itinerary.days[0]?.dayTitle || '');
@@ -20,7 +21,7 @@ const ItineraryComponent = ({ itinerary }) => {
                 </div>
             )}
             <hr></hr>
-
+            {/* <ItineraryDayWiseComponent itinerary={itinerary} /> */}
             <h2>Day-Wise Itinerary</h2>
             {/* Day Filters */}
             <div className="day-filters">
