@@ -5,6 +5,8 @@ const cors = require('cors');
 const morgan = require('morgan');
 const path = require('path');
 const http = require('http');
+const prerender = require('prerender-node');
+
 // const { Server } = require('socket.io');
 
 
@@ -32,8 +34,20 @@ const allowedOrigins = [
     'https://synctrip-git-main-rahulkaushal09s-projects.vercel.app/',
     'https://synctrip-rahulkaushal09s-projects.vercel.app',
     'https://synctrip-git-main-rahulkaushal09s-projects.vercel.app',
-
+    // prerenderIps
+    '103.207.40.0/22',
+    '104.224.12.0/22',
+    '2602:2dd::/36',
+    '104.224.12.0/24',
+    '104.224.13.0/24',
+    '104.224.14.0/24',
+    '104.224.15.0/24',
+    '103.207.40.0/24',
+    '103.207.41.0/24',
+    '103.207.42.0/24',
+    '103.207.43.0/24'
 ];
+
 // Socket.IO setup
 // const io = new Server(server, {
 //     cors: {
@@ -84,6 +98,12 @@ const allowedOrigins = [
 //     });
 // });
 
+//======================>prerender-node setup<========================//
+app.use(
+    prerender
+        .set('prerenderToken', '0BFhtbPTLDxDEnq8mma0') // replace this
+        .set('protocol', 'https') // or 'http' depending on your setup
+);
 
 // -----------------> Middleware <-----------------------------------//
 // CORS configuration
@@ -101,6 +121,7 @@ app.use(
         credentials: true,
     })
 );
+// app.use(require('prerender-node').set('prerenderToken', ''));
 app.use((req, res, next) => {
 
 
@@ -190,6 +211,14 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chats', chatRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/admin', adminRoutes); // Mount admin routes
+
+
+
+// --------------------> static file serving <-----------------------------------//
+app.use(express.static(path.join(__dirname, 'build')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 // -----------------> API Endpoints <-----------------------------------//
 // Root route for deployment check
