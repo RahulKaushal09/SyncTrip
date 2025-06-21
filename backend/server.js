@@ -34,6 +34,8 @@ const allowedOrigins = [
     'https://synctrip-git-main-rahulkaushal09s-projects.vercel.app/',
     'https://synctrip-rahulkaushal09s-projects.vercel.app',
     'https://synctrip-git-main-rahulkaushal09s-projects.vercel.app',
+    // deployed on render.com
+    'https://synctrip.onrender.com',
     // prerenderIps
     '103.207.40.0/22',
     '104.224.12.0/22',
